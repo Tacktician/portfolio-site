@@ -2,31 +2,30 @@
         <section id="contact-form">
           <div class="container">
             <div class="row">
+              <form action="https://formspree.io/f/xldrreqd" method="POST">
               <div class="col-md-6 col-sm-12">
                 <div class="block">
-                  <form>
                     <div class="form-group">
-                      <input type="text" class="form-control" placeholder="Your Name">
+                      <input type="text" name="name" class="form-control" placeholder="Your Name">
                     </div>
                     <div class="form-group">
-                      <input type="text" class="form-control" placeholder="Email Address">
+                      <input type="email" name="email" class="form-control" placeholder="Email Address">
                     </div>
                     <div class="form-group">
-                      <input type="text" class="form-control" placeholder="Subject">
+                      <input type="text" name="subject" class="form-control" placeholder="Subject">
                     </div>
-                  </form>
                 </div>
               </div>
               <div class="col-md-6 col-sm-12">
                 <div class="block">
-                  <form>
                     <div class="form-group-2">
-                      <textarea class="form-control" rows="3" placeholder="Your Message"></textarea>
+                      <textarea class="form-control" name="message" rows="3" placeholder="Your Message"></textarea>
                     </div>
+                    <input type="hidden" name="_next" value="{{ site.url }}/thanks.html" />
                     <button class="btn btn-default" type="submit">Send Message</button>
-                  </form>
                 </div>
               </div>
+              </form>
             </div>
             <div id="contact-box" class="row">
               <div class="col-md-6 col-sm-12">
@@ -41,29 +40,7 @@
                     </li> -->
                   </ul>
 
-                  <ul class="social-icons">
-                    <!-- <li>
-                      <a href="http://www.themefisher.com"><i class="fa fa-google"></i></a>
-                    </li> -->
-                    <li>
-                      <a href="https://www.linkedin.com/in/jamestacker/"><i class="fa fa-linkedin"></i></a>
-                    </li>
-                   <!--  <li>
-                      <a href="http://www.themefisher.com"><i class="fa fa-pinterest"></i></a>
-                    </li>
-                    <li>
-                      <a href="http://www.themefisher.com"><i class="fa fa-dribbble"></i></a>
-                    </li>
-                    <li>
-                      <a href="http://www.themefisher.com"><i class="fa fa-behance"></i></a>
-                    </li> -->
-                    <li>
-                      <a href="https://x.com/tacke94634"><i class="fa fa-twitter"></i></a>
-                    </li>
-                    <!-- <li>
-                      <a href="http://www.themefisher.com"><i class="fa fa-facebook"></i></a>
-                    </li> -->
-                  </ul>
+                  {% include social-icons.html %}
                 </div>
               </div>
     <!--           <div class="col-md-6 col-sm-12">
