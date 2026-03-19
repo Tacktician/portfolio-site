@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Divider</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .demo-section { max-width: 720px; margin: 0 auto; }
+
+    .demo-text { margin: 0 0 2rem; color: var(--ink-mid); line-height: 1.7; font-size: 0.95rem; }
+    .demo-text strong { color: var(--ink); font-weight: 600; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--rule);
+      max-width: 720px;
+      margin: 0 auto 2rem;
+      display: block;
+    }
+
+    /* Variants */
+    .divider-with-label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      max-width: 720px;
+      margin: 0 auto 2rem;
+    }
+    .divider-with-label::before,
+    .divider-with-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+    .divider-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-light);
+      white-space: nowrap;
+    }
+
+    .variant-label { font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--orange); margin-bottom: 0.75rem; }
+  </style>
+</head>
+<body>
+
+  <div class="demo-section">
+
+    <p class="demo-text">This is a <strong>section before the divider</strong>. The divider is used to create clear visual separation between content blocks. It respects the max-width of the content column and uses the muted <code>--rule</code> color to stay subtle.</p>
+
+    <!-- Standard divider -->
+    <hr class="divider">
+
+    <p class="demo-text">This is the <strong>section after the divider</strong>. The rule is 1px, uses <code>var(--rule)</code>, and is centered at a maximum of 720px. It works well between lesson sections, module transitions, or any block-level content separation.</p>
+
+    <!-- Divider with label variant -->
+    <div class="divider-with-label">
+      <span class="divider-label">or continue with</span>
+    </div>
+
+    <p class="demo-text">A labeled divider variant is useful for transitions or optional section breaks. The label floats centered between two rule lines.</p>
+
+  </div>
+
+</body>
+</html>

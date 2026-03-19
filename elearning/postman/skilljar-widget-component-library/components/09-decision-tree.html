@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decision Tree</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --white: #FFFFFF;
+      --green: #2D9E6B;
+      --green-pale: #EAF7F1;
+      --blue: #2563EB;
+      --blue-pale: #EFF4FF;
+      --purple: #7C3AED;
+      --purple-pale: #F5F0FF;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .tree-wrap { max-width: 560px; margin: 0 auto; }
+
+    .progress-track { height: 4px; background: var(--rule); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--orange); border-radius: 2px; transition: width 0.4s; }
+
+    .breadcrumb { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; min-height: 1.4rem; }
+    .bc-item { font-size: 0.78rem; color: var(--ink-light); }
+    .bc-sep { font-size: 0.7rem; color: var(--rule); }
+    .bc-current { font-size: 0.78rem; color: var(--orange); font-weight: 600; font-family: 'Syne', sans-serif; }
+
+    .question-card {
+      background: white; border-radius: 16px; box-shadow: var(--card-shadow);
+      padding: 1.75rem; border-top: 4px solid var(--orange);
+    }
+    .q-label { font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); margin-bottom: 0.5rem; }
+    .q-text { font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 800; color: var(--ink); margin-bottom: 1.25rem; }
+
+    .options { display: flex; flex-direction: column; gap: 0.6rem; }
+    .option-btn {
+      background: #fdfbf9; border: 2px solid var(--rule); border-radius: 10px; padding: 0.85rem 1.1rem;
+      text-align: left; cursor: pointer; font-size: 0.92rem; color: var(--ink-mid);
+      transition: border-color 0.2s, background 0.2s, transform 0.1s; font-family: 'DM Sans', sans-serif;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .option-btn:hover { border-color: var(--orange); background: var(--orange-pale); transform: translateX(4px); }
+    .option-arrow { margin-left: auto; color: var(--ink-light); font-size: 0.85rem; }
+
+    /* Outcome */
+    .outcome-card {
+      background: white; border-radius: 16px; box-shadow: var(--card-shadow); padding: 1.75rem;
+      text-align: center; display: none; animation: popIn 0.3s ease;
+    }
+    .outcome-card.show { display: block; }
+    @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+    .outcome-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .outcome-badge { display: inline-block; padding: 4px 14px; border-radius: 20px; font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; }
+    .badge-pipeline { background: var(--blue-pale); color: var(--blue); }
+    .badge-extraction { background: var(--purple-pale); color: var(--purple); }
+    .badge-chatbot { background: var(--green-pale); color: var(--green); }
+
+    .outcome-title { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--ink); margin-bottom: 0.6rem; }
+    .outcome-body { font-size: 0.92rem; color: var(--ink-mid); line-height: 1.65; margin-bottom: 1.25rem; }
+
+    .restart-btn { background: var(--orange); color: white; border: none; border-radius: 10px; padding: 10px 24px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: background 0.2s; }
+    .restart-btn:hover { background: var(--orange-light); }
+  </style>
+</head>
+<body>
+
+  <div class="tree-wrap">
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+
+    <div class="breadcrumb" id="breadcrumb"></div>
+
+    <div class="question-card" id="questionCard">
+      <div class="q-label" id="qLabel">Question 1 of 3</div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="options"></div>
+    </div>
+
+    <div class="outcome-card" id="outcomeCard">
+      <div class="outcome-icon" id="outIcon"></div>
+      <div class="outcome-badge" id="outBadge"></div>
+      <div class="outcome-title" id="outTitle"></div>
+      <p class="outcome-body" id="outBody"></p>
+      <button class="restart-btn" onclick="restart()">Start Over</button>
+    </div>
+  </div>
+
+  <script>
+    const tree = {
+      id: 'q1',
+      label: 'Question 1 of 3',
+      text: 'What is your primary goal?',
+      progress: 33,
+      breadcrumb: 'Goal',
+      options: [
+        { text: '🤖 Automate repetitive tasks', next: 'q2a', breadLabel: 'Automate' },
+        { text: '💬 Build a conversational interface', next: 'q2b', breadLabel: 'Conversational' }
+      ]
+    };
+
+    const nodes = {
+      q1: tree,
+      q2a: {
+        id: 'q2a', label: 'Question 2 of 3', text: 'How structured is your data?', progress: 66,
+        breadcrumb: 'Data type',
+        options: [
+          { text: '🗃️ Highly structured (tables, JSON)', next: 'q3a', breadLabel: 'Structured' },
+          { text: '📝 Unstructured (text, emails)', next: 'llm-extraction', breadLabel: 'Unstructured' }
+        ]
+      },
+      q2b: {
+        id: 'q2b', label: 'Question 2 of 3', text: 'Who is the end user?', progress: 66,
+        breadcrumb: 'User type',
+        options: [
+          { text: '👥 Internal team', next: 'internal-bot', breadLabel: 'Internal' },
+          { text: '🌐 External customers', next: 'customer-bot', breadLabel: 'External' }
+        ]
+      },
+      q3a: {
+        id: 'q3a', label: 'Question 3 of 3', text: 'Do you need real-time processing?', progress: 90,
+        breadcrumb: 'Processing',
+        options: [
+          { text: '⚡ Yes, sub-second responses', next: 'realtime-pipeline', breadLabel: 'Real-time' },
+          { text: '🕐 No, batch is fine', next: 'batch-pipeline', breadLabel: 'Batch' }
+        ]
+      }
+    };
+
+    const outcomes = {
+      'realtime-pipeline': { icon: '⚡', badge: 'Pipeline', badgeClass: 'badge-pipeline', title: 'Real-Time Data Pipeline', body: 'Use streaming + structured outputs for instant processing. Pair Claude with a message queue like Kafka for high-throughput, low-latency data transformation.' },
+      'batch-pipeline': { icon: '📦', badge: 'Pipeline', badgeClass: 'badge-pipeline', title: 'Batch Processing Pipeline', body: 'Schedule nightly runs with structured data extraction. Use Claude\'s function calling to reliably output JSON, then load results into your data warehouse.' },
+      'llm-extraction': { icon: '🔍', badge: 'Extraction', badgeClass: 'badge-extraction', title: 'LLM Text Extraction', body: 'Use few-shot prompting to extract structure from unstructured text. Claude excels at pulling entities, classifications, and summaries from emails, tickets, and documents.' },
+      'internal-bot': { icon: '🏢', badge: 'Chatbot', badgeClass: 'badge-chatbot', title: 'Internal Assistant', body: 'Build a focused tool for your team with custom knowledge. Connect it to your docs, code repos, and internal tools via MCP. Teams see 30–50% faster information retrieval.' },
+      'customer-bot': { icon: '🤝', badge: 'Chatbot', badgeClass: 'badge-chatbot', title: 'Customer-Facing Bot', body: 'Prioritize safety, escalation paths, and brand voice. Add guardrails, human handoff triggers, and thorough testing against adversarial inputs before going live.' }
+    };
+
+    let path = [];
+    let breadcrumbs = [];
+
+    function render(nodeId) {
+      const node = nodes[nodeId];
+      if (!node) {
+        // It's an outcome
+        showOutcome(nodeId);
+        return;
+      }
+
+      document.getElementById('progressFill').style.width = node.progress + '%';
+      document.getElementById('qLabel').textContent = node.label;
+      document.getElementById('qText').textContent = node.text;
+
+      const opts = document.getElementById('options');
+      opts.innerHTML = node.options.map((opt, i) => `
+        <button class="option-btn" onclick="choose('${node.id}', ${i})">
+          ${opt.text}
+          <span class="option-arrow">→</span>
+        </button>
+      `).join('');
+
+      document.getElementById('questionCard').style.display = '';
+      document.getElementById('outcomeCard').classList.remove('show');
+
+      renderBreadcrumb();
+    }
+
+    function choose(nodeId, optIdx) {
+      const node = nodes[nodeId];
+      const opt = node.options[optIdx];
+      breadcrumbs.push({ label: opt.breadLabel, nodeId });
+      path.push({ nodeId, optIdx });
+      renderBreadcrumb();
+      render(opt.next);
+    }
+
+    function renderBreadcrumb() {
+      const bc = document.getElementById('breadcrumb');
+      if (breadcrumbs.length === 0) { bc.innerHTML = ''; return; }
+      bc.innerHTML = breadcrumbs.map((b, i) =>
+        `<span class="bc-item">${b.label}</span>${i < breadcrumbs.length - 1 ? '<span class="bc-sep">›</span>' : ''}`
+      ).join('');
+    }
+
+    function showOutcome(id) {
+      const o = outcomes[id];
+      document.getElementById('progressFill').style.width = '100%';
+      document.getElementById('outIcon').textContent = o.icon;
+      const badge = document.getElementById('outBadge');
+      badge.textContent = o.badge;
+      badge.className = 'outcome-badge ' + o.badgeClass;
+      document.getElementById('outTitle').textContent = o.title;
+      document.getElementById('outBody').textContent = o.body;
+      document.getElementById('questionCard').style.display = 'none';
+      document.getElementById('outcomeCard').classList.add('show');
+    }
+
+    function restart() {
+      path = [];
+      breadcrumbs = [];
+      render('q1');
+    }
+
+    render('q1');
+  </script>
+</body>
+</html>

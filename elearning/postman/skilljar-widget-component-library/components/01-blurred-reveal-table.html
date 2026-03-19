@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blurred Reveal Table</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --white: #FFFFFF;
+      --green: #2D9E6B;
+      --green-pale: #EAF7F1;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .table-controls { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+    .reveal-all-btn { background: var(--orange); color: white; border: none; border-radius: 8px; padding: 8px 18px; font-family: 'Syne', sans-serif; font-weight: 600; cursor: pointer; font-size: 0.9rem; transition: background 0.2s; }
+    .reveal-all-btn:hover { background: var(--orange-light); }
+    .reveal-counter { font-size: 0.9rem; color: var(--ink-light); }
+
+    .persona-table { width: 100%; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--card-shadow); }
+    .persona-table thead tr { background: var(--orange); color: white; font-family: 'Syne', sans-serif; }
+    .persona-table th, .persona-table td { padding: 14px 20px; text-align: left; border-bottom: 1px solid var(--rule); }
+    .persona-table tbody tr:last-child td { border-bottom: none; }
+    .persona-table tbody tr { background: white; }
+    .persona-table tbody tr:hover { background: #fdfbf9; }
+
+    .outcome-cell { cursor: pointer; position: relative; }
+    .outcome-content { filter: blur(6px); opacity: 0.3; transition: filter 0.4s, opacity 0.4s; user-select: none; }
+    .reveal-hint { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--ink-light); font-family: 'Syne', sans-serif; letter-spacing: 0.02em; }
+    .outcome-cell.revealed .outcome-content { filter: blur(0); opacity: 1; }
+    .outcome-cell.revealed .reveal-hint { display: none; }
+
+    .persona-badge { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 600; }
+    .persona-icon { width: 28px; height: 28px; border-radius: 50%; background: var(--orange-pale); display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+
+  <div class="table-controls">
+    <button class="reveal-all-btn" onclick="revealAll()">Reveal All</button>
+    <span class="reveal-counter" id="counter">0 of 3 revealed</span>
+  </div>
+
+  <table class="persona-table">
+    <thead>
+      <tr>
+        <th>Persona</th>
+        <th>Goal</th>
+        <th>Outcome</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="persona-badge"><span class="persona-icon">👩‍💻</span> Developer</span></td>
+        <td>Automate workflows</td>
+        <td class="outcome-cell" onclick="revealCell(this)">
+          <span class="outcome-content">Ships features 2× faster</span>
+          <span class="reveal-hint">Click to reveal</span>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="persona-badge"><span class="persona-icon">🎨</span> Designer</span></td>
+        <td>Prototype quickly</td>
+        <td class="outcome-cell" onclick="revealCell(this)">
+          <span class="outcome-content">Iterates without bottlenecks</span>
+          <span class="reveal-hint">Click to reveal</span>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="persona-badge"><span class="persona-icon">📊</span> Manager</span></td>
+        <td>Track progress</td>
+        <td class="outcome-cell" onclick="revealCell(this)">
+          <span class="outcome-content">Real-time visibility achieved</span>
+          <span class="reveal-hint">Click to reveal</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    function updateCounter() {
+      const revealed = document.querySelectorAll('.outcome-cell.revealed').length;
+      const total = document.querySelectorAll('.outcome-cell').length;
+      document.getElementById('counter').textContent = `${revealed} of ${total} revealed`;
+    }
+
+    function revealCell(cell) {
+      if (!cell.classList.contains('revealed')) {
+        cell.classList.add('revealed');
+        updateCounter();
+      }
+    }
+
+    function revealAll() {
+      document.querySelectorAll('.outcome-cell').forEach(cell => cell.classList.add('revealed'));
+      updateCounter();
+    }
+  </script>
+</body>
+</html>

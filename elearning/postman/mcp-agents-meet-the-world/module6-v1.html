@@ -1,0 +1,804 @@
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+<div>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --orange:       #FF6C37;
+    --orange-light: #FF8C5A;
+    --orange-pale:  #FFF0EB;
+    --ink:          #1A1612;
+    --ink-mid:      #4A3F38;
+    --ink-light:    #8C7B72;
+    --rule:         #E8DDD6;
+    --white:        #FFFFFF;
+    --green:        #2D9E6B;
+    --green-pale:   #EAF7F1;
+    --blue:         #2563EB;
+    --blue-pale:    #EFF4FF;
+    --purple:       #7C3AED;
+    --purple-pale:  #F5F0FF;
+    --card-shadow:      0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    --card-shadow-lift: 0 12px 32px rgba(26,22,18,0.14), 0 4px 8px rgba(26,22,18,0.08);
+  }
+
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--ink); }
+
+  .lesson-wrap { max-width: 960px; margin: 0 auto; padding: 56px 32px 80px; }
+  @media (max-width: 680px) { .lesson-wrap { padding: 36px 20px 60px; } }
+
+  /* ── Typography ── */
+  .section-label {
+    font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); margin-bottom: 12px;
+  }
+  h1.lesson-title {
+    font-family: 'Syne', sans-serif; font-size: clamp(26px, 4vw, 40px); font-weight: 800;
+    line-height: 1.1; color: var(--ink); margin-bottom: 20px; letter-spacing: -0.02em;
+  }
+  h1.lesson-title em { font-style: normal; color: var(--orange); }
+  h2.subhead {
+    font-family: 'Syne', sans-serif; font-size: clamp(18px, 2.5vw, 24px); font-weight: 700;
+    color: var(--ink); margin-top: 48px; margin-bottom: 14px; letter-spacing: -0.01em;
+  }
+  .lesson-intro {
+    font-size: 17px; line-height: 1.7; color: var(--ink-mid); font-weight: 300;
+    max-width: 680px; margin-bottom: 32px; border-left: 3px solid var(--orange); padding-left: 20px;
+  }
+  .lesson-intro strong { color: var(--ink); font-weight: 500; }
+  .lesson-body {
+    font-size: 16px; line-height: 1.75; color: var(--ink-mid);
+    font-weight: 300; max-width: 720px; margin-bottom: 24px;
+  }
+  .lesson-body strong { color: var(--ink); font-weight: 500; }
+  .divider { height: 1px; background: var(--rule); margin: 44px 0; max-width: 720px; }
+
+  /* ── Objectives box ── */
+  .objectives-box {
+    background: var(--orange-pale); border: 1.5px solid #FFD4C2;
+    border-radius: 10px; padding: 22px 26px; margin-bottom: 44px; max-width: 720px;
+  }
+  .objectives-box .obj-label {
+    font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); margin-bottom: 14px;
+  }
+  .objectives-list { display: flex; flex-direction: column; gap: 10px; }
+  .obj-item { display: flex; align-items: flex-start; gap: 10px; }
+  .obj-item p { display: block; margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink-mid); font-weight: 300; }
+  .obj-item p strong { color: var(--ink); font-weight: 500; }
+  .obj-bullet {
+    flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; background: var(--orange);
+    color: white; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center; margin-top: 2px;
+  }
+
+  /* ── Analogy banner ── */
+  .analogy-banner {
+    background: var(--ink); border-radius: 12px; padding: 28px 32px;
+    max-width: 720px; margin: 8px 0 40px; display: flex; gap: 22px; align-items: flex-start;
+  }
+  .ab-icon { font-size: 34px; flex-shrink: 0; line-height: 1; padding-top: 3px; }
+  .ab-eyebrow {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); margin-bottom: 8px;
+  }
+  .ab-text { font-size: 15px; line-height: 1.7; color: #C8B8AE; font-weight: 300; }
+  .ab-text strong { color: white; font-weight: 500; }
+
+  /* ─────────────────────────────────────────────
+     SECTION 1 — CONFIG GENERATOR
+  ───────────────────────────────────────────── */
+  .cg-wrap { max-width: 720px; margin: 28px 0 0; }
+  .component-label {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 14px;
+  }
+  .cg-card {
+    border: 1.5px solid var(--rule); border-radius: 12px;
+    box-shadow: var(--card-shadow); overflow: hidden; background: white;
+  }
+
+  /* pill row — uses !important to override Skilljar display:block on spans */
+  .cg-header { padding: 18px 24px; border-bottom: 1px solid var(--rule); }
+  .cg-pill-label {
+    font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+    color: var(--ink-light); letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 12px; display: block;
+  }
+  .cg-pills { display: flex !important; flex-direction: row !important; gap: 8px !important; flex-wrap: wrap; }
+  .cg-pill {
+    display: inline-block; font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.05em; padding: 7px 16px; border-radius: 20px; cursor: pointer;
+    border: 1.5px solid var(--rule); color: var(--ink-light); background: white;
+    transition: all 0.15s; user-select: none;
+  }
+  .cg-pill.active { background: var(--orange); color: white; border-color: var(--orange); }
+  .cg-pill:hover:not(.active) { border-color: var(--orange); color: var(--orange); }
+
+  /* code block */
+  .cg-code-wrap { background: #1A1612; padding: 22px 24px; position: relative; min-height: 180px; }
+  .cg-copy-btn {
+    position: absolute; top: 12px; right: 12px;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+    color: var(--ink-light); font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 10px; border-radius: 4px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .cg-copy-btn:hover { background: rgba(255,108,55,0.18); color: var(--orange); }
+  .cg-copy-btn.copied { color: var(--green); border-color: var(--green); }
+  .cg-code {
+    font-family: 'DM Mono', 'Fira Code', 'Courier New', monospace;
+    font-size: 12.5px; line-height: 1.85; color: #A89A8E;
+    white-space: pre-wrap; word-break: break-word;
+  }
+  .tok-key     { color: #FF8C5A; }
+  .tok-str     { color: #7DD3B0; }
+  .tok-punc    { color: #5C5047; }
+  .tok-comment { color: #4A3F38; font-style: italic; }
+
+  /* annotations */
+  .cg-annotations { padding: 16px 24px 4px; display: flex; flex-direction: column; gap: 10px; }
+  .cg-anno { display: flex; align-items: flex-start; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--rule); }
+  .cg-anno:last-child { border-bottom: none; }
+  .cg-anno-dot { flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; background: var(--orange); margin-top: 5px; }
+  .cg-anno p { display: block; margin: 0; font-size: 13.5px; line-height: 1.6; color: var(--ink-mid); font-weight: 300; }
+  .cg-anno p strong { color: var(--ink); font-weight: 500; }
+  .cg-anno code { font-family: 'DM Mono', monospace; font-size: 12px; background: #F0EBE6; color: var(--orange); padding: 1px 5px; border-radius: 3px; }
+
+  .cg-file-note {
+    padding: 12px 24px 16px; border-top: 1px solid var(--rule);
+    font-size: 12.5px; line-height: 1.6; color: var(--ink-light); font-weight: 300; font-style: italic;
+  }
+  .cg-file-note strong { color: var(--ink-mid); font-weight: 500; font-style: normal; }
+  .cg-file-note code { font-family: 'DM Mono', monospace; font-size: 11.5px; background: #F0EBE6; color: var(--ink-mid); padding: 1px 5px; border-radius: 3px; }
+
+  /* ─────────────────────────────────────────────
+     SECTION 2 — STEP-FLOW
+  ───────────────────────────────────────────── */
+  .sf-wrap { max-width: 720px; margin: 28px 0 0; }
+  .sf-card { border: 1.5px solid var(--rule); border-radius: 12px; box-shadow: var(--card-shadow); overflow: hidden; background: white; }
+
+  /* node track */
+  .sf-track {
+    background: #F7F3F0; padding: 26px 20px;
+    display: flex !important; flex-direction: row !important;
+    align-items: center !important; justify-content: center !important;
+    gap: 0; flex-wrap: nowrap; overflow-x: auto;
+  }
+  .sf-node { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 6px; flex-shrink: 0; }
+  .sf-node-icon {
+    width: 46px; height: 46px; border-radius: 10px; font-size: 20px;
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    background: white; border: 1.5px solid var(--rule);
+    transition: background 0.25s, border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  }
+  .sf-node.active .sf-node-icon {
+    background: var(--orange); border-color: var(--orange);
+    transform: scale(1.12); box-shadow: 0 0 0 7px rgba(255,108,55,0.18);
+  }
+  .sf-node.done .sf-node-icon { background: var(--green-pale); border-color: var(--green); }
+  .sf-node-lbl {
+    font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-light);
+    text-align: center; max-width: 60px; line-height: 1.3; transition: color 0.25s;
+  }
+  .sf-node.active .sf-node-lbl { color: var(--orange); }
+  .sf-node.done  .sf-node-lbl  { color: var(--green); }
+  .sf-connector { color: var(--rule); font-size: 16px; padding: 0 6px; margin-bottom: 22px; flex-shrink: 0; transition: color 0.25s; }
+  .sf-connector.done { color: var(--green); }
+
+  /* step content */
+  .sf-body { padding: 22px 24px 18px; }
+  .sf-step-eyebrow { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); margin-bottom: 6px; }
+  .sf-step-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 10px; letter-spacing: -0.01em; }
+  .sf-step-text { font-size: 14.5px; line-height: 1.75; color: var(--ink-mid); font-weight: 300; }
+  .sf-step-text strong { color: var(--ink); font-weight: 500; }
+  .sf-step-text code { font-family: 'DM Mono', monospace; font-size: 12.5px; background: #F0EBE6; color: var(--ink-mid); padding: 1px 5px; border-radius: 3px; }
+
+  /* footer nav — button must use display:block + inner wrapper for Skilljar */
+  .sf-footer {
+    padding: 14px 24px; border-top: 1px solid var(--rule);
+    display: flex !important; align-items: center !important; gap: 10px !important;
+  }
+  .sf-btn {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.06em; border-radius: 6px; cursor: pointer;
+    display: inline-flex !important; flex-direction: row !important;
+    align-items: center !important; justify-content: center !important;
+    padding: 10px 18px !important; line-height: 1 !important;
+    transition: opacity 0.15s, transform 0.1s; border: none; user-select: none;
+  }
+  .sf-btn:active { transform: scale(0.97); }
+  .sf-btn.sf-disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+  .sf-btn-primary { background: var(--orange); color: white !important; box-shadow: 0 3px 10px rgba(255,108,55,0.25); }
+  .sf-btn-primary:hover { background: var(--orange-light); }
+  .sf-btn-ghost { background: white; color: var(--ink-mid) !important; border: 1.5px solid var(--rule) !important; }
+  .sf-btn-ghost:hover { border-color: var(--ink-mid) !important; }
+  .sf-counter { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: var(--ink-light); margin-left: auto; }
+  .sf-counter span { color: var(--orange); }
+
+  /* ─────────────────────────────────────────────
+     SECTION 3 — PUBLISH CHECKLIST
+  ───────────────────────────────────────────── */
+  .cl-wrap { max-width: 720px; margin: 28px 0 0; }
+  .cl-card { border: 1.5px solid var(--rule); border-radius: 12px; box-shadow: var(--card-shadow); overflow: hidden; background: white; }
+
+  .cl-header {
+    padding: 18px 24px; border-bottom: 1px solid var(--rule);
+    display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 12px;
+  }
+  .cl-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--ink); }
+  .cl-prog-wrap { display: flex !important; align-items: center !important; gap: 10px !important; flex-shrink: 0; }
+  .cl-prog-bar { width: 96px; height: 5px; background: var(--rule); border-radius: 3px; overflow: hidden; }
+  .cl-prog-fill { height: 100%; background: var(--orange); border-radius: 3px; width: 0%; transition: width 0.4s ease; }
+  .cl-prog-label { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; color: var(--ink-light); white-space: nowrap; }
+  .cl-prog-label span { color: var(--orange); }
+
+  .cl-row {
+    display: flex !important; align-items: flex-start !important; gap: 14px !important;
+    padding: 16px 24px; border-bottom: 1px solid var(--rule); cursor: pointer;
+    transition: background 0.12s; user-select: none;
+  }
+  .cl-row:last-of-type { border-bottom: none; }
+  .cl-row:hover { background: #FDF8F5; }
+  .cl-row.is-checked { background: var(--green-pale); }
+
+  /* checkbox — standalone div avoids Skilljar button interference */
+  .cl-box {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 5px;
+    border: 2px solid var(--rule); background: white; margin-top: 1px;
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .cl-row.is-checked .cl-box { background: var(--green); border-color: var(--green); }
+  .cl-check { width: 12px; height: 12px; opacity: 0; transition: opacity 0.2s; }
+  .cl-row.is-checked .cl-check { opacity: 1; animation: checkPop 0.25s ease; }
+
+  .cl-text { flex: 1 !important; min-width: 0; }
+  .cl-row-title { display: block; margin: 0 0 3px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--ink); transition: color 0.2s; }
+  .cl-row.is-checked .cl-row-title { color: var(--green); text-decoration: line-through; text-decoration-color: rgba(45,158,107,0.4); }
+  .cl-row-desc { display: block; margin: 0; font-size: 13px; line-height: 1.55; color: var(--ink-light); font-weight: 300; }
+
+  .cl-badge {
+    flex-shrink: 0; font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; margin-top: 3px;
+  }
+  .cl-badge.req  { background: var(--orange-pale); color: var(--orange); }
+  .cl-badge.opt  { background: var(--purple-pale); color: var(--purple); }
+
+  .cl-footer-note {
+    padding: 12px 24px 14px; border-top: 1px solid var(--rule);
+    font-size: 12.5px; color: var(--ink-light); font-weight: 300; font-style: italic; line-height: 1.55;
+  }
+
+  .cl-win {
+    display: none; padding: 22px 24px; background: var(--green-pale);
+    border-top: 2px solid var(--green); text-align: center;
+  }
+  .cl-win.show { display: block; }
+  .cl-win-title { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800; color: var(--green); margin-bottom: 8px; }
+  .cl-win-body { font-size: 14px; line-height: 1.65; color: var(--ink-mid); font-weight: 300; }
+  .cl-win-body strong { color: var(--ink); font-weight: 500; }
+
+  /* ── Video placeholder ── */
+  .video-placeholder {
+    max-width: 720px; background: var(--ink); border-radius: 12px;
+    padding: 52px 32px; margin: 28px 0 0; text-align: center; position: relative; overflow: hidden;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  .video-placeholder::before {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,108,55,0.04) 20px, rgba(255,108,55,0.04) 21px);
+  }
+  .vp-play-ring {
+    width: 56px; height: 56px; border-radius: 50%; background: var(--orange);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 10px rgba(255,108,55,0.15); position: relative; z-index: 1;
+  }
+  .vp-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: white; letter-spacing: 0.04em; position: relative; z-index: 1; }
+  .vp-sub   { font-size: 12px; color: var(--ink-light); font-weight: 300; position: relative; z-index: 1; }
+
+  /* ── Try This CTA ── */
+  .try-this {
+    max-width: 720px; margin: 44px 0 0;
+    background: white; border: 1.5px solid var(--rule); border-left: 4px solid var(--orange);
+    border-radius: 0 10px 10px 0; padding: 24px 28px; box-shadow: var(--card-shadow);
+  }
+  .try-label {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); margin-bottom: 12px;
+  }
+  .try-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+  .try-item:last-of-type { margin-bottom: 0; }
+  .try-item p { display: block; margin: 0; font-size: 15px; line-height: 1.7; color: var(--ink-mid); font-weight: 300; }
+  .try-item p strong { color: var(--ink); font-weight: 500; }
+  .try-bullet {
+    flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--orange); margin-top: 8px;
+  }
+
+  /* ── What's Next ── */
+  .whats-next {
+    background: var(--ink); border-radius: 12px; padding: 28px 56px 28px 32px;
+    max-width: 680px; margin: 44px 0 0;
+    display: flex; align-items: center; gap: 20px; position: relative; overflow: hidden;
+  }
+  .whats-next::after {
+    content: '\2192'; position: absolute; right: 28px; font-size: 26px;
+    color: var(--orange); font-family: 'Syne', sans-serif; font-weight: 800; transition: transform 0.2s;
+  }
+  .wn-icon {
+    width: 46px; height: 46px; border-radius: 10px; background: var(--orange);
+    display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+  }
+  .wn-label {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 4px;
+  }
+  .wn-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: white; letter-spacing: -0.01em; }
+
+  /* ── animations ── */
+  @keyframes checkPop {
+    0%   { transform: scale(0.6); }
+    60%  { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .sf-body { animation: fadeSlideIn 0.2s ease; }
+  h1, h2 { font-family: 'Syne', sans-serif; }
+</style>
+</div>
+<div class="lesson-wrap">
+<div class="section-label">Module 5 &mdash; Connecting to the Outside World</div>
+<h1 class="lesson-title">Connecting to <em>the Outside World</em></h1>
+<p class="lesson-intro">You built the app. Now you need to <strong>list it in the app store</strong> &mdash; and plug it into your other devices. This module is about portability: making your MCP server useful beyond the Postman tab it was born in.</p>
+<div class="objectives-box">
+<div class="obj-label">What you'll be able to do</div>
+<div class="objectives-list">
+<div class="obj-item"><span class="obj-bullet">1</span>
+<p>Export MCP server configs for <strong>Claude Desktop, Cursor, and VS Code</strong> and know exactly where to paste them</p>
+</div>
+<div class="obj-item"><span class="obj-bullet">2</span>
+<p>Add your server to <strong>Agent Mode</strong> &mdash; closing the loop between building a server and using it inside Postman</p>
+</div>
+<div class="obj-item"><span class="obj-bullet">3</span>
+<p>Understand the pathway to <strong>publishing on the Postman API Network</strong> and why verified trust signals matter more for MCP than for regular APIs</p>
+</div>
+</div>
+</div>
+<div class="divider">&nbsp;</div>
+<!-- ══════════════════════════════════════════
+       SECTION 1 — EXPORT & CONFIGURE
+  ══════════════════════════════════════════ -->
+<h2 class="subhead">Export &amp; Configure for MCP Hosts</h2>
+<p class="lesson-body">Think of an MCP host like a smart home hub &mdash; a Philips Hue bridge, say. The bulbs (your tools) don't magically appear in the app just because they exist. You have to register them by telling the hub the right address. <strong>Claude Desktop, Cursor, VS Code with Copilot</strong> all work the same way: each one has a config file waiting for your server's command or URL. Once it's in there, the host discovers your tools automatically on startup.</p>
+<p class="lesson-body">Postman generates the exact config block you need. Pick your host below to see it &mdash; annotated so you know what every field actually means.</p>
+<div class="cg-wrap">
+<div class="component-label">Interactive &mdash; select your MCP host</div>
+<div class="cg-card">
+<div class="cg-header">
+<div class="cg-pill-label">Choose a host</div>
+<div id="cgPills" class="cg-pills">
+<div class="cg-pill active" data-host="claude">Claude Desktop</div>
+<div class="cg-pill" data-host="cursor">Cursor</div>
+<div class="cg-pill" data-host="vscode">VS Code + Copilot</div>
+</div>
+</div>
+<div class="cg-code-wrap"><button id="cgCopyBtn" class="cg-copy-btn">Copy</button>
+<div id="cgCodeBlock" class="cg-code"></div>
+</div>
+<div id="cgAnnotations" class="cg-annotations"></div>
+<div id="cgFileNote" class="cg-file-note"></div>
+</div>
+</div>
+<div class="divider">&nbsp;</div>
+<!-- ══════════════════════════════════════════
+       SECTION 2 — AGENT MODE
+  ══════════════════════════════════════════ -->
+<h2 class="subhead">Agent Mode &mdash; The Postman-Native Host</h2>
+<p class="lesson-body">Here's the callback to the prerequisite course: <strong>Agent Mode is an MCP host</strong>. It speaks MCP natively. Which means the server you just built in the previous module can talk directly to your Postman agent &mdash; no config file editing, no path copying, no restarting anything.</p>
+<p class="lesson-body">The flow is four steps. Walk through them below to see exactly how it works.</p>
+<div class="sf-wrap">
+<div class="component-label">Step-through &mdash; from MCP request to Agent Mode</div>
+<div class="sf-card">
+<div id="sfTrack" class="sf-track"></div>
+<div id="sfBody" class="sf-body"></div>
+<div class="sf-footer">
+<div id="sfPrev" class="sf-btn sf-btn-ghost sf-disabled" tabindex="0" role="button">&larr; Back</div>
+<div id="sfNext" class="sf-btn sf-btn-primary" tabindex="0" role="button">Next &rarr;</div>
+<div class="sf-counter">Step <span id="sfIdx">1</span> of 4</div>
+</div>
+</div>
+</div>
+<div class="divider">&nbsp;</div>
+<!-- ══════════════════════════════════════════
+       SECTION 3 — PUBLISHING
+  ══════════════════════════════════════════ -->
+<h2 class="subhead">Publishing on the Postman API Network</h2>
+<p class="lesson-body">This isn't a requirement &mdash; it's an opportunity. The <a href="https://www.postman.com/explore/mcp-servers" target="_blank" rel="noopener">Postman MCP Catalog</a> is where millions of developers discover servers to connect their agents to. If you built something genuinely useful, this is how other people's agents find it.</p>
+<div class="analogy-banner">
+<div class="ab-icon">🏅</div>
+<div>
+<div class="ab-eyebrow">Why trust matters more for MCP than for regular APIs</div>
+<div class="ab-text">With a regular REST API, a developer reads your docs and consciously decides whether to integrate. With an MCP server, <strong>an AI agent can call your tools autonomously</strong> &mdash; often without a human actively watching. The verified publisher badge isn't vanity. It's the signal that tells developers (and their agents) that they're connecting to the real, official, maintained thing &mdash; not an impostor server with a suspiciously similar name.</div>
+</div>
+</div>
+<p class="lesson-body">The checklist below covers everything you need to get your server into the catalog. Check items off as you go. All four required items must be done before you submit &mdash; but the fifth one is the step most people forget, and it's the one that actually drives discovery.</p>
+<div class="cl-wrap">
+<div class="component-label">Publishing requirements &mdash; check off as you go</div>
+<div class="cl-card">
+<div class="cl-header">
+<div class="cl-title">Road to the MCP Catalog</div>
+<div class="cl-prog-wrap">
+<div class="cl-prog-bar">
+<div id="clFill" class="cl-prog-fill"></div>
+</div>
+<div class="cl-prog-label"><span id="clCount">0</span> / 5</div>
+</div>
+</div>
+<div id="clRows"></div>
+<div class="cl-footer-note">Click any item to mark it done. Hit it again to unmark. The first four are required before you can submit.</div>
+<div id="clWin" class="cl-win">
+<div class="cl-win-title">🎉 Ready to submit!</div>
+<div class="cl-win-body">Email <strong>api-network@postman.com</strong> with a link to your public MCP collection. The team reviews it and, on approval, forks it into the official catalog.</div>
+</div>
+</div>
+</div>
+<div class="divider">&nbsp;</div>
+<!-- ══════════════════════════════════════════
+       VIDEO
+  ══════════════════════════════════════════ -->
+<h2 class="subhead">See the Full Flow in Action</h2>
+<p class="lesson-body">The video below walks through exporting a config for one MCP host, pasting it in, restarting the host, and sending a real request from outside Postman. Then a peek at what a well-published server looks like in the catalog.</p>
+<div class="video-placeholder">
+<div class="vp-play-ring">&nbsp;</div>
+<div class="vp-title">Video Demo &mdash; Export to Host + API Network Walkthrough</div>
+<div class="vp-sub">Replace this block with the embedded lesson video when ready</div>
+</div>
+<div class="divider">&nbsp;</div>
+<!-- ══════════════════════════════════════════
+       TRY THIS
+  ══════════════════════════════════════════ -->
+<div class="try-this">
+<div class="try-label">🌎 Try This</div>
+<div class="try-item">
+<div class="try-bullet">&nbsp;</div>
+<p><strong>Export your server's configuration for whichever MCP host you use most</strong> (or most want to try). Paste it in, restart the host, and send it one real request from outside Postman.</p>
+</div>
+<div class="try-item">
+<div class="try-bullet">&nbsp;</div>
+<p>That moment when an external tool calls something you built in Postman &mdash; when the response comes back and it worked &mdash; <strong>that's the payoff</strong>. Everything else in this course was setup for that.</p>
+</div>
+</div>
+<a href="../../../postman.html" style="text-decoration: none; display: block;">
+<div class="whats-next" style="margin-top: 44px;">
+<div class="wn-icon">🏠</div>
+<div>
+<div class="wn-label">Course Complete</div>
+<div class="wn-title">Back to Portfolio</div>
+</div>
+</div>
+</a>
+</div>
+<!-- /lesson-wrap -->
+<script>
+(function () {
+  'use strict';
+
+  /* ════════════════════════════════════════════
+     SECTION 1 — CONFIG GENERATOR
+  ════════════════════════════════════════════ */
+  var hosts = {
+    claude: {
+      lines: [
+        '{',
+        '  "mcpServers": {',
+        '    "my-postman-server": {',
+        '      "command": "node",',
+        '      "args": ["/path/to/your-mcp-server/mcpServer.js"]',
+        '    }',
+        '  }',
+        '}'
+      ],
+      tokens: {
+        '"mcpServers"':        'tok-key',
+        '"my-postman-server"': 'tok-key',
+        '"command"':           'tok-key',
+        '"args"':              'tok-key',
+        '"node"':              'tok-str',
+        '"/path/to/your-mcp-server/mcpServer.js"': 'tok-str'
+      },
+      annotations: [
+        { html: '<strong>"my-postman-server"</strong> — the name your agent uses to refer to this server. Can be anything; make it memorable.' },
+        { html: '<strong>"command"</strong> — the executable to launch. Use <code>node</code> for your generated JS server.' },
+        { html: '<strong>"args"</strong> — the absolute path to <code>mcpServer.js</code>. Use absolute paths; relative paths behave unpredictably when the host starts the process.' }
+      ],
+      note: '<strong>Where to paste this:</strong> <code>~/Library/Application Support/Claude/claude_desktop_config.json</code> on macOS, or <code>%APPDATA%\\Claude\\claude_desktop_config.json</code> on Windows. Fully quit and relaunch Claude Desktop after saving.'
+    },
+    cursor: {
+      lines: [
+        '{',
+        '  "mcpServers": {',
+        '    "my-postman-server": {',
+        '      "command": "node",',
+        '      "args": ["/path/to/your-mcp-server/mcpServer.js"],',
+        '      "env": {',
+        '        "MY_API_KEY": "your-key-here"',
+        '      }',
+        '    }',
+        '  }',
+        '}'
+      ],
+      tokens: {
+        '"mcpServers"':        'tok-key',
+        '"my-postman-server"': 'tok-key',
+        '"command"':           'tok-key',
+        '"args"':              'tok-key',
+        '"env"':               'tok-key',
+        '"MY_API_KEY"':        'tok-key',
+        '"node"':              'tok-str',
+        '"/path/to/your-mcp-server/mcpServer.js"': 'tok-str',
+        '"your-key-here"':     'tok-str'
+      },
+      annotations: [
+        { html: '<strong>"command" + "args"</strong> — same pattern as Claude Desktop. Cursor uses the same STDIO transport under the hood.' },
+        { html: '<strong>"env"</strong> — inject environment variables directly in the config. Much safer than relying on your shell environment, especially for API keys.' },
+        { html: 'Cursor reads this from <strong>Settings &rarr; MCP</strong> globally, or from a project-level <code>.cursor/mcp.json</code> file for per-project servers.' }
+      ],
+      note: '<strong>Where to paste this:</strong> Open Cursor &rarr; Settings &rarr; MCP &rarr; "Add new global MCP server". Or create <code>.cursor/mcp.json</code> in your project root for a project-scoped server. Restart Cursor after saving.'
+    },
+    vscode: {
+      lines: [
+        '{',
+        '  "mcp": {',
+        '    "servers": {',
+        '      "my-postman-server": {',
+        '        "type": "stdio",',
+        '        "command": "node",',
+        '        "args": ["/path/to/your-mcp-server/mcpServer.js"]',
+        '      }',
+        '    }',
+        '  }',
+        '}'
+      ],
+      tokens: {
+        '"mcp"':               'tok-key',
+        '"servers"':           'tok-key',
+        '"my-postman-server"': 'tok-key',
+        '"type"':              'tok-key',
+        '"command"':           'tok-key',
+        '"args"':              'tok-key',
+        '"stdio"':             'tok-str',
+        '"node"':              'tok-str',
+        '"/path/to/your-mcp-server/mcpServer.js"': 'tok-str'
+      },
+      annotations: [
+        { html: '<strong>"mcp.servers"</strong> — VS Code nests the config under a top-level <code>mcp</code> key, unlike Claude Desktop and Cursor which use <code>mcpServers</code> directly.' },
+        { html: '<strong>"type": "stdio"</strong> — explicitly declare the transport. VS Code Copilot also supports <code>"sse"</code> for remote HTTP servers.' },
+        { html: 'This goes in your VS Code <strong>settings.json</strong> for a global server, or in a workspace <code>.vscode/mcp.json</code> file for project-scoped servers. GitHub Copilot must be enabled and signed in.' }
+      ],
+      note: '<strong>Where to paste this:</strong> Command Palette &rarr; "Open User Settings (JSON)" &rarr; merge into the root object. For project scope, create <code>.vscode/mcp.json</code> instead. Reload VS Code after saving.'
+    }
+  };
+
+  var currentHost = 'claude';
+
+  function tokenizeLine(line) {
+    var cfg = hosts[currentHost];
+    var result = line
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    // apply token colours — must escape the key for use in a regex
+    Object.keys(cfg.tokens).forEach(function(k) {
+      var cls = cfg.tokens[k];
+      var escaped = k.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+      result = result.replace(new RegExp(escaped, 'g'), '<span class="' + cls + '">' + k + '</span>');
+    });
+    return result;
+  }
+
+  function renderConfig(hostKey) {
+    currentHost = hostKey;
+    var cfg = hosts[hostKey];
+    var codeEl  = document.getElementById('cgCodeBlock');
+    var annoEl  = document.getElementById('cgAnnotations');
+    var noteEl  = document.getElementById('cgFileNote');
+
+    // inject code as lines joined by <br>  — avoids white-space:pre Skilljar stripping
+    codeEl.innerHTML = cfg.lines.map(tokenizeLine).join('<br>');
+
+    // annotations
+    annoEl.innerHTML = cfg.annotations.map(function(a) {
+      return '<div class="cg-anno"><div class="cg-anno-dot"></div><p>' + a.html + '</p></div>';
+    }).join('');
+
+    // file note
+    noteEl.innerHTML = cfg.note;
+  }
+
+  // pill clicks
+  document.getElementById('cgPills').addEventListener('click', function(e) {
+    var pill = e.target.closest('.cg-pill');
+    if (!pill) return;
+    document.querySelectorAll('.cg-pill').forEach(function(p) { p.classList.remove('active'); });
+    pill.classList.add('active');
+    renderConfig(pill.dataset.host);
+  });
+
+  // copy button
+  document.getElementById('cgCopyBtn').addEventListener('click', function() {
+    var btn = this;
+    var text = hosts[currentHost].lines.join('\n');
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(function() {
+        btn.textContent = 'Copied \u2713';
+        btn.classList.add('copied');
+        setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+  });
+
+  renderConfig('claude');
+
+
+  /* ════════════════════════════════════════════
+     SECTION 2 — STEP-FLOW
+  ════════════════════════════════════════════ */
+  var steps = [
+    {
+      icon: '&#129331;',
+      label: 'MCP Request',
+      title: 'Create an MCP request for your server',
+      body: 'In your workspace, click <strong>+ &rarr; MCP</strong> to create a new MCP request. Connect it to your server using its command (STDIO) or URL (streamable HTTP). Click <strong>Load Capabilities</strong> to confirm Postman can see your tools. Save the request to a collection in the same workspace.'
+    },
+    {
+      icon: '&#9881;&#65039;',
+      label: 'Generate Config',
+      title: 'Click Generate Config in the sidebar',
+      body: 'With your MCP request open, look in the right sidebar for the code icon &mdash; <strong>Generate Config</strong>. Click it. A dropdown appears asking which MCP host you want to target. Choose <strong>Agent Mode</strong> from the list.'
+    },
+    {
+      icon: '&#10133;',
+      label: 'Add to Agent Mode',
+      title: 'Click "Add to Agent Mode"',
+      body: 'Postman handles the wiring. Click <strong>Add to Agent Mode</strong> and your server is registered as an available tool source for your Postman agent. No config file, no path copying, no restart &mdash; it just connects.'
+    },
+    {
+      icon: '&#9989;',
+      label: 'Verify',
+      title: 'Verify in Agent Mode configuration',
+      body: 'Open Agent Mode and look for <strong>Agent Mode configuration</strong>. Your server appears in the list with its tools. You can toggle individual tools on or off right from here &mdash; the same way you\'d manage any other MCP server in Agent Mode.'
+    }
+  ];
+
+  var sfCurrent = 0;
+
+  function renderTrack() {
+    var track = document.getElementById('sfTrack');
+    track.innerHTML = '';
+    steps.forEach(function(s, i) {
+      if (i > 0) {
+        var conn = document.createElement('div');
+        conn.className = 'sf-connector' + (i <= sfCurrent ? ' done' : '');
+        conn.innerHTML = '&#8594;';
+        track.appendChild(conn);
+      }
+      var node = document.createElement('div');
+      node.className = 'sf-node' + (i === sfCurrent ? ' active' : i < sfCurrent ? ' done' : '');
+      node.innerHTML =
+        '<div class="sf-node-icon">' + s.icon + '</div>' +
+        '<div class="sf-node-lbl">'  + s.label + '</div>';
+      track.appendChild(node);
+    });
+  }
+
+  function renderBody() {
+    var s = steps[sfCurrent];
+    var body = document.getElementById('sfBody');
+    body.innerHTML =
+      '<div class="sf-step-eyebrow">Step ' + (sfCurrent + 1) + ' of ' + steps.length + '</div>' +
+      '<div class="sf-step-title">' + s.title + '</div>' +
+      '<div class="sf-step-text">'  + s.body  + '</div>';
+    document.getElementById('sfIdx').textContent = sfCurrent + 1;
+
+    var prev = document.getElementById('sfPrev');
+    var next = document.getElementById('sfNext');
+
+    // div-based buttons — use .sf-disabled class instead of disabled attribute
+    if (sfCurrent === 0) {
+      prev.classList.add('sf-disabled');
+    } else {
+      prev.classList.remove('sf-disabled');
+    }
+
+    if (sfCurrent === steps.length - 1) {
+      next.innerHTML = 'Done ✓';
+      next.classList.add('sf-disabled');
+    } else {
+      next.innerHTML = 'Next →';
+      next.classList.remove('sf-disabled');
+    }
+  }
+
+  document.getElementById('sfPrev').addEventListener('click', function() {
+    if (sfCurrent > 0) { sfCurrent--; renderTrack(); renderBody(); }
+  });
+  document.getElementById('sfNext').addEventListener('click', function() {
+    if (sfCurrent < steps.length - 1) { sfCurrent++; renderTrack(); renderBody(); }
+  });
+
+  renderTrack();
+  renderBody();
+
+
+  /* ════════════════════════════════════════════
+     SECTION 3 — CHECKLIST
+  ════════════════════════════════════════════ */
+  var checklistItems = [
+    { title: 'Complete public profile + at least one public workspace',    desc: 'Your team needs a visible public presence on the API Network before any submission.',          badge: 'req', required: true  },
+    { title: 'Create a well-documented MCP collection',                    desc: 'Include use cases, auth instructions, and how to get started. Pretend you\'re explaining it to a stranger.',    badge: 'req', required: true  },
+    { title: 'Add an MCP request for each server configuration',           desc: 'One STDIO request for local servers, one HTTP request for remote ones. Include all env variable names.',        badge: 'req', required: true  },
+    { title: 'Apply for verified publisher status',                        desc: 'The blue badge is what makes developers and agents trust your tools enough to use them autonomously.',           badge: 'req', required: true  },
+    { title: 'Post a workspace update announcing your MCP server',         desc: 'This shows up in the API Network feed and drives actual discovery. Most publishers skip it. Don\'t.',            badge: 'opt', required: false }
+  ];
+
+  var checked = {};
+
+  function renderChecklist() {
+    var container = document.getElementById('clRows');
+    container.innerHTML = '';
+
+    checklistItems.forEach(function(item, i) {
+      var row = document.createElement('div');
+      row.className = 'cl-row' + (checked[i] ? ' is-checked' : '');
+      row.innerHTML =
+        '<div class="cl-box">' +
+          '<svg class="cl-check" viewBox="0 0 14 14" fill="none">' +
+            '<path d="M2.5 7l3.5 3.5 5.5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '</svg>' +
+        '</div>' +
+        '<div class="cl-text">' +
+          '<span class="cl-row-title">' + item.title + '</span>' +
+          '<span class="cl-row-desc">'  + item.desc  + '</span>' +
+        '</div>' +
+        '<div class="cl-badge ' + item.badge + '">' + (item.badge === 'req' ? 'Required' : 'Recommended') + '</div>';
+
+      row.addEventListener('click', function() {
+        checked[i] = !checked[i];
+        updateChecklist();
+      });
+      container.appendChild(row);
+    });
+    updateChecklist();
+  }
+
+  function updateChecklist() {
+    var count = Object.keys(checked).filter(function(k) { return checked[k]; }).length;
+    var total = checklistItems.length;
+
+    // re-apply checked classes
+    var rows = document.querySelectorAll('#clRows .cl-row');
+    rows.forEach(function(row, i) {
+      row.classList.toggle('is-checked', !!checked[i]);
+    });
+
+    // progress
+    document.getElementById('clFill').style.width  = (count / total * 100) + '%';
+    document.getElementById('clCount').textContent = count;
+
+    // win state — all 4 required done
+    var requiredDone = checklistItems.every(function(item, i) {
+      return !item.required || !!checked[i];
+    });
+    document.getElementById('clWin').classList.toggle('show', requiredDone);
+  }
+
+  renderChecklist();
+
+})();
+</script>

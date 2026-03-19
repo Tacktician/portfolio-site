@@ -1,0 +1,995 @@
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+<div>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --orange:       #FF6C37;
+    --orange-light: #FF8C5A;
+    --orange-pale:  #FFF0EB;
+    --ink:          #1A1612;
+    --ink-mid:      #4A3F38;
+    --ink-light:    #8C7B72;
+    --rule:         #E8DDD6;
+    --white:        #FFFFFF;
+    --green:        #2D9E6B;
+    --green-pale:   #EAF7F1;
+    --blue:         #2563EB;
+    --blue-pale:    #EFF4FF;
+    --purple:       #7C3AED;
+    --purple-pale:  #F5F0FF;
+    --card-shadow:      0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    --card-shadow-lift: 0 12px 32px rgba(26,22,18,0.14), 0 4px 8px rgba(26,22,18,0.08);
+  }
+
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--ink); }
+
+  .lesson-wrap { max-width: 960px; margin: 0 auto; padding: 56px 32px 80px; }
+  @media (max-width: 680px) { .lesson-wrap { padding: 36px 20px 60px; } }
+
+  /* ── Typography ── */
+  .section-label {
+    font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); margin-bottom: 12px;
+  }
+  h1.lesson-title {
+    font-family: 'Syne', sans-serif; font-size: clamp(26px, 4vw, 40px); font-weight: 800;
+    line-height: 1.1; color: var(--ink); margin-bottom: 20px; letter-spacing: -0.02em;
+  }
+  h1.lesson-title em { font-style: normal; color: var(--orange); }
+  h2.subhead {
+    font-family: 'Syne', sans-serif; font-size: clamp(18px, 2.5vw, 24px); font-weight: 700;
+    color: var(--ink); margin-top: 48px; margin-bottom: 14px; letter-spacing: -0.01em;
+  }
+  .lesson-intro {
+    font-size: 17px; line-height: 1.7; color: var(--ink-mid); font-weight: 300;
+    max-width: 680px; margin-bottom: 32px; border-left: 3px solid var(--orange); padding-left: 20px;
+  }
+  .lesson-body {
+    font-size: 16px; line-height: 1.75; color: var(--ink-mid);
+    font-weight: 300; max-width: 720px; margin-bottom: 24px;
+  }
+  .lesson-body strong, .lesson-intro strong { color: var(--ink); font-weight: 500; }
+  a { color: var(--orange); text-decoration: underline; text-underline-offset: 3px; }
+  a:hover { color: var(--orange-light); }
+  .divider { height: 1px; background: var(--rule); margin: 44px 0; max-width: 720px; }
+
+  /* ── Objectives box ── */
+  .objectives-box {
+    background: var(--orange-pale); border: 1.5px solid #FFD4C2;
+    border-radius: 10px; padding: 22px 26px; margin-bottom: 44px; max-width: 720px;
+  }
+  .objectives-box .obj-label {
+    font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); margin-bottom: 14px;
+  }
+  .objectives-list { display: flex; flex-direction: column; gap: 10px; }
+  .obj-item { display: flex; align-items: flex-start; gap: 10px; }
+  .obj-item p { display: block; margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink-mid); font-weight: 300; }
+  .obj-item p strong { color: var(--ink); font-weight: 500; }
+  .obj-bullet {
+    flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; background: var(--orange);
+    color: white; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center; margin-top: 2px;
+  }
+
+  /* ── Path badge header ── */
+  .path-header {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 20px; margin-top: 48px;
+  }
+  .path-badge {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 12px;
+    border-radius: 20px; flex-shrink: 0;
+  }
+  .path-badge.flows { background: var(--orange-pale); color: var(--orange); border: 1.5px solid #FFD4C2; }
+  .path-badge.generator { background: var(--blue-pale); color: var(--blue); border: 1.5px solid #BFDBFE; }
+  .path-title {
+    font-family: 'Syne', sans-serif; font-size: clamp(17px, 2.2vw, 22px);
+    font-weight: 700; color: var(--ink); letter-spacing: -0.01em;
+  }
+
+  /* ── Vending machine callout ── */
+  .analogy-banner {
+    background: var(--ink); border-radius: 12px; padding: 24px 28px;
+    max-width: 720px; margin: 20px 0 32px; display: flex; gap: 18px; align-items: flex-start;
+  }
+  .analogy-banner .ab-icon { font-size: 32px; flex-shrink: 0; }
+  .ab-body {}
+  .ab-eyebrow {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); margin-bottom: 6px;
+  }
+  .ab-text { font-size: 15px; line-height: 1.65; color: #C8B8AE; font-weight: 300; }
+  .ab-text strong { color: white; font-weight: 500; }
+
+  /* ── Accordion ── */
+  .accordion { max-width: 720px; margin: 28px 0 36px; }
+  .accordion-header-row {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  }
+  .accordion-eyebrow {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-light);
+  }
+
+  .acc-item {
+    border: 1.5px solid var(--rule); border-radius: 10px; margin-bottom: 8px;
+    overflow: hidden; transition: border-color 0.2s;
+  }
+  .acc-item.open { border-color: var(--orange); }
+
+  .acc-trigger {
+    width: 100%; background: none; border: none; cursor: pointer;
+    padding: 16px 20px; display: flex; align-items: center; gap: 14px;
+    text-align: left; transition: background 0.15s;
+  }
+  .acc-trigger:hover { background: #FDF8F5; }
+  .acc-item.open .acc-trigger { background: var(--orange-pale); }
+
+  .acc-icon {
+    width: 30px; height: 30px; border-radius: 8px; background: var(--orange-pale);
+    display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+  }
+  .acc-item.open .acc-icon { background: var(--orange); }
+
+  .acc-label {
+    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--ink); flex: 1;
+  }
+  .acc-sublabel { font-size: 12px; color: var(--ink-light); font-weight: 300; }
+
+  .acc-chevron {
+    width: 18px; height: 18px; flex-shrink: 0; color: var(--ink-light);
+    transition: transform 0.25s ease;
+  }
+  .acc-item.open .acc-chevron { transform: rotate(180deg); color: var(--orange); }
+
+  .acc-body {
+    max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.25s ease;
+    padding: 0 20px;
+  }
+  .acc-item.open .acc-body { max-height: 600px; padding: 0 20px 20px; }
+
+  .acc-body-inner { padding-top: 16px; border-top: 1px solid var(--rule); }
+  .acc-body-inner p {
+    font-size: 14px; line-height: 1.65; color: var(--ink-mid); font-weight: 300; margin-bottom: 12px;
+  }
+  .acc-body-inner p:last-child { margin-bottom: 0; }
+  .acc-body-inner strong { color: var(--ink); font-weight: 500; }
+
+  /* Code block inside accordion */
+  .acc-code {
+    background: var(--ink); border-radius: 8px; padding: 16px 18px;
+    font-family: 'DM Mono', 'Fira Code', 'Courier New', monospace;
+    font-size: 12.5px; line-height: 1.7; color: #C8B8AE;
+    margin: 12px 0; overflow-x: auto; white-space: pre;
+  }
+  .acc-code .tok-key   { color: #FF8C5A; }
+  .acc-code .tok-str   { color: #7DD3B0; }
+  .acc-code .tok-punc  { color: #8C7B72; }
+  .acc-code .tok-bool  { color: #C4A4FF; }
+  .acc-code .tok-num   { color: #93C5FD; }
+  .acc-anno {
+    background: #FFF0EB; border-left: 3px solid var(--orange);
+    border-radius: 0 6px 6px 0; padding: 10px 14px; margin: 10px 0;
+    font-size: 13px; line-height: 1.5; color: var(--ink-mid); font-weight: 300;
+  }
+  .acc-anno strong { color: var(--ink); font-weight: 500; }
+
+  /* ── Code tabs ── */
+  .code-tabs-wrap { max-width: 720px; margin: 28px 0 36px; }
+  .code-tabs-label {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 10px;
+  }
+  .code-tabs-nav {
+    display: flex; gap: 0; border-bottom: 2px solid var(--rule); margin-bottom: 0;
+  }
+  .ctab-btn {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.04em; padding: 10px 18px; background: none; border: none;
+    cursor: pointer; color: var(--ink-light); border-bottom: 2px solid transparent;
+    margin-bottom: -2px; transition: color 0.15s, border-color 0.15s;
+  }
+  .ctab-btn.active { color: var(--orange); border-bottom-color: var(--orange); }
+  .ctab-btn:hover:not(.active) { color: var(--ink); }
+  .ctab-panel { display: none; }
+  .ctab-panel.active { display: block; }
+  .code-block {
+    background: var(--ink); border-radius: 0 8px 8px 8px; padding: 20px 22px;
+    font-family: 'DM Mono', 'Fira Code', 'Courier New', monospace;
+    font-size: 12.5px; line-height: 1.75; color: #C8B8AE;
+    overflow-x: auto; white-space: pre; position: relative;
+  }
+  .code-block .tok-key   { color: #FF8C5A; }
+  .code-block .tok-str   { color: #7DD3B0; }
+  .code-block .tok-punc  { color: #8C7B72; }
+  .code-block .tok-bool  { color: #C4A4FF; }
+  .code-block .tok-num   { color: #93C5FD; }
+  .code-block .tok-comment { color: #6B5E57; font-style: italic; }
+  .copy-btn {
+    position: absolute; top: 12px; right: 12px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+    color: #8C7B72; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 10px;
+    border-radius: 4px; cursor: pointer; transition: background 0.15s, color 0.15s;
+  }
+  .copy-btn:hover { background: rgba(255,108,55,0.2); color: var(--orange); }
+  .copy-btn.copied { color: var(--green); border-color: var(--green); }
+
+  /* ── Generator step carousel ── */
+  .carousel-wrap { max-width: 720px; margin: 28px 0 36px; }
+  .carousel-label {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 12px;
+  }
+  .carousel-track {
+    background: white; border: 1.5px solid var(--rule); border-radius: 12px;
+    box-shadow: var(--card-shadow); overflow: hidden;
+  }
+  .carousel-header {
+    background: var(--ink); padding: 16px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .carousel-step-info {
+    font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light);
+  }
+  .carousel-step-info span { color: var(--orange); }
+  .carousel-dots { display: flex; gap: 6px; }
+  .cdot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); transition: background 0.2s;
+    cursor: pointer;
+  }
+  .cdot.active { background: var(--orange); }
+  .carousel-slide { padding: 28px 28px 24px; animation: slideUp 0.3s ease; }
+  .slide-num {
+    font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); margin-bottom: 8px;
+  }
+  .slide-title {
+    font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700;
+    color: var(--ink); margin-bottom: 12px; letter-spacing: -0.01em;
+  }
+  .slide-body {
+    font-size: 14.5px; line-height: 1.7; color: var(--ink-mid);
+    font-weight: 300; margin-bottom: 16px;
+  }
+  .slide-body strong { color: var(--ink); font-weight: 500; }
+  .slide-why {
+    background: var(--orange-pale); border: 1.5px solid #FFD4C2;
+    border-radius: 8px; padding: 12px 16px;
+    font-size: 13px; line-height: 1.55; color: var(--ink-mid); font-weight: 300;
+  }
+  .slide-why-label {
+    font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); margin-bottom: 5px;
+  }
+  .slide-why strong { color: var(--ink); font-weight: 500; }
+  .carousel-footer {
+    padding: 16px 24px; border-top: 1px solid var(--rule);
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .btn {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+    letter-spacing: 0.05em; padding: 10px 20px; border-radius: 6px; border: none;
+    cursor: pointer; transition: transform 0.1s, background 0.1s, opacity 0.1s;
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--orange); color: white; box-shadow: 0 3px 10px rgba(255,108,55,0.3); }
+  .btn-primary:hover { background: var(--orange-light); }
+  .btn-primary:disabled { opacity: 0.35; cursor: default; box-shadow: none; }
+  .btn-ghost { background: transparent; color: var(--ink-mid); border: 1.5px solid var(--rule); }
+  .btn-ghost:hover { border-color: var(--ink-mid); color: var(--ink); }
+  .btn-ghost:disabled { opacity: 0.35; cursor: default; }
+  .progress-bar-wrap {
+    flex: 1; height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%; background: var(--orange); border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  /* ── Decision tree ── */
+  .decision-wrap { max-width: 720px; margin: 28px 0 36px; }
+  .decision-label {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 14px;
+  }
+  .decision-card {
+    background: white; border: 1.5px solid var(--rule); border-radius: 12px;
+    box-shadow: var(--card-shadow); overflow: hidden;
+  }
+  .dt-question-area { padding: 28px 28px 0; }
+  .dt-q-num {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); margin-bottom: 8px;
+  }
+  .dt-q-text {
+    font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700;
+    color: var(--ink); line-height: 1.3; margin-bottom: 20px; letter-spacing: -0.01em;
+  }
+  .dt-options { display: flex; flex-direction: column; gap: 8px; padding-bottom: 24px; }
+  .dt-opt {
+    background: white; border: 1.5px solid var(--rule); border-radius: 8px;
+    padding: 13px 18px; cursor: pointer; text-align: left; width: 100%;
+    font-size: 14.5px; color: var(--ink-mid); font-weight: 300; line-height: 1.45;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .dt-opt:hover { border-color: var(--orange); background: var(--orange-pale); color: var(--ink); }
+  .dt-opt strong { color: var(--ink); font-weight: 500; }
+
+  .dt-progress-strip {
+    background: var(--rule); height: 3px; margin: 0 28px;
+  }
+  .dt-progress-fill { height: 100%; background: var(--orange); transition: width 0.4s ease; }
+
+  .dt-history {
+    padding: 12px 28px 0; display: flex; gap: 6px; flex-wrap: wrap; min-height: 32px;
+  }
+  .dt-crumb {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px;
+    border-radius: 20px; background: var(--orange-pale); color: var(--orange);
+    border: 1px solid #FFD4C2;
+  }
+
+  /* Result card */
+  .dt-result { padding: 28px; animation: slideUp 0.4s ease; }
+  .dt-result-badge {
+    display: inline-block; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 14px;
+    border-radius: 20px; margin-bottom: 14px;
+  }
+  .dt-result-badge.flows { background: var(--orange-pale); color: var(--orange); border: 1.5px solid #FFD4C2; }
+  .dt-result-badge.generator { background: var(--blue-pale); color: var(--blue); border: 1.5px solid #BFDBFE; }
+  .dt-result-badge.both { background: var(--purple-pale); color: var(--purple); border: 1.5px solid #DDD6FE; }
+  .dt-result-title {
+    font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+    color: var(--ink); margin-bottom: 10px; letter-spacing: -0.02em;
+  }
+  .dt-result-body { font-size: 14.5px; line-height: 1.7; color: var(--ink-mid); font-weight: 300; margin-bottom: 16px; }
+  .dt-result-body strong { color: var(--ink); font-weight: 500; }
+  .dt-restart-row { margin-top: 8px; }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Video placeholder ── */
+  .video-placeholder {
+    max-width: 720px; background: var(--ink); border-radius: 12px;
+    padding: 48px 32px; margin: 32px 0; display: flex; flex-direction: column;
+    align-items: center; gap: 14px; text-align: center; position: relative; overflow: hidden;
+  }
+  .video-placeholder::before {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,108,55,0.04) 20px, rgba(255,108,55,0.04) 21px);
+  }
+  .video-play {
+    width: 52px; height: 52px; border-radius: 50%; background: var(--orange);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 8px rgba(255,108,55,0.15); position: relative; z-index: 1;
+  }
+  .video-label { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: white; letter-spacing: 0.04em; position: relative; z-index: 1; }
+  .video-sublabel { font-size: 12px; color: var(--ink-light); font-weight: 300; position: relative; z-index: 1; }
+
+  /* ── CTA aside ── */
+  .cta-aside {
+    background: white; border: 1.5px solid var(--rule); border-left: 4px solid var(--orange);
+    border-radius: 0 10px 10px 0; padding: 24px 28px; max-width: 680px;
+    margin-bottom: 40px; box-shadow: var(--card-shadow);
+  }
+  .cta-aside .cta-label {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); margin-bottom: 12px;
+  }
+  .cta-paths { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+  @media (max-width: 580px) { .cta-paths { grid-template-columns: 1fr; } }
+  .cta-path-card {
+    border: 1.5px solid var(--rule); border-radius: 8px; padding: 16px 18px;
+  }
+  .cta-path-card.flows-card { border-color: #FFD4C2; background: var(--orange-pale); }
+  .cta-path-card.gen-card   { border-color: #BFDBFE; background: var(--blue-pale); }
+  .cta-path-tag {
+    font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .flows-card .cta-path-tag { color: var(--orange); }
+  .gen-card   .cta-path-tag { color: var(--blue); }
+  .cta-path-text { font-size: 13.5px; line-height: 1.6; color: var(--ink-mid); font-weight: 300; }
+  .cta-path-text strong { color: var(--ink); font-weight: 500; }
+
+  /* ── What's Next ── */
+  .whats-next {
+    background: var(--ink); border-radius: 12px; padding: 28px 32px; max-width: 680px;
+    display: flex; align-items: center; gap: 20px; position: relative; overflow: hidden;
+  }
+  .whats-next::after {
+    content: '→'; position: absolute; right: 28px; font-size: 28px; color: var(--orange);
+    font-family: 'Syne', sans-serif; font-weight: 800; transition: transform 0.2s;
+  }
+  .whats-next:hover::after { transform: translateX(5px); }
+  .next-icon {
+    width: 44px; height: 44px; border-radius: 10px; background: var(--orange);
+    display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+  }
+  .next-text .next-label {
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 4px;
+  }
+  .next-text h4 {
+    font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
+    color: white !important; letter-spacing: -0.01em;
+  }
+  h1, h2 { font-family: 'Syne', sans-serif; }
+</style>
+</div>
+
+<div class="lesson-wrap">
+
+  <div class="section-label">Module 5 &mdash; Building MCP Servers</div>
+  <h1 class="lesson-title">Building Your Own MCP Server<br /><em>(No, Seriously)</em></h1>
+
+  <p class="lesson-intro">Until now you've been a <em>consumer</em> of MCP servers. This module flips the table. You're now the person building the server that someone else's agent calls. That's a very different kind of power &mdash; and it comes with some responsibility.</p>
+
+  <div class="objectives-box">
+    <div class="obj-label">What You'll Learn</div>
+    <div class="objectives-list">
+      <div class="obj-item"><span class="obj-bullet">1</span><p>The <strong>two paths to building</strong> an MCP server in Postman &mdash; visual (Flows) vs. API-first (Generator)</p></div>
+      <div class="obj-item"><span class="obj-bullet">2</span><p>The anatomy of a <strong>toolDefinition scenario</strong> and how to write one that actually makes sense</p></div>
+      <div class="obj-item"><span class="obj-bullet">3</span><p>How the <strong>MCP Generator translates</strong> your existing API requests into agent-ready tools</p></div>
+      <div class="obj-item"><span class="obj-bullet">4</span><p>Which path is right for <strong>your use case</strong> &mdash; answered by a decision tree, not a coin flip</p></div>
+    </div>
+  </div>
+
+  <div class="divider">&nbsp;</div>
+
+  <!-- ═══════════════════════════════════════════════
+       PATH A: FLOWS
+  ════════════════════════════════════════════════ -->
+  <div class="path-header">
+    <span class="path-badge flows">Path A</span>
+    <span class="path-title">The Visual Builder &mdash; Postman Flows</span>
+  </div>
+
+  <p class="lesson-body">Postman Flows lets you build an MCP server without touching a line of server code. The mechanism is a special kind of deployed Flow called an <strong>Action</strong> &mdash; a flow that lives in the cloud and responds to HTTP requests. When you give that action a <code>toolDefinition</code> scenario, it becomes an MCP server. Clients can connect to it, see its tools, and call them.</p>
+
+  <div class="analogy-banner">
+    <div class="ab-icon">🏧</div>
+    <div class="ab-body">
+      <div class="ab-eyebrow">Mental model</div>
+      <div class="ab-text">Think of it as a <strong>vending machine you deploy to the cloud.</strong> You stock it with tools (the toolDefinition scenario). Anyone with the URL can ask what's in it (<strong>Load Capabilities</strong>) and request an item (<strong>Run</strong>). The machine handles the rest. You wrote zero server code.</div>
+    </div>
+  </div>
+
+  <h2 class="subhead">Anatomy of a toolDefinition</h2>
+  <p class="lesson-body">A <code>toolDefinition</code> is just a JSON scenario in your Flow. It has one required section and two optional ones. Click each section below to expand it &mdash; the greeter example runs through all three.</p>
+
+  <div class="accordion" id="toolDefAccordion">
+
+    <div class="acc-item open" data-acc="tools">
+      <button class="acc-trigger">
+        <span class="acc-icon">🛠️</span>
+        <span>
+          <div class="acc-label">tools <span style="color:var(--orange);font-size:11px;margin-left:6px;">required</span></div>
+          <div class="acc-sublabel">The actions your server can perform</div>
+        </span>
+        <svg class="acc-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>Each tool has a <strong>name</strong> (what the agent calls), a <strong>description</strong> (what the agent reads to decide whether to use it &mdash; write this thoughtfully), and an <strong>inputSchema</strong> (the arguments it accepts).</p>
+          <div class="acc-code"><span class="tok-punc">{</span>
+  <span class="tok-key">"tools"</span><span class="tok-punc">: [</span>
+    <span class="tok-punc">{</span>
+      <span class="tok-key">"name"</span><span class="tok-punc">:</span> <span class="tok-str">"greeter"</span><span class="tok-punc">,</span>
+      <span class="tok-key">"description"</span><span class="tok-punc">:</span> <span class="tok-str">"Says hello to a person by their first name"</span><span class="tok-punc">,</span>
+      <span class="tok-key">"inputSchema"</span><span class="tok-punc">: {</span>
+        <span class="tok-key">"type"</span><span class="tok-punc">:</span> <span class="tok-str">"object"</span><span class="tok-punc">,</span>
+        <span class="tok-key">"properties"</span><span class="tok-punc">: {</span>
+          <span class="tok-key">"first_name"</span><span class="tok-punc">: {</span>
+            <span class="tok-key">"type"</span><span class="tok-punc">:</span> <span class="tok-str">"string"</span><span class="tok-punc">,</span>
+            <span class="tok-key">"description"</span><span class="tok-punc">:</span> <span class="tok-str">"The person's first name"</span>
+          <span class="tok-punc">}</span>
+        <span class="tok-punc">},</span>
+        <span class="tok-key">"required"</span><span class="tok-punc">: [</span><span class="tok-str">"first_name"</span><span class="tok-punc">]</span>
+      <span class="tok-punc">}</span>
+    <span class="tok-punc">}</span>
+  <span class="tok-punc">]</span>
+<span class="tok-punc">}</span></div>
+          <div class="acc-anno">⚠️ <strong>description is load-bearing.</strong> The agent reads this to decide whether to call your tool. Vague descriptions get skipped. "Gets the user's current Slack status message" beats "gets user status" every time.</div>
+          <p>Each property in <code>inputSchema.properties</code> becomes an argument when the tool is called. In Postman Flows, you access it at <code>arguments.first_name</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" data-acc="prompts">
+      <button class="acc-trigger">
+        <span class="acc-icon">💬</span>
+        <span>
+          <div class="acc-label">prompts <span style="color:var(--ink-light);font-size:11px;margin-left:6px;">optional</span></div>
+          <div class="acc-sublabel">Suggested conversation starters for interacting with the server</div>
+        </span>
+        <svg class="acc-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>Prompts let your server suggest structured conversation starters to the client. Think of them as pre-written instructions that a client can surface to a user or pass to an LLM.</p>
+          <div class="acc-code"><span class="tok-key">"prompts"</span><span class="tok-punc">: [</span>
+  <span class="tok-punc">{</span>
+    <span class="tok-key">"name"</span><span class="tok-punc">:</span> <span class="tok-str">"request-code-review"</span><span class="tok-punc">,</span>
+    <span class="tok-key">"title"</span><span class="tok-punc">:</span> <span class="tok-str">"Request Code Review"</span><span class="tok-punc">,</span>
+    <span class="tok-key">"description"</span><span class="tok-punc">:</span> <span class="tok-str">"Ask the LLM to review a file for anomalies"</span><span class="tok-punc">,</span>
+    <span class="tok-key">"arguments"</span><span class="tok-punc">: [</span>
+      <span class="tok-punc">{</span>
+        <span class="tok-key">"name"</span><span class="tok-punc">:</span> <span class="tok-str">"file"</span><span class="tok-punc">,</span>
+        <span class="tok-key">"description"</span><span class="tok-punc">:</span> <span class="tok-str">"The data file to review"</span><span class="tok-punc">,</span>
+        <span class="tok-key">"required"</span><span class="tok-punc">:</span> <span class="tok-bool">true</span>
+      <span class="tok-punc">}</span>
+    <span class="tok-punc">]</span>
+  <span class="tok-punc">}</span>
+<span class="tok-punc">]</span></div>
+          <div class="acc-anno">Prompts are identified by <strong>name</strong> (not URI). When a client calls a prompt, the action receives a JSON object with <code>name</code> and <code>arguments</code> &mdash; the outer MCP envelope is stripped away for you.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" data-acc="resources">
+      <button class="acc-trigger">
+        <span class="acc-icon">📁</span>
+        <span>
+          <div class="acc-label">resources &amp; resourceTemplates <span style="color:var(--ink-light);font-size:11px;margin-left:6px;">optional</span></div>
+          <div class="acc-sublabel">Data your server exposes for an AI model to read</div>
+        </span>
+        <svg class="acc-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      </button>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>Resources provide static context to a model &mdash; files, documents, data &mdash; identified by <strong>URI</strong> (not name). Resource templates parameterize that URI using <a href="https://datatracker.ietf.org/doc/html/rfc6570" target="_blank">RFC 6570 URI Templates</a>.</p>
+          <div class="acc-code"><span class="tok-key">"resources"</span><span class="tok-punc">: [</span>
+  <span class="tok-punc">{</span>
+    <span class="tok-key">"uri"</span><span class="tok-punc">:</span>      <span class="tok-str">"http://example.com/data.json"</span><span class="tok-punc">,</span>
+    <span class="tok-key">"name"</span><span class="tok-punc">:</span>     <span class="tok-str">"data.js"</span><span class="tok-punc">,</span>
+    <span class="tok-key">"mimeType"</span><span class="tok-punc">:</span> <span class="tok-str">"application/json"</span>
+  <span class="tok-punc">}</span>
+<span class="tok-punc">],</span>
+<span class="tok-key">"resourceTemplates"</span><span class="tok-punc">: [</span>
+  <span class="tok-punc">{</span>
+    <span class="tok-key">"uriTemplate"</span><span class="tok-punc">:</span> <span class="tok-str">"file:///{path}"</span><span class="tok-punc">,</span>
+    <span class="tok-key">"name"</span><span class="tok-punc">:</span>        <span class="tok-str">"Project Files"</span><span class="tok-punc">,</span>
+    <span class="tok-key">"mimeType"</span><span class="tok-punc">:</span>    <span class="tok-str">"application/octet-stream"</span>
+  <span class="tok-punc">}</span>
+<span class="tok-punc">]</span></div>
+          <div class="acc-anno">Resource actions receive a <code>{ uri }</code> object. Resource template actions receive the resolved URI with any template variables filled in. The outer MCP envelope is stripped &mdash; same as prompts.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Code tabs: minimal vs multi-tool -->
+  <div class="code-tabs-wrap">
+    <div class="code-tabs-label">See it in context</div>
+    <div class="code-tabs-nav">
+      <button class="ctab-btn active" data-tab="minimal">Minimal single-tool</button>
+      <button class="ctab-btn" data-tab="multi">Multi-tool with condition</button>
+    </div>
+    <div id="ctab-minimal" class="ctab-panel active">
+      <div class="code-block" id="code-minimal"><button class="copy-btn" data-target="code-minimal">Copy</button><span class="tok-comment">// toolDefinition scenario body — single tool</span>
+<span class="tok-punc">{</span>
+  <span class="tok-key">"tools"</span><span class="tok-punc">: [</span>
+    <span class="tok-punc">{</span>
+      <span class="tok-key">"name"</span><span class="tok-punc">:</span>        <span class="tok-str">"greeter"</span><span class="tok-punc">,</span>
+      <span class="tok-key">"description"</span><span class="tok-punc">:</span> <span class="tok-str">"Says hello to a person by their first name"</span><span class="tok-punc">,</span>
+      <span class="tok-key">"inputSchema"</span><span class="tok-punc">: {</span>
+        <span class="tok-key">"type"</span><span class="tok-punc">:</span>       <span class="tok-str">"object"</span><span class="tok-punc">,</span>
+        <span class="tok-key">"properties"</span><span class="tok-punc">: {</span>
+          <span class="tok-key">"first_name"</span><span class="tok-punc">: {</span>
+            <span class="tok-key">"type"</span><span class="tok-punc">:</span>        <span class="tok-str">"string"</span><span class="tok-punc">,</span>
+            <span class="tok-key">"description"</span><span class="tok-punc">:</span> <span class="tok-str">"The person's first name"</span>
+          <span class="tok-punc">}</span>
+        <span class="tok-punc">},</span>
+        <span class="tok-key">"required"</span><span class="tok-punc">: [</span><span class="tok-str">"first_name"</span><span class="tok-punc">]</span>
+      <span class="tok-punc">}</span>
+    <span class="tok-punc">}</span>
+  <span class="tok-punc">]</span>
+<span class="tok-punc">}</span>
+
+<span class="tok-comment">// In your Flow canvas, a Template block reads:</span>
+<span class="tok-comment">// "Hello, " + {{steps.select.output}}</span>
+<span class="tok-comment">// where the Select block path is: arguments.first_name</span></div>
+    </div>
+    <div id="ctab-multi" class="ctab-panel">
+      <div class="code-block" id="code-multi"><button class="copy-btn" data-target="code-multi">Copy</button><span class="tok-comment">// toolDefinition scenario body — two tools</span>
+<span class="tok-punc">{</span>
+  <span class="tok-key">"tools"</span><span class="tok-punc">: [</span>
+    <span class="tok-punc">{</span>
+      <span class="tok-key">"name"</span><span class="tok-punc">:</span>        <span class="tok-str">"get_weather"</span><span class="tok-punc">,</span>
+      <span class="tok-key">"description"</span><span class="tok-punc">:</span> <span class="tok-str">"Returns current weather for a given city"</span><span class="tok-punc">,</span>
+      <span class="tok-key">"inputSchema"</span><span class="tok-punc">: {</span>
+        <span class="tok-key">"type"</span><span class="tok-punc">:</span> <span class="tok-str">"object"</span><span class="tok-punc">,</span>
+        <span class="tok-key">"properties"</span><span class="tok-punc">: {</span>
+          <span class="tok-key">"city"</span><span class="tok-punc">: {</span> <span class="tok-key">"type"</span><span class="tok-punc">:</span> <span class="tok-str">"string"</span><span class="tok-punc">,</span> <span class="tok-key">"description"</span><span class="tok-punc">:</span> <span class="tok-str">"City name"</span> <span class="tok-punc">}</span>
+        <span class="tok-punc">},</span>
+        <span class="tok-key">"required"</span><span class="tok-punc">: [</span><span class="tok-str">"city"</span><span class="tok-punc">]</span>
+      <span class="tok-punc">}</span>
+    <span class="tok-punc">},</span>
+    <span class="tok-punc">{</span>
+      <span class="tok-key">"name"</span><span class="tok-punc">:</span>        <span class="tok-str">"get_forecast"</span><span class="tok-punc">,</span>
+      <span class="tok-key">"description"</span><span class="tok-punc">:</span> <span class="tok-str">"Returns 5-day forecast for a given city"</span><span class="tok-punc">,</span>
+      <span class="tok-key">"inputSchema"</span><span class="tok-punc">: {</span>
+        <span class="tok-key">"type"</span><span class="tok-punc">:</span> <span class="tok-str">"object"</span><span class="tok-punc">,</span>
+        <span class="tok-key">"properties"</span><span class="tok-punc">: {</span>
+          <span class="tok-key">"city"</span><span class="tok-punc">:  {</span> <span class="tok-key">"type"</span><span class="tok-punc">:</span> <span class="tok-str">"string"</span><span class="tok-punc">,</span> <span class="tok-key">"description"</span><span class="tok-punc">:</span> <span class="tok-str">"City name"</span> <span class="tok-punc">},</span>
+          <span class="tok-key">"units"</span><span class="tok-punc">: {</span> <span class="tok-key">"type"</span><span class="tok-punc">:</span> <span class="tok-str">"string"</span><span class="tok-punc">,</span> <span class="tok-key">"description"</span><span class="tok-punc">:</span> <span class="tok-str">"metric or imperial"</span> <span class="tok-punc">}</span>
+        <span class="tok-punc">},</span>
+        <span class="tok-key">"required"</span><span class="tok-punc">: [</span><span class="tok-str">"city"</span><span class="tok-punc">]</span>
+      <span class="tok-punc">}</span>
+    <span class="tok-punc">}</span>
+  <span class="tok-punc">]</span>
+<span class="tok-punc">}</span>
+
+<span class="tok-comment">// In your Flow canvas, use a Condition block first:</span>
+<span class="tok-comment">//   if body.name == "get_weather"  → weather branch</span>
+<span class="tok-comment">//   if body.name == "get_forecast" → forecast branch</span>
+<span class="tok-comment">// Each branch uses a Select block to parse arguments.city</span></div>
+    </div>
+  </div>
+
+  <div class="divider">&nbsp;</div>
+
+  <!-- ═══════════════════════════════════════════════
+       PATH B: GENERATOR
+  ════════════════════════════════════════════════ -->
+  <div class="path-header">
+    <span class="path-badge generator">Path B</span>
+    <span class="path-title">The API Network Generator</span>
+  </div>
+
+  <p class="lesson-body">You have an API. Maybe several. The MCP Generator reads your existing Postman requests and generates a working MCP server, with one <strong>tool per request</strong>, handling auth, base URLs, and parameters automatically.</p>
+
+  <div class="analogy-banner" style="background: #0F2245;">
+    <div class="ab-icon">🌐</div>
+    <div class="ab-body">
+      <div class="ab-eyebrow" style="color: #93C5FD;">Mental model</div>
+      <div class="ab-text">Think of the Generator as a <strong>translator who reads your instruction manual</strong> (the API) and rewrites it as a list of commands your agent can natively understand. Each request becomes a tool. The auth, the base URL, the parameters &mdash; all carried over. You didn't write any MCP JSON. The translator did.</div>
+    </div>
+  </div>
+
+  <h2 class="subhead">The 8-Step Generation Flow</h2>
+  <p class="lesson-body">Walk through the full generation process below. Each step has a "why this matters" annotation so you know what's actually happening under the hood.</p>
+
+  <div class="carousel-wrap">
+    <div class="carousel-label">Step-by-step &mdash; click Next to advance</div>
+    <div class="carousel-track">
+      <div class="carousel-header">
+        <div class="carousel-step-info">Step <span id="carStep">1</span> of 8</div>
+        <div class="carousel-dots" id="carDots"></div>
+      </div>
+      <div id="carSlide" class="carousel-slide"></div>
+      <div class="carousel-footer">
+        <button class="btn btn-ghost" id="carPrev" disabled>← Back</button>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" id="carProgress" style="width:12.5%"></div></div>
+        <button class="btn btn-primary" id="carNext">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider">&nbsp;</div>
+
+  <!-- ═══════════════════════════════════════════════
+       DECISION TREE
+  ════════════════════════════════════════════════ -->
+  <h2 class="subhead">Which Path Is Right for You?</h2>
+  <p class="lesson-body">Answer three questions and get a concrete recommendation. No waffling, no "it depends" &mdash; just your path.</p>
+
+  <div class="decision-wrap">
+    <div class="decision-label">Interactive decision tree</div>
+    <div class="decision-card" id="dtCard">
+      <div class="dt-history" id="dtHistory"></div>
+      <div class="dt-progress-strip"><div class="dt-progress-fill" id="dtProgress" style="width:0%"></div></div>
+      <div class="dt-question-area" id="dtQuestion"></div>
+    </div>
+  </div>
+
+  <div class="divider">&nbsp;</div>
+
+  <!-- VIDEO -->
+  <h2 class="subhead">See Both Paths Side by Side</h2>
+  <p class="lesson-body">The demo below builds the same simple MCP server two ways &mdash; Flows on the left, Generator on the right. Same result, different journeys. Watching them back to back is the fastest way to decide which workflow fits your brain.</p>
+
+  <div class="video-placeholder">
+    <div class="video-play">&nbsp;</div>
+    <div class="video-label">Video Demo &mdash; Flows vs. Generator: Side-by-Side Build</div>
+    <div class="video-sublabel">Replace this block with the embedded comparison video when ready</div>
+  </div>
+
+  <div class="divider">&nbsp;</div>
+
+  <!-- CTA -->
+  <div class="cta-aside">
+    <div class="cta-label">🚀 Try This &mdash; Pick Your Path</div>
+    <div class="cta-paths">
+      <div class="cta-path-card flows-card">
+        <div class="cta-path-tag">Flows path</div>
+        <div class="cta-path-text">Use the <strong>greeter example as a template</strong>, deploy it, connect to it with an MCP request, and then modify the tool to do something you'd actually use &mdash; a formatter, a lookup, a calculation. One tool is enough.</div>
+      </div>
+      <div class="cta-path-card gen-card">
+        <div class="cta-path-tag">Generator path</div>
+        <div class="cta-path-text">Find <strong>3 requests in any public workspace</strong> that relate to a tool you use daily. Generate the server, unzip it, and run <code>npm run list-tools</code>. Read what got created. Does it match what you'd have written?</div>
+      </div>
+    </div>
+  </div>
+
+  <a href="module6-v1.html" style="text-decoration: none; display: block;">
+    <div class="whats-next">
+      <div class="next-icon">🌐</div>
+      <div class="next-text">
+        <div class="next-label">Up Next</div>
+        <h4>Connecting to the Outside World</h4>
+      </div>
+    </div>
+  </a>
+
+</div>
+
+<script>
+(function () {
+
+  /* ────────────────────────────────────────────
+     ACCORDION
+  ──────────────────────────────────────────── */
+  document.querySelectorAll('.acc-trigger').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.acc-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  /* ────────────────────────────────────────────
+     CODE TABS
+  ──────────────────────────────────────────── */
+  document.querySelectorAll('.ctab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+      document.querySelectorAll('.ctab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.ctab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('ctab-' + tab).classList.add('active');
+    });
+  });
+
+  /* Copy buttons */
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const block = document.getElementById(btn.dataset.target);
+      const text = block.innerText.replace(/^Copy\n?/, '').trim();
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied ✓';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    });
+  });
+
+  /* ────────────────────────────────────────────
+     CAROUSEL
+  ──────────────────────────────────────────── */
+  const slides = [
+    {
+      title: 'Open the MCP Generator',
+      body: 'From the Home menu, go to <strong>Public API Network</strong> then click <strong>MCP Generator</strong> in the left sidebar. This is your starting point &mdash; you\'re about to shop for API requests the way you\'d browse a market.',
+      why: 'The Generator is built directly into the API Network, which means you have access to thousands of verified publisher collections right from the jump.'
+    },
+    {
+      title: 'Search for a public API',
+      body: 'Type the name of an API or a category into the search field. Postman returns <strong>public workspaces and collections</strong> that match. You\'re looking for requests that represent actions you want your agent to perform.',
+      why: '<strong>Be specific.</strong> "Stripe invoices" will surface better results than just "Stripe." You\'re hunting for individual request-level actions, not whole APIs.'
+    },
+    {
+      title: 'Choose a public workspace',
+      body: 'Click into a workspace from the results. You\'ll see its collections and folder structure. Browse through them like you\'re reading a menu &mdash; each folder often maps to a resource type.',
+      why: 'Prefer <strong>verified publisher</strong> workspaces (blue badge). Their requests are more likely to have accurate base URLs, correct parameter names, and maintained auth schemas.'
+    },
+    {
+      title: 'Select individual requests',
+      body: 'Click through collections and folders and <strong>select the specific requests</strong> you want to turn into tools. Each request will become exactly one tool. Choose the ones that map to real actions, not just reads.',
+      why: 'Less is more here. A 3-tool server you understand beats a 40-tool server you don\'t. Start narrow &mdash; you can always regenerate with more later.'
+    },
+    {
+      title: 'Click Add Requests',
+      body: 'Once you\'ve selected what you need, click <strong>Add Requests</strong>. You can then search again and pull requests from <em>different workspaces</em> into the same server &mdash; a Stripe request and a Slack request can live side by side.',
+      why: 'Cross-API servers are one of the most powerful things MCP enables. One agent, one server, two completely different services it can reach. This step is where that gets set up.'
+    },
+    {
+      title: 'Click Generate',
+      body: 'Hit <strong>Generate</strong>. Postman reads each selected request &mdash; the URL, method, parameters, auth pattern &mdash; and writes a TypeScript MCP server wrapping all of it. It zips the result for you automatically.',
+      why: 'The generator handles the boilerplate you\'d otherwise write by hand: the MCP tool definition, the HTTP call logic, the argument mapping. What used to take hours takes seconds.'
+    },
+    {
+      title: 'Download and unzip',
+      body: 'Click <strong>Download ZIP</strong> and follow the onscreen instructions. Move the folder somewhere you\'ll find it, then open a terminal and <code>cd</code> into it.',
+      why: 'The unzipped project has a <code>tools/</code> directory with one file per tool, a <code>.env</code> template for your API keys, and a <code>README.md</code> with startup instructions. Read the README.'
+    },
+    {
+      title: 'Install, list tools, and start',
+      body: 'Run <strong><code>npm install</code></strong>, then <strong><code>npm run list-tools</code></strong> to see every tool that was generated with its name and file path. Then start the server with <strong><code>node mcpServer.js</code></strong> (STDIO) or <strong><code>node mcpServer.js --streamable-http</code></strong>.',
+      why: '<code>npm run list-tools</code> is your sanity check. If the tool names look wrong, open the relevant file in <code>tools/</code> and you\'ll see exactly what the generator created &mdash; it\'s readable TypeScript, not a black box.'
+    }
+  ];
+
+  let carIdx = 0;
+
+  const carSlide    = document.getElementById('carSlide');
+  const carStep     = document.getElementById('carStep');
+  const carDots     = document.getElementById('carDots');
+  const carPrev     = document.getElementById('carPrev');
+  const carNext     = document.getElementById('carNext');
+  const carProgress = document.getElementById('carProgress');
+
+  function buildDots() {
+    carDots.innerHTML = '';
+    slides.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'cdot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => goTo(i));
+      carDots.appendChild(d);
+    });
+  }
+
+  function renderSlide() {
+    const s = slides[carIdx];
+    carSlide.innerHTML = `
+      <div class="slide-num">Step ${carIdx + 1} of ${slides.length}</div>
+      <div class="slide-title">${s.title}</div>
+      <div class="slide-body">${s.body}</div>
+      <div class="slide-why"><div class="slide-why-label">Why this step matters</div>${s.why}</div>
+    `;
+    carStep.textContent = carIdx + 1;
+    carProgress.style.width = ((carIdx + 1) / slides.length * 100) + '%';
+    carPrev.disabled = carIdx === 0;
+    carNext.textContent = carIdx === slides.length - 1 ? 'Done ✓' : 'Next →';
+    carNext.disabled = false;
+    document.querySelectorAll('.cdot').forEach((d, i) => {
+      d.classList.toggle('active', i === carIdx);
+    });
+  }
+
+  function goTo(idx) {
+    carIdx = Math.max(0, Math.min(slides.length - 1, idx));
+    renderSlide();
+  }
+
+  carPrev.addEventListener('click', () => goTo(carIdx - 1));
+  carNext.addEventListener('click', () => { if (carIdx < slides.length - 1) goTo(carIdx + 1); });
+
+  buildDots();
+  renderSlide();
+
+  /* ────────────────────────────────────────────
+     DECISION TREE
+  ──────────────────────────────────────────── */
+  const questions = [
+    {
+      q: 'Do you already have existing API requests in Postman that cover what you need?',
+      opts: [
+        { label: 'Yes — I have requests I\'d use directly', val: 'yes-api' },
+        { label: 'No — I\'m building something new from scratch', val: 'no-api' },
+        { label: 'Sort of — I have an API but I need custom logic between steps', val: 'partial-api' }
+      ]
+    },
+    {
+      q: 'Do you need to transform data or run logic between API calls?',
+      opts: [
+        { label: 'Yes — the agent needs to process results before returning them', val: 'yes-logic' },
+        { label: 'No — it\'s mostly just making API calls and returning results', val: 'no-logic' }
+      ]
+    },
+    {
+      q: 'Do you plan to share this server publicly on the Postman API Network?',
+      opts: [
+        { label: 'Yes — I want other developers to find and use it', val: 'yes-public' },
+        { label: 'No — it\'s internal or for personal use', val: 'no-public' }
+      ]
+    }
+  ];
+
+  const results = {
+    flows: {
+      badge: 'flows',
+      title: '→ Take the Flows path',
+      body: 'You\'re building something net-new, or you need logic and transformations woven into the response. <strong>Postman Flows</strong> gives you a visual canvas to wire up that logic without writing server code. Start with the greeter example, then expand outward.'
+    },
+    generator: {
+      badge: 'generator',
+      title: '→ Use the MCP Generator',
+      body: 'You have existing API requests and need a clean, shareable server fast. <strong>The Generator</strong> is your shortcut: it reads your requests and writes the MCP layer for you. Run <code>npm run list-tools</code> after generation to see exactly what was created.'
+    },
+    both: {
+      badge: 'both',
+      title: '→ Consider both — start with Generator',
+      body: 'Your use case has API-first parts (Generator) and logic-heavy parts (Flows). A practical approach: <strong>generate a base server</strong> for the straightforward API calls, then build a Flows action for anything that needs orchestration, and expose both as tools in the same MCP collection.'
+    }
+  };
+
+  let dtStep = 0;
+  let dtAnswers = [];
+  const dtQuestion = document.getElementById('dtQuestion');
+  const dtHistory  = document.getElementById('dtHistory');
+  const dtProgress = document.getElementById('dtProgress');
+
+  function dtRender() {
+    if (dtStep >= questions.length) {
+      showResult();
+      return;
+    }
+    const q = questions[dtStep];
+    dtProgress.style.width = (dtStep / questions.length * 100) + '%';
+    dtQuestion.innerHTML = `
+      <div class="dt-q-num">Question ${dtStep + 1} of ${questions.length}</div>
+      <div class="dt-q-text">${q.q}</div>
+      <div class="dt-options">
+        ${q.opts.map(o => `<button class="dt-opt" data-val="${o.val}">${o.label}</button>`).join('')}
+      </div>
+    `;
+    dtQuestion.querySelectorAll('.dt-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        dtAnswers.push(btn.dataset.val);
+        addCrumb(btn.textContent);
+        dtStep++;
+        dtRender();
+      });
+    });
+  }
+
+  function addCrumb(text) {
+    const c = document.createElement('div');
+    c.className = 'dt-crumb';
+    c.textContent = text.length > 28 ? text.slice(0, 26) + '…' : text;
+    dtHistory.appendChild(c);
+  }
+
+  function showResult() {
+    dtProgress.style.width = '100%';
+    let key = 'flows';
+    const a = dtAnswers;
+
+    if (a[0] === 'yes-api' && a[1] === 'no-logic') {
+      key = 'generator';
+    } else if (a[0] === 'yes-api' && a[1] === 'yes-logic') {
+      key = 'both';
+    } else if (a[0] === 'partial-api') {
+      key = 'both';
+    } else {
+      key = 'flows';
+    }
+
+    const r = results[key];
+    dtQuestion.innerHTML = `
+      <div class="dt-result">
+        <div class="dt-result-badge ${r.badge}">${r.badge === 'both' ? 'Both paths' : r.badge === 'flows' ? 'Flows path' : 'Generator path'}</div>
+        <div class="dt-result-title">${r.title}</div>
+        <div class="dt-result-body">${r.body}</div>
+        <div class="dt-restart-row">
+          <button class="btn btn-ghost" id="dtRestart">Start over</button>
+        </div>
+      </div>
+    `;
+    document.getElementById('dtRestart').addEventListener('click', () => {
+      dtStep = 0; dtAnswers = []; dtHistory.innerHTML = '';
+      dtProgress.style.width = '0%';
+      dtRender();
+    });
+  }
+
+  dtRender();
+
+})();
+</script>

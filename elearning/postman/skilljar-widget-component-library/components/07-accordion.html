@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accordion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --white: #FFFFFF;
+      --green: #2D9E6B;
+      --green-pale: #EAF7F1;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .accordion { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.5rem; }
+
+    .acc-item { background: white; border-radius: 12px; box-shadow: var(--card-shadow); overflow: hidden; }
+
+    .acc-trigger {
+      width: 100%; background: none; border: none; display: flex; align-items: center; gap: 0.75rem;
+      padding: 1.1rem 1.25rem; cursor: pointer; text-align: left; transition: background 0.15s;
+    }
+    .acc-trigger:hover { background: #fdfbf9; }
+    .acc-item.open .acc-trigger { background: var(--orange-pale); }
+
+    .acc-icon { font-size: 1.1rem; width: 28px; text-align: center; flex-shrink: 0; }
+    .acc-title-wrap { flex: 1; }
+    .acc-step-label { font-family: 'Syne', sans-serif; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-light); }
+    .acc-item.open .acc-step-label { color: var(--orange); }
+    .acc-title { font-family: 'Syne', sans-serif; font-size: 0.98rem; font-weight: 700; color: var(--ink); margin: 0; line-height: 1.3; }
+
+    .acc-chevron { font-size: 0.75rem; color: var(--ink-light); transition: transform 0.3s; margin-left: auto; }
+    .acc-item.open .acc-chevron { transform: rotate(180deg); color: var(--orange); }
+
+    .acc-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    .acc-item.open .acc-body { max-height: 400px; }
+    .acc-body-inner { padding: 0 1.25rem 1.25rem 3.5rem; }
+
+    .acc-body-inner p { margin: 0 0 0.75rem; font-size: 0.9rem; color: var(--ink-mid); line-height: 1.65; }
+    .acc-body-inner p:last-child { margin-bottom: 0; }
+
+    .acc-code { background: #1a1210; border-radius: 8px; padding: 0.75rem 1rem; font-family: 'DM Mono', monospace; font-size: 0.78rem; color: #7DD3B0; line-height: 1.6; margin: 0.5rem 0; overflow-x: auto; }
+
+    .acc-anno { background: var(--orange-pale); border-left: 3px solid var(--orange); border-radius: 0 6px 6px 0; padding: 0.6rem 0.9rem; margin-top: 0.5rem; font-size: 0.85rem; color: var(--ink-mid); }
+
+    .acc-checklist { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+    .acc-checklist li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; color: var(--ink-mid); }
+    .acc-checklist li::before { content: '✓'; color: var(--green); font-weight: 700; font-size: 0.8rem; }
+
+    .acc-steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem; counter-reset: step; }
+    .acc-steps li { display: flex; gap: 0.6rem; font-size: 0.88rem; color: var(--ink-mid); align-items: flex-start; counter-increment: step; }
+    .acc-steps li::before { content: counter(step); background: var(--ink); color: white; font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  </style>
+</head>
+<body>
+
+  <div class="accordion" id="accordion">
+
+    <div class="acc-item open" data-idx="0">
+      <button class="acc-trigger" onclick="toggle(0)">
+        <span class="acc-icon">🔌</span>
+        <div class="acc-title-wrap">
+          <div class="acc-step-label">Step 1</div>
+          <div class="acc-title">Connect — Establish the connection</div>
+        </div>
+        <span class="acc-chevron">▼</span>
+      </button>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>Start by establishing a transport-level connection to your MCP server. The client sends an <code>initialize</code> request with its protocol version and capabilities.</p>
+          <div class="acc-code">$ npx @modelcontextprotocol/client connect stdio ./server.js</div>
+          <div class="acc-anno">💡 The server responds with its own capabilities, completing the handshake.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" data-idx="1">
+      <button class="acc-trigger" onclick="toggle(1)">
+        <span class="acc-icon">🔍</span>
+        <div class="acc-title-wrap">
+          <div class="acc-step-label">Step 2</div>
+          <div class="acc-title">Discover — List available capabilities</div>
+        </div>
+        <span class="acc-chevron">▼</span>
+      </button>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>Once connected, enumerate what the server exposes. Use the three discovery endpoints:</p>
+          <ul class="acc-checklist">
+            <li><strong>tools/list</strong> — all invokable functions</li>
+            <li><strong>resources/list</strong> — all readable data sources</li>
+            <li><strong>prompts/list</strong> — all reusable prompt templates</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" data-idx="2">
+      <button class="acc-trigger" onclick="toggle(2)">
+        <span class="acc-icon">🛠️</span>
+        <div class="acc-title-wrap">
+          <div class="acc-step-label">Step 3</div>
+          <div class="acc-title">Configure — Set up your tools</div>
+        </div>
+        <span class="acc-chevron">▼</span>
+      </button>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>Register the tool definitions with your AI model. Pass them in the <code>tools</code> parameter of your API call.</p>
+          <div class="acc-code">const { tools } = await client.listTools();<br>const response = await claude.messages.create({ tools, ... });</div>
+          <div class="acc-anno">⚠️ Only include tools the model actually needs for the task — fewer tools means faster, more accurate responses.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" data-idx="3">
+      <button class="acc-trigger" onclick="toggle(3)">
+        <span class="acc-icon">▶️</span>
+        <div class="acc-title-wrap">
+          <div class="acc-step-label">Step 4</div>
+          <div class="acc-title">Execute — Run your first request</div>
+        </div>
+        <span class="acc-chevron">▼</span>
+      </button>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>Send a message, handle tool use responses in a loop:</p>
+          <ol class="acc-steps">
+            <li>Send message to Claude with tools attached</li>
+            <li>If response has <code>tool_use</code> blocks, call <code>tools/call</code> via MCP</li>
+            <li>Append tool results to the conversation</li>
+            <li>Re-send to Claude until you get a text response</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" data-idx="4">
+      <button class="acc-trigger" onclick="toggle(4)">
+        <span class="acc-icon">✅</span>
+        <div class="acc-title-wrap">
+          <div class="acc-step-label">Step 5</div>
+          <div class="acc-title">Verify — Confirm the results</div>
+        </div>
+        <span class="acc-chevron">▼</span>
+      </button>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>After each tool invocation, validate the response before continuing:</p>
+          <ul class="acc-checklist">
+            <li>Check <code>isError: false</code> in the tool result</li>
+            <li>Validate content type matches expected schema</li>
+            <li>Log the exchange for debugging</li>
+            <li>Close the connection cleanly when done</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function toggle(idx) {
+      const items = document.querySelectorAll('.acc-item');
+      items.forEach((item, i) => {
+        if (i === idx) {
+          item.classList.toggle('open');
+        } else {
+          item.classList.remove('open');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

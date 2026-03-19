@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Section Label + Title</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .section-header { max-width: 620px; }
+
+    .section-eyebrow {
+      display: inline-block;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--orange);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.15;
+      margin: 0 0 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .section-title em {
+      font-style: italic;
+      color: var(--orange);
+    }
+
+    .section-intro {
+      border-left: 4px solid var(--orange);
+      padding-left: 1.1rem;
+      margin: 0;
+      font-size: 1rem;
+      color: var(--ink-mid);
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="section-header">
+    <span class="section-eyebrow">Module 3</span>
+    <h1 class="section-title">Understanding <em>Primitives</em></h1>
+    <p class="section-intro">Every MCP server exposes its capabilities through three core building blocks. Once you understand how resources, tools, and prompts work together, you can design servers that are both powerful and predictable.</p>
+  </div>
+
+</body>
+</html>

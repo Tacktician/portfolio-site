@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow Steps List</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .flow-steps { max-width: 560px; display: flex; flex-direction: column; }
+
+    .flow-step { display: flex; gap: 1.25rem; padding: 0 0 1.5rem; position: relative; }
+    .flow-step:last-child { padding-bottom: 0; }
+
+    /* Vertical connector line */
+    .flow-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 44px;
+      bottom: 0;
+      width: 2px;
+      background: var(--rule);
+    }
+
+    .step-num-col { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .step-circle {
+      width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: white;
+      font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      box-shadow: var(--card-shadow);
+    }
+
+    .step-body { flex: 1; padding-top: 8px; }
+    .step-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; flex-wrap: wrap; }
+    .step-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; color: var(--ink); }
+    .step-pill { font-family: 'Syne', sans-serif; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 9px; border-radius: 10px; background: var(--orange-pale); color: var(--orange); }
+    .step-desc { font-size: 0.88rem; color: var(--ink-mid); line-height: 1.6; margin: 0; }
+  </style>
+</head>
+<body>
+
+  <div class="flow-steps">
+
+    <div class="flow-step">
+      <div class="step-num-col">
+        <div class="step-circle">1</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <span class="step-title">Initialize</span>
+          <span class="step-pill">Required</span>
+        </div>
+        <p class="step-desc">Send the <code>initialize</code> request with your client name, version, and capability declarations. The server responds with its own capabilities to complete the handshake.</p>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="step-num-col">
+        <div class="step-circle">2</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <span class="step-title">Configure</span>
+        </div>
+        <p class="step-desc">Register the tools, resources, and prompts exposed by the server. Store these definitions in your application state — they're the interface between your app and the AI.</p>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="step-num-col">
+        <div class="step-circle">3</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <span class="step-title">Test</span>
+        </div>
+        <p class="step-desc">Invoke a simple tool with known inputs and verify the response matches expectations. Use the MCP inspector to trace the full JSON-RPC exchange and catch schema mismatches early.</p>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="step-num-col">
+        <div class="step-circle">4</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <span class="step-title">Deploy</span>
+          <span class="step-pill">Final</span>
+        </div>
+        <p class="step-desc">Move to production with proper environment variable management, error handling, and logging. Monitor token usage and latency to catch regressions before users notice them.</p>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

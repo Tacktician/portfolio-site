@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Step Carousel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --white: #FFFFFF;
+      --green: #2D9E6B;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .carousel-wrap { max-width: 580px; margin: 0 auto; }
+
+    .progress-bar-track { height: 4px; background: var(--rule); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: var(--orange); border-radius: 2px; transition: width 0.4s cubic-bezier(0.4,0,0.2,1); }
+
+    .slide-card {
+      background: white; border-radius: 16px; box-shadow: var(--card-shadow);
+      padding: 2rem; min-height: 220px; position: relative; overflow: hidden;
+    }
+    .slide-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--orange); }
+
+    .slide-counter { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); margin-bottom: 0.5rem; }
+    .slide-title { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--ink); margin: 0 0 0.75rem; }
+    .slide-body { font-size: 0.95rem; color: var(--ink-mid); line-height: 1.7; margin: 0 0 1rem; }
+    .slide-why { background: var(--orange-pale); border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.85rem; color: var(--ink-mid); }
+    .slide-why strong { color: var(--orange); font-family: 'Syne', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.25rem; }
+
+    .carousel-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 1.25rem; }
+
+    .nav-btn {
+      background: white; border: 2px solid var(--rule); border-radius: 10px; padding: 10px 22px;
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer;
+      color: var(--ink-mid); transition: border-color 0.2s, color 0.2s, background 0.2s;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .nav-btn:hover:not(:disabled) { border-color: var(--orange); color: var(--orange); }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .nav-btn.primary { background: var(--orange); border-color: var(--orange); color: white; }
+    .nav-btn.primary:hover { background: var(--orange-light); border-color: var(--orange-light); color: white; }
+    .nav-btn.done { background: var(--green); border-color: var(--green); color: white; cursor: default; }
+
+    .dots { display: flex; gap: 0.4rem; align-items: center; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--rule); transition: background 0.2s, transform 0.2s; }
+    .dot.active { background: var(--orange); transform: scale(1.3); }
+    .dot.done { background: var(--ink-light); }
+
+    .slide-inner { animation: fadeSlide 0.25s ease; }
+    @keyframes fadeSlide { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+  </style>
+</head>
+<body>
+
+  <div class="carousel-wrap">
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progressFill" style="width: 12.5%"></div>
+    </div>
+
+    <div class="slide-card">
+      <div class="slide-inner" id="slideInner"></div>
+    </div>
+
+    <div class="carousel-nav">
+      <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button>
+      <div class="dots" id="dots"></div>
+      <button class="nav-btn primary" id="nextBtn" onclick="navigate(1)">Next →</button>
+    </div>
+  </div>
+
+  <script>
+    const steps = [
+      {
+        title: 'Define Your Goal',
+        body: 'Start with a clear outcome in mind. What problem are you solving? What does success look like? A well-defined goal shapes every decision that follows — model choice, prompt design, and architecture.',
+        why: 'A vague goal produces vague results. Specificity is the foundation of every great AI integration.'
+      },
+      {
+        title: 'Choose Your Model',
+        body: 'Select the AI model that matches your task\'s complexity and latency requirements. Claude Opus excels at complex reasoning; Haiku is optimized for speed and cost. Match the model to the job.',
+        why: 'Using a powerful model for a simple task wastes money. Using a weak model for complex reasoning fails silently.'
+      },
+      {
+        title: 'Set Up Auth',
+        body: 'Configure your API credentials securely. Store your API key in environment variables — never hardcode it. Use a .env file locally and a secrets manager in production.',
+        why: 'A leaked API key can result in unexpected bills or data exposure. Always treat keys like passwords.'
+      },
+      {
+        title: 'Write the Prompt',
+        body: 'Craft clear, specific instructions. Give the model a role, context, and explicit output format. Use few-shot examples for complex or structured outputs. Shorter isn\'t always better — clarity wins.',
+        why: 'The prompt is the primary interface between you and the model. Time spent here multiplies returns downstream.'
+      },
+      {
+        title: 'Add Context',
+        body: 'Provide relevant background information: user history, retrieved documents, current state. Context helps the model ground its responses in your specific situation rather than generalizing.',
+        why: 'Without context, the model guesses. With context, it reasons. The difference is the quality of every answer.'
+      },
+      {
+        title: 'Test & Iterate',
+        body: 'Run your prompt against a variety of real inputs. Evaluate the outputs. Identify failure modes. Refine the prompt, adjust temperature, and test again. Iteration is the process — not an afterthought.',
+        why: 'No prompt survives first contact with real data. Expect to iterate 5–10 times before production.'
+      },
+      {
+        title: 'Handle Errors',
+        body: 'Build in fallbacks for API errors, rate limits, and unexpected outputs. Validate model responses before acting on them. Never let a raw API error surface to end users.',
+        why: 'AI outputs are probabilistic. A robust integration assumes something will go wrong and handles it gracefully.'
+      },
+      {
+        title: 'Deploy & Monitor',
+        body: 'Ship to production with logging, tracing, and latency metrics in place. Track token usage, response times, and user feedback. Set up alerts for error spikes and model drift.',
+        why: 'You can\'t improve what you don\'t measure. Monitoring is how a good integration becomes a great product.'
+      }
+    ];
+
+    let current = 0;
+
+    function render() {
+      const step = steps[current];
+      const total = steps.length;
+
+      document.getElementById('slideInner').innerHTML = `
+        <div class="slide-counter">Step ${current + 1} of ${total}</div>
+        <h2 class="slide-title">${step.title}</h2>
+        <p class="slide-body">${step.body}</p>
+        <div class="slide-why"><strong>Why this matters</strong>${step.why}</div>
+      `;
+
+      document.getElementById('progressFill').style.width = ((current + 1) / total * 100) + '%';
+
+      document.getElementById('prevBtn').disabled = current === 0;
+
+      const nextBtn = document.getElementById('nextBtn');
+      if (current === total - 1) {
+        nextBtn.textContent = 'Done ✓';
+        nextBtn.className = 'nav-btn done';
+        nextBtn.onclick = null;
+      } else {
+        nextBtn.textContent = 'Next →';
+        nextBtn.className = 'nav-btn primary';
+        nextBtn.onclick = () => navigate(1);
+      }
+
+      const dots = document.getElementById('dots');
+      dots.innerHTML = steps.map((_, i) =>
+        `<div class="dot ${i === current ? 'active' : i < current ? 'done' : ''}" onclick="goTo(${i})"></div>`
+      ).join('');
+    }
+
+    function navigate(dir) {
+      const next = current + dir;
+      if (next >= 0 && next < steps.length) {
+        current = next;
+        render();
+      }
+    }
+
+    function goTo(idx) {
+      current = idx;
+      render();
+    }
+
+    render();
+  </script>
+</body>
+</html>

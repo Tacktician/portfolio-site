@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Step-Flow Navigator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --white: #FFFFFF;
+      --green: #2D9E6B;
+      --green-pale: #EAF7F1;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .flow-wrap { max-width: 580px; margin: 0 auto; }
+
+    /* Node track */
+    .node-track { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; position: relative; }
+
+    .node-connector { flex: 1; height: 3px; background: var(--rule); transition: background 0.4s; margin: 0 -1px; }
+    .node-connector.done { background: var(--green); }
+
+    .flow-node {
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      cursor: pointer; transition: transform 0.2s; position: relative; z-index: 1;
+    }
+    .flow-node:hover .node-circle { box-shadow: 0 0 0 4px var(--orange-pale); }
+
+    .node-circle {
+      width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--rule); background: white;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+      transition: all 0.3s; box-shadow: var(--card-shadow);
+    }
+    .flow-node.active .node-circle { border-color: var(--orange); background: var(--orange-pale); transform: scale(1.15); box-shadow: 0 4px 16px rgba(255,108,55,0.25); }
+    .flow-node.done .node-circle { border-color: var(--green); background: var(--green-pale); }
+    .flow-node.done .node-circle::after { content: '✓'; font-size: 0.9rem; color: var(--green); font-weight: 700; position: absolute; }
+    .flow-node.done .node-emoji { display: none; }
+
+    .node-label { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; color: var(--ink-light); text-align: center; white-space: nowrap; }
+    .flow-node.active .node-label { color: var(--orange); }
+    .flow-node.done .node-label { color: var(--green); }
+
+    /* Step content */
+    .step-card { background: white; border-radius: 16px; box-shadow: var(--card-shadow); padding: 1.75rem; min-height: 180px; border-top: 4px solid var(--orange); }
+    .step-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--orange-pale); color: var(--orange); font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 4px 10px; border-radius: 20px; margin-bottom: 0.75rem; }
+    .step-icon { font-size: 1rem; }
+    .step-title { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--ink); margin-bottom: 0.75rem; }
+    .step-body { font-size: 0.93rem; color: var(--ink-mid); line-height: 1.7; margin: 0; }
+
+    /* Nav */
+    .flow-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 1.25rem; }
+    .nav-btn {
+      background: white; border: 2px solid var(--rule); border-radius: 10px; padding: 10px 22px;
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer;
+      color: var(--ink-mid); transition: border-color 0.2s, color 0.2s;
+    }
+    .nav-btn:hover:not(:disabled) { border-color: var(--orange); color: var(--orange); }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .nav-btn.primary { background: var(--orange); border-color: var(--orange); color: white; }
+    .nav-btn.primary:hover:not(:disabled) { background: var(--orange-light); border-color: var(--orange-light); color: white; }
+    .nav-btn.done-btn { background: var(--green); border-color: var(--green); color: white; cursor: default; }
+
+    .step-count { font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 700; color: var(--ink-light); }
+
+    .step-anim { animation: stepIn 0.25s ease; }
+    @keyframes stepIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <div class="flow-wrap">
+    <div class="node-track" id="nodeTrack"></div>
+    <div class="step-card">
+      <div class="step-anim" id="stepContent"></div>
+    </div>
+    <div class="flow-nav">
+      <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button>
+      <span class="step-count" id="stepCount"></span>
+      <button class="nav-btn primary" id="nextBtn" onclick="navigate(1)">Next →</button>
+    </div>
+  </div>
+
+  <script>
+    const steps = [
+      { icon: '🔌', label: 'Connect', title: 'Connect', body: 'Establish connection to your MCP server and verify it responds to the initialize handshake. The server returns its protocol version and available capabilities.' },
+      { icon: '🗂️', label: 'Discover', title: 'Discover', body: 'Call tools/list and resources/list to enumerate all available capabilities. Cache these definitions — they\'re stable across the session and don\'t need to be re-fetched.' },
+      { icon: '⚡', label: 'Execute', title: 'Execute', body: 'Invoke a tool by name with the required parameters. Handle the response — check isError and parse the content array. Tool results are passed back to the model as tool_result messages.' },
+      { icon: '✅', label: 'Complete', title: 'Complete', body: 'Verify results, handle errors gracefully, and close the connection when the task is done. Log the full exchange for debugging and auditing purposes.' }
+    ];
+
+    let current = 0;
+
+    function render() {
+      const total = steps.length;
+
+      // Node track
+      const track = document.getElementById('nodeTrack');
+      let html = '';
+      steps.forEach((step, i) => {
+        const state = i < current ? 'done' : i === current ? 'active' : '';
+        html += `
+          <div class="flow-node ${state}" onclick="goTo(${i})">
+            <div class="node-circle"><span class="node-emoji">${step.icon}</span></div>
+            <span class="node-label">${step.label}</span>
+          </div>
+        `;
+        if (i < steps.length - 1) {
+          html += `<div class="node-connector ${i < current ? 'done' : ''}"></div>`;
+        }
+      });
+      track.innerHTML = html;
+
+      // Content
+      const s = steps[current];
+      document.getElementById('stepContent').innerHTML = `
+        <div class="step-badge"><span class="step-icon">${s.icon}</span>Step ${current + 1}</div>
+        <div class="step-title">${s.title}</div>
+        <p class="step-body">${s.body}</p>
+      `;
+      document.getElementById('stepContent').className = 'step-anim';
+      // retrigger animation
+      void document.getElementById('stepContent').offsetWidth;
+
+      document.getElementById('stepCount').textContent = `${current + 1} of ${total}`;
+      document.getElementById('prevBtn').disabled = current === 0;
+
+      const nextBtn = document.getElementById('nextBtn');
+      if (current === total - 1) {
+        nextBtn.textContent = 'Done ✓';
+        nextBtn.className = 'nav-btn done-btn';
+        nextBtn.disabled = true;
+      } else {
+        nextBtn.textContent = 'Next →';
+        nextBtn.className = 'nav-btn primary';
+        nextBtn.disabled = false;
+      }
+    }
+
+    function navigate(dir) {
+      const next = current + dir;
+      if (next >= 0 && next < steps.length) { current = next; render(); }
+    }
+
+    function goTo(idx) { current = idx; render(); }
+
+    render();
+  </script>
+</body>
+</html>

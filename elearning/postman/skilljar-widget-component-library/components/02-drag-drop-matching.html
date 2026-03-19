@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drag-and-Drop Matching</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --white: #FFFFFF;
+      --green: #2D9E6B;
+      --green-pale: #EAF7F1;
+      --red: #E03E2D;
+      --red-pale: #FEF0EE;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .dnd-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+
+    .dnd-col-label { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 0.75rem; }
+
+    .cards-pool { display: flex; flex-direction: column; gap: 0.6rem; min-height: 280px; }
+
+    .drag-card {
+      background: white;
+      border: 2px solid var(--rule);
+      border-radius: 10px;
+      padding: 12px 16px;
+      cursor: grab;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: var(--card-shadow);
+      transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+      user-select: none;
+    }
+    .drag-card:hover { border-color: var(--orange); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(26,22,18,0.12); }
+    .drag-card:active { cursor: grabbing; }
+    .drag-card.dragging { opacity: 0.4; }
+
+    .drop-targets { display: flex; flex-direction: column; gap: 0.6rem; }
+
+    .drop-target {
+      background: white;
+      border: 2px dashed var(--rule);
+      border-radius: 10px;
+      padding: 12px 16px;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .drop-target .target-label { font-size: 0.88rem; color: var(--ink-mid); flex: 1; }
+    .drop-target.drag-over { border-color: var(--orange); background: var(--orange-pale); }
+    .drop-target.correct { border-color: var(--green); background: var(--green-pale); border-style: solid; }
+    .drop-target.incorrect { border-color: var(--red); background: var(--red-pale); border-style: solid; }
+    .drop-target.incorrect { animation: shake 0.4s ease; }
+
+    .placed-card {
+      background: var(--ink);
+      color: white;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      white-space: nowrap;
+    }
+    .placed-card .remove-btn { cursor: pointer; opacity: 0.6; font-size: 0.75rem; line-height: 1; transition: opacity 0.2s; margin-left: 2px; }
+    .placed-card .remove-btn:hover { opacity: 1; }
+
+    .result-icon { display: none; font-size: 1.1rem; }
+    .drop-target.correct .result-icon, .drop-target.incorrect .result-icon { display: block; }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    .actions { display: flex; align-items: center; gap: 1rem; margin-top: 1.5rem; }
+    .check-btn { background: var(--orange); color: white; border: none; border-radius: 8px; padding: 10px 24px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: background 0.2s; }
+    .check-btn:hover { background: var(--orange-light); }
+    .reset-btn { background: transparent; color: var(--ink-mid); border: 2px solid var(--rule); border-radius: 8px; padding: 10px 20px; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: border-color 0.2s; }
+    .reset-btn:hover { border-color: var(--ink-mid); }
+
+    .result-panel { margin-top: 1.5rem; background: white; border-radius: 12px; padding: 1.25rem 1.5rem; box-shadow: var(--card-shadow); display: none; }
+    .result-panel.show { display: block; }
+    .result-score { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--ink); margin-bottom: 0.25rem; }
+    .result-msg { color: var(--ink-mid); font-size: 0.9rem; }
+    .perfect-badge { display: inline-block; background: var(--green); color: white; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.8rem; padding: 3px 10px; border-radius: 20px; margin-left: 0.5rem; vertical-align: middle; }
+
+    /* Ghost element */
+    .drag-ghost {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.9;
+      transform: rotate(3deg) scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dnd-layout">
+    <div>
+      <div class="dnd-col-label">Drag these cards →</div>
+      <div class="cards-pool" id="cardsPool">
+        <div class="drag-card" data-id="tool" draggable="true">🔧 Tool</div>
+        <div class="drag-card" data-id="resource" draggable="true">📋 Resource</div>
+        <div class="drag-card" data-id="prompt" draggable="true">⚡ Prompt</div>
+        <div class="drag-card" data-id="workflow" draggable="true">🔄 Workflow</div>
+      </div>
+    </div>
+    <div>
+      <div class="dnd-col-label">← Drop onto the right definition</div>
+      <div class="drop-targets" id="dropTargets">
+        <div class="drop-target" data-accepts="tool">
+          <span class="target-label">Actions the AI can perform</span>
+          <span class="result-icon"></span>
+        </div>
+        <div class="drop-target" data-accepts="resource">
+          <span class="target-label">Data the AI can read</span>
+          <span class="result-icon"></span>
+        </div>
+        <div class="drop-target" data-accepts="prompt">
+          <span class="target-label">Instructions for behavior</span>
+          <span class="result-icon"></span>
+        </div>
+        <div class="drop-target" data-accepts="workflow">
+          <span class="target-label">Sequences of operations</span>
+          <span class="result-icon"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="check-btn" onclick="checkAnswers()">Check Answers</button>
+    <button class="reset-btn" onclick="resetAll()">Reset</button>
+  </div>
+
+  <div class="result-panel" id="resultPanel">
+    <div class="result-score" id="resultScore"></div>
+    <div class="result-msg" id="resultMsg"></div>
+  </div>
+
+  <script>
+    let draggingId = null;
+    let draggingEl = null;
+    let ghost = null;
+    let offsetX = 0, offsetY = 0;
+
+    const cards = document.querySelectorAll('.drag-card');
+    const targets = document.querySelectorAll('.drop-target');
+
+    // Desktop drag events
+    cards.forEach(card => {
+      card.addEventListener('dragstart', e => {
+        draggingId = card.dataset.id;
+        draggingEl = card;
+        setTimeout(() => card.classList.add('dragging'), 0);
+      });
+      card.addEventListener('dragend', () => {
+        card.classList.remove('dragging');
+        draggingId = null;
+        draggingEl = null;
+      });
+    });
+
+    targets.forEach(target => {
+      target.addEventListener('dragover', e => { e.preventDefault(); target.classList.add('drag-over'); });
+      target.addEventListener('dragleave', () => target.classList.remove('drag-over'));
+      target.addEventListener('drop', e => {
+        e.preventDefault();
+        target.classList.remove('drag-over');
+        if (draggingId) dropCard(target, draggingId, draggingEl);
+      });
+    });
+
+    // Touch drag
+    cards.forEach(card => {
+      card.addEventListener('touchstart', e => {
+        const touch = e.touches[0];
+        draggingId = card.dataset.id;
+        draggingEl = card;
+        const rect = card.getBoundingClientRect();
+        offsetX = touch.clientX - rect.left;
+        offsetY = touch.clientY - rect.top;
+
+        ghost = card.cloneNode(true);
+        ghost.className = 'drag-card drag-ghost';
+        ghost.style.width = rect.width + 'px';
+        ghost.style.left = (touch.clientX - offsetX) + 'px';
+        ghost.style.top = (touch.clientY - offsetY) + 'px';
+        document.body.appendChild(ghost);
+        card.classList.add('dragging');
+      }, { passive: true });
+
+      card.addEventListener('touchmove', e => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        if (ghost) {
+          ghost.style.left = (touch.clientX - offsetX) + 'px';
+          ghost.style.top = (touch.clientY - offsetY) + 'px';
+        }
+        targets.forEach(t => {
+          const r = t.getBoundingClientRect();
+          if (touch.clientX >= r.left && touch.clientX <= r.right && touch.clientY >= r.top && touch.clientY <= r.bottom) {
+            t.classList.add('drag-over');
+          } else {
+            t.classList.remove('drag-over');
+          }
+        });
+      }, { passive: false });
+
+      card.addEventListener('touchend', e => {
+        const touch = e.changedTouches[0];
+        if (ghost) { ghost.remove(); ghost = null; }
+        draggingEl && draggingEl.classList.remove('dragging');
+
+        targets.forEach(t => {
+          t.classList.remove('drag-over');
+          const r = t.getBoundingClientRect();
+          if (touch.clientX >= r.left && touch.clientX <= r.right && touch.clientY >= r.top && touch.clientY <= r.bottom) {
+            if (draggingId) dropCard(t, draggingId, draggingEl);
+          }
+        });
+        draggingId = null;
+        draggingEl = null;
+      });
+    });
+
+    function dropCard(target, id, sourceEl) {
+      // Remove any existing placed card in target
+      const existing = target.querySelector('.placed-card');
+      if (existing) {
+        const returnId = existing.dataset.returnId;
+        returnToPool(returnId);
+        existing.remove();
+      }
+      // Also remove card from whatever target it was in before
+      targets.forEach(t => {
+        const p = t.querySelector(`.placed-card[data-return-id="${id}"]`);
+        if (p) p.remove();
+      });
+
+      // Hide source card
+      if (sourceEl) sourceEl.style.display = 'none';
+
+      // Create placed card
+      const placed = document.createElement('div');
+      placed.className = 'placed-card';
+      placed.dataset.returnId = id;
+      const cardEl = document.querySelector(`.drag-card[data-id="${id}"]`);
+      placed.innerHTML = (cardEl ? cardEl.textContent.trim() : id) + ` <span class="remove-btn" onclick="removeFromTarget(this, '${id}')">✕</span>`;
+
+      // Insert before target label
+      const label = target.querySelector('.target-label');
+      target.insertBefore(placed, label);
+
+      // Clear checked state
+      target.classList.remove('correct', 'incorrect');
+      target.querySelector('.result-icon').textContent = '';
+    }
+
+    function removeFromTarget(btn, id) {
+      const placed = btn.closest('.placed-card');
+      placed.remove();
+      returnToPool(id);
+    }
+
+    function returnToPool(id) {
+      const card = document.querySelector(`.drag-card[data-id="${id}"]`);
+      if (card) card.style.display = '';
+    }
+
+    function checkAnswers() {
+      let correct = 0;
+      targets.forEach(target => {
+        const placed = target.querySelector('.placed-card');
+        const icon = target.querySelector('.result-icon');
+        target.classList.remove('correct', 'incorrect');
+        if (placed) {
+          const isCorrect = placed.dataset.returnId === target.dataset.accepts;
+          if (isCorrect) {
+            correct++;
+            target.classList.add('correct');
+            icon.textContent = '✓';
+          } else {
+            target.classList.add('incorrect');
+            icon.textContent = '✗';
+            // Re-trigger shake
+            target.style.animation = 'none';
+            requestAnimationFrame(() => { target.style.animation = ''; });
+          }
+        } else {
+          icon.textContent = '';
+        }
+      });
+
+      const panel = document.getElementById('resultPanel');
+      const score = document.getElementById('resultScore');
+      const msg = document.getElementById('resultMsg');
+      const total = targets.length;
+      panel.classList.add('show');
+      score.innerHTML = `${correct} / ${total} correct${correct === total ? '<span class="perfect-badge">Perfect!</span>' : ''}`;
+      if (correct === total) {
+        msg.textContent = '🎉 Excellent! You matched all cards correctly.';
+      } else if (correct >= total / 2) {
+        msg.textContent = 'Good effort! Review the incorrect matches and try again.';
+      } else {
+        msg.textContent = 'Keep going — review the definitions and give it another shot.';
+      }
+    }
+
+    function resetAll() {
+      targets.forEach(target => {
+        const placed = target.querySelector('.placed-card');
+        if (placed) {
+          returnToPool(placed.dataset.returnId);
+          placed.remove();
+        }
+        target.classList.remove('correct', 'incorrect');
+        target.querySelector('.result-icon').textContent = '';
+      });
+      document.getElementById('resultPanel').classList.remove('show');
+    }
+  </script>
+</body>
+</html>

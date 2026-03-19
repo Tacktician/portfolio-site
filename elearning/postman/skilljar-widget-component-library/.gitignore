@@ -1,0 +1,9 @@
+*.pyc, __pycache__
+**/node_modules/
+**/.venv/
+**/.env/
+.idea
+.DS_Store
+*.log
+*.tmp
+npm-debug.log

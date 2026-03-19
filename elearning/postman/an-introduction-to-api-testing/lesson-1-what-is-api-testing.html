@@ -1,0 +1,279 @@
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+<div>
+<style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --white: #FFFFFF;
+      --green: #2D9E6B;
+      --green-pale: #EAF7F1;
+      --blue: #2563EB;
+      --blue-pale: #EFF4FF;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    .lesson-container { font-family: 'DM Sans', sans-serif; color: var(--ink); line-height: 1.7; max-width: 780px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+
+    /* ── Section Header ── */
+    .section-header { margin-bottom: 2.5rem; }
+    .section-eyebrow {
+      display: inline-block; font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em; color: var(--orange); margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--ink);
+      line-height: 1.15; margin: 0 0 1.25rem; letter-spacing: -0.02em;
+    }
+    .section-title em { font-style: italic; color: var(--orange); }
+    .section-intro {
+      border-left: 4px solid var(--orange); padding-left: 1.1rem; margin: 0;
+      font-size: 1rem; color: var(--ink-mid); line-height: 1.7;
+    }
+
+    /* ── Objectives Box ── */
+    .objectives-box {
+      background: var(--orange-pale); border: 1.5px solid #FFD4C2;
+      border-radius: 10px; padding: 22px 26px; margin-bottom: 2.5rem;
+      box-shadow: var(--card-shadow);
+    }
+    .obj-label {
+      font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); margin-bottom: 14px;
+    }
+    .objectives-list { display: flex; flex-direction: column; gap: 10px; }
+    .obj-item { display: flex; align-items: flex-start; gap: 10px; }
+    .obj-item p { display: block; margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink-mid); font-weight: 300; }
+    .obj-item p strong { color: var(--ink); font-weight: 500; }
+    .obj-bullet {
+      flex-shrink: 0; width: 20px; height: 20px; min-width: 20px; border-radius: 50%;
+      background: var(--orange); color: white; font-family: 'Syne', sans-serif;
+      font-size: 10px; font-weight: 700; display: inline-flex; align-items: center;
+      justify-content: center; margin-top: 2px;
+    }
+
+    /* ── Divider ── */
+    .divider-with-label { display: flex; align-items: center; gap: 1rem; margin: 2.5rem auto; }
+    .divider-with-label::before, .divider-with-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+    .divider-label { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-light); white-space: nowrap; }
+
+    /* ── Body Text ── */
+    .lesson-text { font-size: 0.95rem; color: var(--ink-mid); line-height: 1.7; margin-bottom: 2rem; }
+    .lesson-text strong { color: var(--ink); font-weight: 600; }
+
+    /* ── Callout Box ── */
+    .callout {
+      border-radius: 12px; padding: 1.1rem 1.4rem; display: flex; align-items: flex-start;
+      gap: 1rem; box-shadow: var(--card-shadow); margin-bottom: 2.5rem;
+    }
+    .callout-info { background: var(--blue-pale); border: 1.5px solid rgba(37,99,235,0.15); }
+    .callout-tip { background: var(--orange-pale); border: 1.5px solid rgba(255,108,55,0.2); }
+    .callout-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 1px; }
+    .callout-content { flex: 1; }
+    .callout-title { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+    .callout-info .callout-title { color: var(--blue); }
+    .callout-tip .callout-title { color: var(--orange); }
+    .callout-body { font-size: 0.9rem; color: var(--ink-mid); line-height: 1.6; margin: 0; }
+
+    /* ── Blurred Reveal Table ── */
+    .table-controls { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+    .reveal-all-btn {
+      background: var(--orange); color: white; border: none; border-radius: 8px;
+      padding: 8px 18px; font-family: 'Syne', sans-serif; font-weight: 600;
+      cursor: pointer; font-size: 0.9rem; transition: background 0.2s;
+    }
+    .reveal-all-btn:hover { background: var(--orange-light); }
+    .reveal-counter { font-size: 0.9rem; color: var(--ink-light); }
+
+    .persona-table { width: 100%; border-collapse: collapse; border-radius: 12px; overflow: hidden; box-shadow: var(--card-shadow); margin-bottom: 2.5rem; }
+    .persona-table thead tr { background: var(--orange); color: white; font-family: 'Syne', sans-serif; }
+    .persona-table th, .persona-table td { padding: 14px 20px; text-align: left; border-bottom: 1px solid var(--rule); }
+    .persona-table tbody tr:last-child td { border-bottom: none; }
+    .persona-table tbody tr { background: white; }
+    .persona-table tbody tr:hover { background: #fdfbf9; }
+
+    .outcome-cell { cursor: pointer; position: relative; }
+    .outcome-content { filter: blur(6px); opacity: 0.3; transition: filter 0.4s, opacity 0.4s; user-select: none; }
+    .reveal-hint {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; color: var(--ink-light); font-family: 'Syne', sans-serif; letter-spacing: 0.02em;
+    }
+    .outcome-cell.revealed .outcome-content { filter: blur(0); opacity: 1; }
+    .outcome-cell.revealed .reveal-hint { display: none; }
+
+    .persona-badge { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 600; }
+    .persona-icon {
+      width: 28px; height: 28px; border-radius: 50%; background: var(--orange-pale);
+      display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;
+    }
+
+    /* ── What's Next Footer ── */
+    a.whats-next, a.whats-next:hover, a.whats-next:visited, a.whats-next:active {
+      background: var(--ink); border-radius: 16px; padding: 1.75rem 2rem;
+      display: flex; align-items: center; gap: 1.5rem; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(26,22,18,0.2);
+      text-decoration: none; margin-top: 1rem; color: inherit;
+    }
+    a.whats-next:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(26,22,18,0.3); }
+    .whats-next:hover .arrow-icon { transform: translateX(5px); }
+    .next-icon-box {
+      width: 52px; height: 52px; background: var(--orange); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .arrow-icon { font-size: 1.4rem; color: white; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); display: block; }
+    .next-content { flex: 1; }
+    .next-label { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); margin-bottom: 0.3rem; }
+    .next-title { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: white; margin: 0; }
+    .next-subtitle { font-size: 0.83rem; color: rgba(255,255,255,0.45); margin-top: 0.2rem; }
+    .next-chevron { color: rgba(255,255,255,0.25); font-size: 1.1rem; transition: color 0.2s; }
+    .whats-next:hover .next-chevron { color: rgba(255,255,255,0.6); }
+
+    /* ── Arcade Embed ── */
+    .arcade-wrap { position: relative; padding-bottom: calc(56.65% + 41px); height: 0; width: 100%; margin-bottom: 2.5rem; }
+    .arcade-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 12px; }
+    h1, h2 { font-family: 'Syne', sans-serif; }
+</style>
+</div>
+<div class="lesson-container"><!-- SECTION HEADER -->
+<div class="section-header"><span class="section-eyebrow">Lesson 1 &middot; An Introduction to API Testing</span>
+<h1 class="section-title">What is <em>API Testing?</em></h1>
+<p class="section-intro">API testing is the practice of validating that your Application Programming Interfaces meet expectations for functionality, reliability, performance, and security. Before you write a single test, it helps to understand who tests APIs &mdash; and why.</p>
+</div>
+<!-- LEARNING OBJECTIVES -->
+<div class="objectives-box">
+<div class="obj-label">What You&rsquo;ll Learn</div>
+<div class="objectives-list">
+<div class="obj-item"><span class="obj-bullet">1</span>
+<p>Define <strong>API testing</strong> and explain why it is essential in modern software development.</p>
+</div>
+<div class="obj-item"><span class="obj-bullet">2</span>
+<p>Identify the <strong>key personas</strong> involved in API testing and their primary goals.</p>
+</div>
+<div class="obj-item"><span class="obj-bullet">3</span>
+<p>Map each persona to the <strong>type of testing</strong> they typically perform.</p>
+</div>
+</div>
+</div>
+<!-- VIDEO / ARCADE EMBED -->
+<div class="arcade-wrap"><iframe title="What is API Testing?" src="https://demo.arcade.software/pmhu8Krf3mzpAjBqUegE?embed&amp;embed_mobile=tab&amp;embed_desktop=inline&amp;show_copy_link=true" allowfullscreen="" loading="lazy"></iframe></div>
+<!-- DIVIDER -->
+<div class="divider-with-label"><span class="divider-label">Who tests APIs?</span></div>
+<p class="lesson-text">API testing isn&rsquo;t the sole domain of QA engineers. Across the software development lifecycle, <strong>many different roles</strong> interact with APIs and run tests against them &mdash; each with a unique perspective and goal. A developer might focus on whether a single endpoint returns the correct data, while a security specialist probes for vulnerabilities and misconfigurations.</p>
+<div class="callout callout-info"><span class="callout-icon">ℹ️</span>
+<div class="callout-content">
+<div class="callout-title">Note</div>
+<p class="callout-body">The table below maps common roles to their testing goals and the types of tests they run. Click on the blurred cells in the <strong>Test Type</strong> column to reveal the answers &mdash; or press <strong>Reveal All</strong> to see everything at once.</p>
+</div>
+</div>
+<!-- BLURRED REVEAL TABLE -->
+<div class="table-controls"><button id="js-reveal-all" class="reveal-all-btn">Reveal All</button> <span id="js-counter" class="reveal-counter">0 of 9 revealed</span></div>
+<table id="js-persona-table" class="persona-table">
+<thead>
+<tr>
+<th>Persona</th>
+<th>Goal</th>
+<th>Test Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="persona-badge"><span class="persona-icon">👩&zwj;💻</span> Developers</span></td>
+<td>Verify endpoints work correctly during development</td>
+<td class="outcome-cell"><span class="outcome-content">Functional testing</span> <span class="reveal-hint">Click to reveal</span></td>
+</tr>
+<tr>
+<td><span class="persona-badge"><span class="persona-icon">📐</span> API Designers &amp; Architects</span></td>
+<td>Ensure the API contract is consistent and well-structured</td>
+<td class="outcome-cell"><span class="outcome-content">Reliability testing</span> <span class="reveal-hint">Click to reveal</span></td>
+</tr>
+<tr>
+<td><span class="persona-badge"><span class="persona-icon">🧪</span> Quality Assurance Engineers</span></td>
+<td>Validate end-to-end behavior and catch regressions</td>
+<td class="outcome-cell"><span class="outcome-content">Functional testing</span> <span class="reveal-hint">Click to reveal</span></td>
+</tr>
+<tr>
+<td><span class="persona-badge"><span class="persona-icon">⚙️</span> Test Automation Engineers</span></td>
+<td>Build repeatable test suites that run in CI/CD pipelines</td>
+<td class="outcome-cell"><span class="outcome-content">Functional testing</span> <span class="reveal-hint">Click to reveal</span></td>
+</tr>
+<tr>
+<td><span class="persona-badge"><span class="persona-icon">🔐</span> DevSecOps Engineers</span></td>
+<td>Integrate security checks into the deployment pipeline</td>
+<td class="outcome-cell"><span class="outcome-content">Security testing</span> <span class="reveal-hint">Click to reveal</span></td>
+</tr>
+<tr>
+<td><span class="persona-badge"><span class="persona-icon">🛡️</span> Security Specialists</span></td>
+<td>Identify vulnerabilities, misconfigurations, and data exposure risks</td>
+<td class="outcome-cell"><span class="outcome-content">Security testing</span> <span class="reveal-hint">Click to reveal</span></td>
+</tr>
+<tr>
+<td><span class="persona-badge"><span class="persona-icon">📊</span> Business Analysts</span></td>
+<td>Confirm the API delivers the right data for business decisions</td>
+<td class="outcome-cell"><span class="outcome-content">Documentation testing</span> <span class="reveal-hint">Click to reveal</span></td>
+</tr>
+<tr>
+<td><span class="persona-badge"><span class="persona-icon">🎯</span> API Product Owners</span></td>
+<td>Ensure the API aligns with product requirements and user needs</td>
+<td class="outcome-cell"><span class="outcome-content">Documentation testing</span> <span class="reveal-hint">Click to reveal</span></td>
+</tr>
+<tr>
+<td><span class="persona-badge"><span class="persona-icon">🚀</span> Performance Engineers</span></td>
+<td>Measure response times, throughput, and resource usage under load</td>
+<td class="outcome-cell"><span class="outcome-content">Performance testing</span> <span class="reveal-hint">Click to reveal</span></td>
+</tr>
+</tbody>
+</table>
+<!-- KEY TAKEAWAY -->
+<div class="callout callout-tip"><span class="callout-icon">💡</span>
+<div class="callout-content">
+<div class="callout-title">Key Takeaway</div>
+<p class="callout-body">API testing is a cross-functional discipline. Understanding which persona you align with &mdash; and which test types matter most to your role &mdash; helps you focus your efforts and collaborate more effectively with your team.</p>
+</div>
+</div>
+<!-- WHAT'S NEXT --> <a class="whats-next" href="/path/api-testing-path/an-introduction-to-api-testing/api-test-types" target="_self">
+<div class="next-icon-box"><span class="arrow-icon">&rarr;</span></div>
+<div class="next-content">
+<div class="next-label">Up Next</div>
+<div class="next-title">Lesson 2: API Test Types</div>
+<div class="next-subtitle">Key concerns, test categories, and matching definitions</div>
+</div>
+<span class="next-chevron">&rsaquo;</span> </a></div>
+<p>
+<script>
+(function(){
+    function updateCounter(){
+        var revealed = document.querySelectorAll('.outcome-cell.revealed').length;
+        var total = document.querySelectorAll('.outcome-cell').length;
+        var counter = document.getElementById('js-counter');
+        if(counter){ counter.textContent = revealed + ' of ' + total + ' revealed'; }
+    }
+
+    var table = document.getElementById('js-persona-table');
+    if(table){
+        table.addEventListener('click', function(e){
+            var cell = e.target.closest('.outcome-cell');
+            if(cell && !cell.classList.contains('revealed')){
+                cell.classList.add('revealed');
+                updateCounter();
+            }
+        });
+    }
+
+    var btn = document.getElementById('js-reveal-all');
+    if(btn){
+        btn.addEventListener('click', function(){
+            var cells = document.querySelectorAll('.outcome-cell');
+            for(var i = 0; i < cells.length; i++){
+                cells[i].classList.add('revealed');
+            }
+            updateCounter();
+        });
+    }
+})();
+</script>
+</p>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Tabs with Copy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --white: #FFFFFF;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .code-tabs-wrap { background: #1a1210; border-radius: 14px; overflow: hidden; box-shadow: var(--card-shadow); }
+
+    .code-tab-bar { display: flex; align-items: center; background: #110e0c; border-bottom: 1px solid #2a2220; padding: 0 1rem; }
+    .code-tab-btn {
+      background: none; border: none; color: #8C7B72; font-family: 'Syne', sans-serif; font-size: 0.85rem;
+      font-weight: 600; padding: 12px 16px; cursor: pointer; border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s; position: relative; top: 1px;
+    }
+    .code-tab-btn:hover { color: #e8ddd6; }
+    .code-tab-btn.active { color: var(--orange); border-bottom-color: var(--orange); }
+
+    .copy-btn-wrap { margin-left: auto; }
+    .copy-btn {
+      background: #2a2220; color: #8C7B72; border: 1px solid #3a3230; border-radius: 6px;
+      padding: 5px 12px; font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; transition: background 0.2s, color 0.2s;
+    }
+    .copy-btn:hover { background: #3a3230; color: #e8ddd6; }
+    .copy-btn.copied { color: #7DD3B0; border-color: #7DD3B0; }
+
+    .code-panel { display: none; }
+    .code-panel.active { display: block; }
+
+    .file-label { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem 0; font-family: 'DM Mono', monospace; font-size: 0.75rem; color: #5C5047; }
+    .file-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); opacity: 0.6; }
+
+    .code-body { padding: 1rem 1.25rem 1.5rem; font-family: 'DM Mono', monospace; font-size: 0.82rem; line-height: 1.75; overflow-x: auto; margin: 0; }
+    .code-body pre { margin: 0; }
+
+    .tok-key { color: #FF8C5A; }
+    .tok-str { color: #7DD3B0; }
+    .tok-num { color: #A8D8EA; }
+    .tok-bool { color: #C3A8EA; }
+    .tok-field { color: #FFD4C2; }
+    .tok-punc { color: #5C5047; }
+    .tok-comment { color: #8C7B72; font-style: italic; }
+  </style>
+</head>
+<body>
+
+  <div class="code-tabs-wrap">
+    <div class="code-tab-bar">
+      <button class="code-tab-btn active" onclick="switchCodeTab('setup', this)">Setup</button>
+      <button class="code-tab-btn" onclick="switchCodeTab('request', this)">Request</button>
+      <button class="code-tab-btn" onclick="switchCodeTab('response', this)">Response</button>
+      <div class="copy-btn-wrap">
+        <button class="copy-btn" id="copyBtn" onclick="copyCode()">Copy</button>
+      </div>
+    </div>
+
+    <!-- Setup -->
+    <div class="code-panel active" id="panel-setup" data-raw='{"mcpVersion":"2024-11-05","client":{"name":"my-app","version":"1.0.0"},"capabilities":{"tools":{},"resources":{},"prompts":{}}}'>
+      <div class="file-label"><span class="file-dot"></span>config.json</div>
+      <div class="code-body"><pre><span class="tok-punc">{</span>
+  <span class="tok-field">"mcpVersion"</span><span class="tok-punc">:</span> <span class="tok-str">"2024-11-05"</span><span class="tok-punc">,</span>
+  <span class="tok-field">"client"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span>
+    <span class="tok-field">"name"</span><span class="tok-punc">:</span> <span class="tok-str">"my-app"</span><span class="tok-punc">,</span>
+    <span class="tok-field">"version"</span><span class="tok-punc">:</span> <span class="tok-str">"1.0.0"</span>
+  <span class="tok-punc">},</span>
+  <span class="tok-field">"capabilities"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span>
+    <span class="tok-field">"tools"</span><span class="tok-punc">:</span> <span class="tok-punc">{},</span>
+    <span class="tok-field">"resources"</span><span class="tok-punc">:</span> <span class="tok-punc">{},</span>
+    <span class="tok-field">"prompts"</span><span class="tok-punc">:</span> <span class="tok-punc">{}</span>
+  <span class="tok-punc">}</span>
+<span class="tok-punc">}</span></pre></div>
+    </div>
+
+    <!-- Request -->
+    <div class="code-panel" id="panel-request" data-raw='{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"search_web","arguments":{"query":"MCP protocol overview","limit":5}}}'>
+      <div class="file-label"><span class="file-dot"></span>request.json</div>
+      <div class="code-body"><pre><span class="tok-punc">{</span>
+  <span class="tok-field">"jsonrpc"</span><span class="tok-punc">:</span> <span class="tok-str">"2.0"</span><span class="tok-punc">,</span>
+  <span class="tok-field">"id"</span><span class="tok-punc">:</span> <span class="tok-num">1</span><span class="tok-punc">,</span>
+  <span class="tok-field">"method"</span><span class="tok-punc">:</span> <span class="tok-str">"tools/call"</span><span class="tok-punc">,</span>
+  <span class="tok-field">"params"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span>
+    <span class="tok-field">"name"</span><span class="tok-punc">:</span> <span class="tok-str">"search_web"</span><span class="tok-punc">,</span>
+    <span class="tok-field">"arguments"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span>
+      <span class="tok-field">"query"</span><span class="tok-punc">:</span> <span class="tok-str">"MCP protocol overview"</span><span class="tok-punc">,</span>
+      <span class="tok-field">"limit"</span><span class="tok-punc">:</span> <span class="tok-num">5</span>
+    <span class="tok-punc">}</span>
+  <span class="tok-punc">}</span>
+<span class="tok-punc">}</span></pre></div>
+    </div>
+
+    <!-- Response -->
+    <div class="code-panel" id="panel-response" data-raw='{"jsonrpc":"2.0","id":1,"result":{"content":[{"type":"text","text":"MCP (Model Context Protocol) is an open standard..."}],"isError":false}}'>
+      <div class="file-label"><span class="file-dot"></span>response.json</div>
+      <div class="code-body"><pre><span class="tok-punc">{</span>
+  <span class="tok-field">"jsonrpc"</span><span class="tok-punc">:</span> <span class="tok-str">"2.0"</span><span class="tok-punc">,</span>
+  <span class="tok-field">"id"</span><span class="tok-punc">:</span> <span class="tok-num">1</span><span class="tok-punc">,</span>
+  <span class="tok-field">"result"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span>
+    <span class="tok-field">"content"</span><span class="tok-punc">:</span> <span class="tok-punc">[{</span>
+      <span class="tok-field">"type"</span><span class="tok-punc">:</span> <span class="tok-str">"text"</span><span class="tok-punc">,</span>
+      <span class="tok-field">"text"</span><span class="tok-punc">:</span> <span class="tok-str">"MCP (Model Context Protocol) is an open standard..."</span>
+    <span class="tok-punc">}],</span>
+    <span class="tok-field">"isError"</span><span class="tok-punc">:</span> <span class="tok-bool">false</span>
+  <span class="tok-punc">}</span>
+<span class="tok-punc">}</span></pre></div>
+    </div>
+  </div>
+
+  <script>
+    let activePanel = 'setup';
+
+    function switchCodeTab(name, btn) {
+      document.querySelectorAll('.code-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.code-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + name).classList.add('active');
+      activePanel = name;
+      const copyBtn = document.getElementById('copyBtn');
+      copyBtn.textContent = 'Copy';
+      copyBtn.classList.remove('copied');
+    }
+
+    function copyCode() {
+      const panel = document.querySelector('.code-panel.active');
+      const text = panel.dataset.raw;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = 'Copied ✓';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
