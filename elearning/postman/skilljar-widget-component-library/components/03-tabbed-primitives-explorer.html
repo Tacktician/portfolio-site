@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabbed Primitives Explorer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --white: #FFFFFF;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .tab-nav { display: flex; gap: 0; border-bottom: 2px solid var(--rule); margin-bottom: 0; }
+    .tab-btn {
+      background: none; border: none; padding: 10px 24px; font-family: 'Syne', sans-serif; font-weight: 600;
+      font-size: 0.9rem; cursor: pointer; color: var(--ink-light); position: relative; top: 2px;
+      border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s;
+    }
+    .tab-btn:hover { color: var(--ink); }
+    .tab-btn.active { color: var(--orange); border-bottom-color: var(--orange); }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; padding-top: 1.5rem; }
+
+    .prim-info { display: flex; flex-direction: column; gap: 1rem; }
+
+    .prim-header { display: flex; align-items: center; gap: 0.75rem; }
+    .prim-icon { font-size: 2rem; }
+    .prim-badge { background: var(--orange-pale); color: var(--orange); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; }
+    .prim-title { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--ink); margin: 0; }
+
+    .prim-desc { color: var(--ink-mid); line-height: 1.65; margin: 0; }
+
+    .prim-analogy { background: white; border-left: 4px solid var(--orange); border-radius: 0 8px 8px 0; padding: 0.75rem 1rem; box-shadow: var(--card-shadow); }
+    .prim-analogy-label { font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--orange); margin-bottom: 0.3rem; }
+    .prim-analogy-text { font-size: 0.9rem; color: var(--ink-mid); margin: 0; font-style: italic; }
+
+    .prim-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .prim-pill { background: white; border: 1.5px solid var(--rule); border-radius: 20px; padding: 4px 12px; font-size: 0.82rem; font-family: 'DM Sans', sans-serif; font-weight: 500; color: var(--ink-mid); }
+
+    .code-block { background: #1a1210; border-radius: 12px; padding: 1.25rem; overflow-x: auto; font-family: 'DM Mono', monospace; font-size: 0.82rem; line-height: 1.7; }
+    .tok-key { color: #FF8C5A; }
+    .tok-str { color: #7DD3B0; }
+    .tok-num { color: #A8D8EA; }
+    .tok-bool { color: #C3A8EA; }
+    .tok-field { color: #FFD4C2; }
+    .tok-punc { color: #5C5047; }
+    .tok-comment { color: #8C7B72; font-style: italic; }
+    .tok-white { color: #e8ddd6; }
+  </style>
+</head>
+<body>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('resources')">📄 Resources</button>
+    <button class="tab-btn" onclick="switchTab('tools')">🔧 Tools</button>
+    <button class="tab-btn" onclick="switchTab('prompts')">💬 Prompts</button>
+  </div>
+
+  <!-- Resources -->
+  <div class="tab-panel active" id="tab-resources">
+    <div class="prim-info">
+      <div class="prim-header">
+        <span class="prim-icon">📄</span>
+        <div>
+          <span class="prim-badge">Data</span>
+          <h2 class="prim-title">Resources</h2>
+        </div>
+      </div>
+      <p class="prim-desc">Resources expose data that the AI can read — files, database records, API responses, or any structured information. They are read-only by nature: the server defines what data is accessible, and the AI retrieves it on demand.</p>
+      <div class="prim-analogy">
+        <div class="prim-analogy-label">Analogy</div>
+        <p class="prim-analogy-text">"Like a library shelf — the AI can browse and retrieve, but cannot modify."</p>
+      </div>
+      <div class="prim-pills">
+        <span class="prim-pill">File contents</span>
+        <span class="prim-pill">DB records</span>
+        <span class="prim-pill">API data</span>
+        <span class="prim-pill">Config files</span>
+      </div>
+    </div>
+    <div class="code-block"><pre><span class="tok-comment">// Resource definition</span>
+<span class="tok-punc">{</span>
+  <span class="tok-field">"uri"</span><span class="tok-punc">:</span> <span class="tok-str">"file://docs/readme.md"</span><span class="tok-punc">,</span>
+  <span class="tok-field">"name"</span><span class="tok-punc">:</span> <span class="tok-str">"Project README"</span><span class="tok-punc">,</span>
+  <span class="tok-field">"description"</span><span class="tok-punc">:</span> <span class="tok-str">"Main project documentation"</span><span class="tok-punc">,</span>
+  <span class="tok-field">"mimeType"</span><span class="tok-punc">:</span> <span class="tok-str">"text/markdown"</span><span class="tok-punc">,</span>
+  <span class="tok-field">"contents"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span>
+    <span class="tok-field">"text"</span><span class="tok-punc">:</span> <span class="tok-str">"# My Project\n\nWelcome..."</span>
+  <span class="tok-punc">}</span>
+<span class="tok-punc">}</span></pre></div>
+  </div>
+
+  <!-- Tools -->
+  <div class="tab-panel" id="tab-tools">
+    <div class="prim-info">
+      <div class="prim-header">
+        <span class="prim-icon">🔧</span>
+        <div>
+          <span class="prim-badge">Actions</span>
+          <h2 class="prim-title">Tools</h2>
+        </div>
+      </div>
+      <p class="prim-desc">Tools are functions the AI can invoke to perform actions — search, compute, write, send. Unlike resources, tools have side effects. The server implements the logic; the AI decides when to call them based on the task at hand.</p>
+      <div class="prim-analogy">
+        <div class="prim-analogy-label">Analogy</div>
+        <p class="prim-analogy-text">"Like a Swiss Army knife — each tool is a specific capability the AI can reach for."</p>
+      </div>
+      <div class="prim-pills">
+        <span class="prim-pill">Web search</span>
+        <span class="prim-pill">Code execution</span>
+        <span class="prim-pill">File write</span>
+        <span class="prim-pill">API calls</span>
+      </div>
+    </div>
+    <div class="code-block"><pre><span class="tok-comment">// Tool definition</span>
+<span class="tok-punc">{</span>
+  <span class="tok-field">"name"</span><span class="tok-punc">:</span> <span class="tok-str">"search_web"</span><span class="tok-punc">,</span>
+  <span class="tok-field">"description"</span><span class="tok-punc">:</span> <span class="tok-str">"Search the web for current info"</span><span class="tok-punc">,</span>
+  <span class="tok-field">"inputSchema"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span>
+    <span class="tok-field">"type"</span><span class="tok-punc">:</span> <span class="tok-str">"object"</span><span class="tok-punc">,</span>
+    <span class="tok-field">"properties"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span>
+      <span class="tok-field">"query"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span>
+        <span class="tok-field">"type"</span><span class="tok-punc">:</span> <span class="tok-str">"string"</span>
+      <span class="tok-punc">}</span>
+    <span class="tok-punc">},</span>
+    <span class="tok-field">"required"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"query"</span><span class="tok-punc">]</span>
+  <span class="tok-punc">}</span>
+<span class="tok-punc">}</span></pre></div>
+  </div>
+
+  <!-- Prompts -->
+  <div class="tab-panel" id="tab-prompts">
+    <div class="prim-info">
+      <div class="prim-header">
+        <span class="prim-icon">💬</span>
+        <div>
+          <span class="prim-badge">Templates</span>
+          <h2 class="prim-title">Prompts</h2>
+        </div>
+      </div>
+      <p class="prim-desc">Prompts are reusable instruction templates that shape how the AI behaves for specific tasks. They can include arguments, example messages, and system context — making consistent behavior easy to reproduce across different sessions.</p>
+      <div class="prim-analogy">
+        <div class="prim-analogy-label">Analogy</div>
+        <p class="prim-analogy-text">"Like a job description — setting context, tone, and responsibilities upfront."</p>
+      </div>
+      <div class="prim-pills">
+        <span class="prim-pill">System prompts</span>
+        <span class="prim-pill">Few-shot examples</span>
+        <span class="prim-pill">Role definitions</span>
+        <span class="prim-pill">Task instructions</span>
+      </div>
+    </div>
+    <div class="code-block"><pre><span class="tok-comment">// Prompt template</span>
+<span class="tok-punc">{</span>
+  <span class="tok-field">"name"</span><span class="tok-punc">:</span> <span class="tok-str">"code_reviewer"</span><span class="tok-punc">,</span>
+  <span class="tok-field">"description"</span><span class="tok-punc">:</span> <span class="tok-str">"Review code for quality"</span><span class="tok-punc">,</span>
+  <span class="tok-field">"arguments"</span><span class="tok-punc">:</span> <span class="tok-punc">[{</span>
+    <span class="tok-field">"name"</span><span class="tok-punc">:</span> <span class="tok-str">"language"</span><span class="tok-punc">,</span>
+    <span class="tok-field">"required"</span><span class="tok-punc">:</span> <span class="tok-bool">true</span>
+  <span class="tok-punc">}],</span>
+  <span class="tok-field">"messages"</span><span class="tok-punc">:</span> <span class="tok-punc">[{</span>
+    <span class="tok-field">"role"</span><span class="tok-punc">:</span> <span class="tok-str">"system"</span><span class="tok-punc">,</span>
+    <span class="tok-field">"content"</span><span class="tok-punc">:</span> <span class="tok-str">"You are a {{language}} expert..."</span>
+  <span class="tok-punc">}]</span>
+<span class="tok-punc">}</span></pre></div>
+  </div>
+
+  <script>
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      document.getElementById('tab-' + name).classList.add('active');
+    }
+  </script>
+</body>
+</html>

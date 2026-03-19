@@ -1,0 +1,805 @@
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+<div>
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6C37;
+      --white: #FFFFFF;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --green: #2D9E6B;
+      --green-pale: #EAF7F1;
+      --red-pale: #FEF0EE;
+      --red: #E03E2D;
+      --blue-pale: #EEF4FF;
+      --blue: #3B6FE8;
+      --purple-pale: #F3F0FB;
+      --purple: #7B5EA7;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+      --card-shadow-lift: 0 12px 32px rgba(26,22,18,0.14), 0 4px 8px rgba(26,22,18,0.08);
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+.lesson-wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 56px 32px 80px;
+}
+    @media (max-width: 680px) {
+      .lesson-wrap { padding: 36px 20px 60px; }
+    }
+
+    .section-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 12px;
+    }
+    h1.lesson-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    h1.lesson-title em { font-style: normal; color: var(--orange); }
+
+    .lesson-intro {
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--ink-mid);
+      font-weight: 300;
+      max-width: 680px;
+      margin-bottom: 40px;
+      border-left: 3px solid var(--orange);
+      padding-left: 20px;
+    }
+    .lesson-intro strong { color: var(--ink); font-weight: 500; }
+
+    h2.subhead {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(18px, 2.5vw, 24px);
+      font-weight: 700;
+      color: var(--ink);
+      margin-top: 52px;
+      margin-bottom: 14px;
+      letter-spacing: -0.01em;
+    }
+    h2.subhead .hl { color: var(--orange); }
+
+    .lesson-body {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--ink-mid);
+      font-weight: 300;
+      max-width: 720px;
+      margin-bottom: 24px;
+    }
+    .lesson-body strong { color: var(--ink); font-weight: 500; }
+    a { color: var(--orange); text-decoration: underline; text-underline-offset: 3px; }
+
+    .divider { height: 1px; background: var(--rule); margin: 44px 0; max-width: 720px; }
+
+    /* ── Objectives box ── */
+    .objectives-box {
+      background: var(--orange-pale);
+      border: 1.5px solid #FFD4C2;
+      border-radius: 10px;
+      padding: 22px 26px;
+      margin-bottom: 44px;
+      max-width: 720px;
+    }
+    .objectives-box .obj-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 14px;
+    }
+    .objectives-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .obj-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--ink-mid);
+      font-weight: 300;
+    }
+    .obj-item strong { color: var(--ink); font-weight: 500; }
+    .obj-bullet {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: white;
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    /* ── Callout ── */
+    .callout {
+      background: var(--orange-pale);
+      border: 1.5px solid #FFD4C2;
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin-bottom: 28px;
+      display: flex; gap: 14px; align-items: flex-start;
+      max-width: 720px;
+    }
+    .callout.callout-info { background: var(--blue-pale); border-color: #C5D8FF; }
+    .callout.callout-tip  { background: var(--green-pale); border-color: #B8E8D4; }
+    .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .callout-text { font-size: 14.5px; line-height: 1.6; color: var(--ink-mid); font-weight: 400; }
+    .callout-text strong { color: var(--ink); font-weight: 500; }
+
+    /* ── Video placeholder ── */
+    .video-placeholder {
+      background: var(--ink);
+      border-radius: 12px;
+      min-height: 280px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 16px; margin: 28px 0 36px;
+      position: relative; overflow: hidden;
+      max-width: 960px;
+    }
+    .video-placeholder::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        45deg, transparent, transparent 18px,
+        rgba(255,108,55,0.06) 18px, rgba(255,108,55,0.06) 19px
+      );
+    }
+    .video-play-btn {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--orange); display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 1; box-shadow: 0 6px 24px rgba(255,108,55,0.45);
+    }
+    .video-label {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-light);
+      position: relative; z-index: 1;
+    }
+    .video-title {
+      font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
+      color: white; position: relative; z-index: 1; text-align: center;
+      max-width: 480px; padding: 0 24px; line-height: 1.3;
+    }
+
+    /* ── Three Primitives ── */
+    .primitives-explorer {
+      max-width: 860px;
+      margin: 32px 0 40px;
+      border-radius: 14px;
+      overflow: hidden;
+      overflow-x: auto;
+      box-shadow: var(--card-shadow-lift);
+      border: 1.5px solid var(--rule);
+    }
+    .prim-tab-strip {
+      display: flex;
+      background: #F5F0EC;
+      border-bottom: 1.5px solid var(--rule);
+    }
+    .prim-tab {
+      flex: 1;
+      padding: 16px 12px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      border-bottom: 3px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      position: relative;
+      bottom: -1.5px;
+    }
+    .prim-tab:hover { background: #EDE6DF; }
+    .prim-tab.active { background: white; border-bottom-color: var(--orange); }
+    .prim-tab .tab-icon { font-size: 24px; line-height: 1; }
+    .prim-tab .tab-name {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-light);
+      transition: color 0.15s;
+    }
+    .prim-tab.active .tab-name { color: var(--orange); }
+    .prim-tab .tab-badge {
+      font-size: 10px; font-weight: 300; color: var(--ink-light);
+      font-family: 'DM Sans', sans-serif; text-transform: none; letter-spacing: 0;
+    }
+    .prim-tab.active .tab-badge { color: var(--ink-mid); }
+    .prim-panel { display: none; }
+    .prim-panel.active { display: block; animation: fadeSlide 0.25s ease both; }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .prim-panel-inner {
+      display: grid; grid-template-columns: 3fr 2fr; gap: 0;
+      background: white; min-width: 600px;
+    }
+    @media (max-width: 640px) {
+      .prim-tab { padding: 12px 8px 10px; }
+      .prim-tab .tab-badge { display: none; }
+    }
+    .prim-explain { padding: 32px 36px; border-right: 1.5px solid var(--rule); }
+    .prim-explain .prim-eyebrow {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); margin-bottom: 10px;
+    }
+    .prim-explain h3 {
+      font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+      color: var(--ink); letter-spacing: -0.02em; margin-bottom: 14px;
+    }
+    .prim-explain .prim-desc {
+      font-size: 14.5px; line-height: 1.7; color: var(--ink-mid);
+      font-weight: 300; margin-bottom: 20px;
+    }
+    .prim-explain .prim-desc strong { color: var(--ink); font-weight: 500; }
+    .prim-analogy {
+      background: var(--orange-pale); border: 1.5px solid #FFD4C2;
+      border-radius: 8px; padding: 14px 16px;
+      font-size: 13.5px; line-height: 1.6; color: var(--ink-mid); font-weight: 300;
+    }
+    .prim-analogy::before { content: '💡 Analogy: '; font-weight: 500; color: var(--ink); }
+    .prim-use-cases { margin-top: 18px; display: flex; flex-direction: column; gap: 8px; }
+    .prim-use-cases .uc-label {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 4px;
+    }
+    .uc-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #F5F0EC; border: 1px solid var(--rule); border-radius: 20px;
+      padding: 4px 12px; font-size: 12.5px; color: var(--ink-mid);
+      font-weight: 300; margin: 0 4px 6px 0;
+    }
+    .prim-code {
+      background: var(--ink); padding: 28px 28px 24px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .prim-code .code-label {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light);
+    }
+    .prim-code pre {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px; padding: 18px 20px;
+      font-family: 'Courier New', Courier, monospace; font-size: 12.5px;
+      line-height: 1.7; color: #E8DDD6; overflow-x: auto; white-space: pre;
+    }
+    .prim-code .tok-key    { color: #FF8C5A; }
+    .prim-code .tok-str    { color: #7EC8A0; }
+    .prim-code .tok-num    { color: #A8D8EA; }
+    .prim-code .tok-comment{ color: #8C7B72; font-style: italic; }
+    .prim-code .tok-field  { color: #FFD4C2; }
+    .prim-code .tok-bool   { color: #C3A8EA; }
+    .prim-code .response-label {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-top: 4px;
+    }
+    .prim-code .response-box {
+      background: rgba(45,158,107,0.12); border: 1px solid rgba(45,158,107,0.25);
+      border-radius: 8px; padding: 16px 18px;
+      font-family: 'Courier New', Courier, monospace; font-size: 12.5px;
+      line-height: 1.65; color: #B8E8D4; overflow-x: auto; white-space: pre;
+    }
+
+    /* ── Code tabs ── */
+    .code-tabs-wrap { max-width: 720px; margin: 28px 0 36px; }
+    .code-tab-strip { display: flex; gap: 0; align-items: flex-end; padding-left: 2px; }
+    .code-tab-btn {
+      font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 9px 18px 8px; border: 1.5px solid var(--rule); border-bottom: none;
+      border-radius: 6px 6px 0 0; background: #F5F0EC; color: var(--ink-light);
+      cursor: pointer; transition: background 0.15s, color 0.15s;
+      margin-right: 3px; position: relative; bottom: -1px;
+    }
+    .code-tab-btn:hover { color: var(--ink-mid); background: #EDE6DF; }
+    .code-tab-btn.active { background: var(--ink); color: white; border-color: var(--ink); z-index: 1; }
+    .code-tab-btn.active::before {
+      content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--orange); margin-right: 7px; vertical-align: middle; margin-top: -2px;
+    }
+    .code-panel {
+      background: var(--ink); border: 1.5px solid var(--ink);
+      border-radius: 0 6px 6px 6px; position: relative; overflow: hidden;
+    }
+    .code-panel-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 16px 8px; border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .code-panel-filename {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light);
+    }
+    .copy-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--ink-light); background: transparent; border: none; cursor: pointer;
+      padding: 4px 10px; border-radius: 4px; transition: color 0.15s, background 0.15s;
+    }
+    .copy-btn:hover { color: white; background: rgba(255,255,255,0.08); }
+    .copy-btn.copied { color: var(--green); }
+    .code-panel-inner {
+      display: none; padding: 20px 22px 22px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px; line-height: 1.9; color: #E8DDD6;
+      overflow-x: auto; white-space: normal; word-break: break-word;
+    }
+    .code-panel-inner.active { display: block; }
+    .tok-k  { color: #FF8C5A; }
+    .tok-s  { color: #7EC8A0; }
+    .tok-c  { color: #8C7B72; font-style: italic; }
+    .tok-v  { color: #A8D8EA; }
+    .tok-f  { color: #FFD4C2; }
+    .tok-b  { color: #C3A8EA; }
+
+    /* ── Decode This ── */
+    .decode-wrap { max-width: 860px; margin: 32px 0 40px; }
+    .decode-title {
+      font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700;
+      color: var(--ink); margin-bottom: 6px;
+    }
+    .decode-subtitle { font-size: 14px; color: var(--ink-light); font-weight: 300; margin-bottom: 24px; }
+    .decode-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 680px) { .decode-layout { grid-template-columns: 1fr; } }
+    .decode-json {
+      background: var(--ink); border-radius: 10px; padding: 22px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12.5px; line-height: 1.85; color: #E8DDD6; position: relative;
+    }
+    .decode-json .annotate-line {
+      display: flex; align-items: flex-start; gap: 10px;
+      cursor: pointer; border-radius: 4px; padding: 1px 4px;
+      transition: background 0.12s; white-space: pre;
+    }
+    .decode-json .annotate-line:hover { background: rgba(255,108,55,0.12); }
+    .decode-json .annotate-line.active { background: rgba(255,108,55,0.18); }
+    .annotate-marker {
+      flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%;
+      background: var(--orange); color: white;
+      font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.15s; margin-top: 2px;
+    }
+    .annotate-line:hover .annotate-marker,
+    .annotate-line.active .annotate-marker { opacity: 1; }
+    .decode-annotations { display: flex; flex-direction: column; gap: 10px; }
+    .annotation-card {
+      border: 1.5px solid var(--rule); border-radius: 8px; padding: 14px 16px;
+      background: white; box-shadow: var(--card-shadow);
+      opacity: 0.4; transform: translateX(6px);
+      transition: opacity 0.2s, transform 0.2s, border-color 0.2s;
+    }
+    .annotation-card.active { opacity: 1; transform: translateX(0); border-color: var(--orange); }
+    .annotation-card .ann-num {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); margin-bottom: 4px;
+    }
+    .annotation-card .ann-title {
+      font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+      color: var(--ink); margin-bottom: 4px;
+    }
+    .annotation-card .ann-body { font-size: 12.5px; line-height: 1.6; color: var(--ink-mid); font-weight: 300; }
+    .annotation-card .ann-body strong { color: var(--ink); font-weight: 500; }
+
+    /* ── Try This ── */
+    .try-this {
+      background: var(--orange-pale); border: 2px solid var(--orange);
+      border-radius: 12px; padding: 28px 32px; max-width: 720px;
+      margin-top: 52px; display: flex; gap: 20px; align-items: flex-start;
+    }
+    .try-this-icon { font-size: 32px; flex-shrink: 0; line-height: 1; }
+    .try-this-content .try-label {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); margin-bottom: 6px;
+    }
+    .try-this-content h3 {
+      font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800;
+      color: var(--ink); margin-bottom: 10px; letter-spacing: -0.01em;
+    }
+    .try-this-content p {
+      font-size: 14.5px; line-height: 1.65; color: var(--ink-mid); font-weight: 300;
+    }
+    .try-this-content p strong { color: var(--ink); font-weight: 500; }
+    .try-steps { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+    .try-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 14px; line-height: 1.55; color: var(--ink-mid); font-weight: 300;
+    }
+    .try-item strong { color: var(--ink); font-weight: 500; }
+    .step-num {
+      flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%;
+      background: var(--orange); color: white;
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center; margin-top: 1px;
+    }
+
+    /* ── What's Next ── */
+    .whats-next {
+      background: var(--ink); border-radius: 12px; padding: 28px 32px;
+      max-width: 680px; display: flex; align-items: center; gap: 20px;
+      position: relative; overflow: hidden; margin-top: 48px; cursor: pointer;
+    }
+    .whats-next::after {
+      content: '→'; position: absolute; right: 28px;
+      font-size: 28px; color: var(--orange);
+      font-family: 'Syne', sans-serif; font-weight: 800; transition: transform 0.2s;
+    }
+    .whats-next:hover::after { transform: translateX(5px); }
+    .next-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: var(--orange); display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .next-text .next-label {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 4px;
+    }
+    .next-text h4 {
+      font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
+      color: white; letter-spacing: -0.01em;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    h1, h2 { font-family: 'Syne', sans-serif; }
+  </style>
+</div>
+<div class="lesson-wrap">
+<div class="section-label">Module 3 &mdash; Connecting to MCP</div>
+<h1 class="lesson-title">Your First MCP <em>Handshake</em></h1>
+<p class="lesson-intro">Before you can build anything, you need to know the language. MCP servers talk to clients through three types of primitives &mdash; <strong>tools, resources, and prompts</strong> &mdash; and every interaction you'll ever have with an MCP server comes down to one of those three things. This lesson is your decoder ring.</p>
+
+<div class="objectives-box">
+<div class="obj-label">By the end of this lesson</div>
+<div class="objectives-list">
+  <div class="obj-item"><span class="obj-bullet">1</span><span>Understand the difference between <strong>tools, resources, and prompts</strong> &mdash; and why it matters for how you write your requests</span></div>
+  <div class="obj-item"><span class="obj-bullet">2</span><span>Create your first <strong>MCP request</strong> in Postman and connect to a live server</span></div>
+  <div class="obj-item"><span class="obj-bullet">3</span><span>Know when to use <strong>STDIO vs streamable HTTP</strong> transport &mdash; the two modes MCP supports</span></div>
+  <div class="obj-item"><span class="obj-bullet">4</span><span>Read and decode a <strong>real MCP server response</strong> without the documentation open</span></div>
+</div>
+</div>
+
+<div class="divider">&nbsp;</div>
+<h2 class="subhead">The <span class="hl">Three Primitives</span> Explorer</h2>
+<p class="lesson-body">If MCP is the telephone system connecting your AI to the world, then tools, resources, and prompts are the three types of calls that telephone system can handle. They look similar at first glance &mdash; they're all things a server "has" &mdash; but they do fundamentally different things. Getting these straight is the difference between knowing what to ask for and guessing.</p>
+<div class="callout">
+<div class="callout-icon">🎛️</div>
+<div class="callout-text"><strong>Interactive:</strong> Click each tab below to explore the three primitives. Each one shows you what it is, a real-world analogy, and what the actual JSON looks like when you call it.</div>
+</div>
+<div id="primitivesExplorer" class="primitives-explorer">
+<div class="prim-tab-strip"><button class="prim-tab active" data-prim="tools"> <span class="tab-icon">⚙️</span> <span class="tab-name">Tools</span> <span class="tab-badge">actions the server performs</span> </button> <button class="prim-tab" data-prim="resources"> <span class="tab-icon">📦</span> <span class="tab-name">Resources</span> <span class="tab-badge">data the server exposes</span> </button> <button class="prim-tab" data-prim="prompts"> <span class="tab-icon">💬</span> <span class="tab-name">Prompts</span> <span class="tab-badge">templates the server suggests</span> </button></div>
+<div id="prim-tools" class="prim-panel active">
+<div class="prim-panel-inner">
+<div class="prim-explain">
+<div class="prim-eyebrow">Primitive 1</div>
+<h3>Tools</h3>
+<p class="prim-desc">Tools are <strong>actions the server can perform on your behalf</strong>. When an AI model uses a tool, something actually happens &mdash; a calendar event gets created, a database query runs, a file gets written. Tools have inputs and produce outputs, and they can have side effects.</p>
+<div class="prim-analogy">Tools are like ordering from a menu. You pick a dish, the kitchen does the work, and you get the result. You don't need to know how to cook.</div>
+<div class="prim-use-cases">
+<div class="uc-label">Common examples</div>
+<span class="uc-pill">create_calendar_event</span> <span class="uc-pill">send_slack_message</span> <span class="uc-pill">query_database</span> <span class="uc-pill">search_docs</span> <span class="uc-pill">create_github_issue</span></div>
+</div>
+<div class="prim-code">
+<div class="code-label">Request &mdash; calling a tool</div>
+<pre><span class="tok-comment">// POST to MCP server</span>
+{
+  <span class="tok-field">"method"</span>: <span class="tok-str">"tools/call"</span>,
+  <span class="tok-field">"params"</span>: {
+    <span class="tok-field">"name"</span>: <span class="tok-str">"create_calendar_event"</span>,
+    <span class="tok-field">"arguments"</span>: {
+      <span class="tok-field">"title"</span>:    <span class="tok-str">"Team standup"</span>,
+      <span class="tok-field">"datetime"</span>: <span class="tok-str">"2026-03-10T09:00"</span>,
+      <span class="tok-field">"duration"</span>: <span class="tok-num">30</span>
+    }
+  }
+}</pre>
+<div class="response-label">✓ Server response</div>
+<div class="response-box">{ <span class="tok-field">"content"</span>: [{ <span class="tok-field">"type"</span>: <span class="tok-str">"text"</span>, <span class="tok-field">"text"</span>: <span class="tok-str">"Event created: Team standup on March 10 at 9:00 AM (30 min)"</span> }], <span class="tok-field">"isError"</span>: <span class="tok-bool">false</span> }</div>
+</div>
+</div>
+</div>
+<div id="prim-resources" class="prim-panel">
+<div class="prim-panel-inner">
+<div class="prim-explain">
+<div class="prim-eyebrow">Primitive 2</div>
+<h3>Resources</h3>
+<p class="prim-desc">Resources are <strong>data the server exposes for reading</strong>. They're identified by a URI and can contain files, database records, API responses, logs &mdash; anything a model needs as context. Resources are read-only by nature; they give the model information without triggering side effects.</p>
+<div class="prim-analogy">Resources are like a reference library. You check out a book to read it, but checking it out doesn't change the book &mdash; or the library.</div>
+<div class="prim-use-cases">
+<div class="uc-label">Common examples</div>
+<span class="uc-pill">file:///project/README.md</span> <span class="uc-pill">db://users/profile/{id}</span> <span class="uc-pill">api://metrics/today</span> <span class="uc-pill">git://repo/main/diff</span></div>
+</div>
+<div class="prim-code">
+<div class="code-label">Request &mdash; reading a resource</div>
+<pre><span class="tok-comment">// POST to MCP server</span>
+{
+  <span class="tok-field">"method"</span>: <span class="tok-str">"resources/read"</span>,
+  <span class="tok-field">"params"</span>: {
+    <span class="tok-field">"uri"</span>: <span class="tok-str">"file:///project/src/main.rs"</span>
+  }
+}</pre>
+<div class="response-label">✓ Server response</div>
+<div class="response-box">{ <span class="tok-field">"contents"</span>: [{ <span class="tok-field">"uri"</span>: <span class="tok-str">"file:///project/src/main.rs"</span>, <span class="tok-field">"mimeType"</span>: <span class="tok-str">"text/x-rust"</span>, <span class="tok-field">"text"</span>: <span class="tok-str">"fn main() {\n println!(\"hello\");\n}"</span> }] }</div>
+</div>
+</div>
+</div>
+<div id="prim-prompts" class="prim-panel">
+<div class="prim-panel-inner">
+<div class="prim-explain">
+<div class="prim-eyebrow">Primitive 3</div>
+<h3>Prompts</h3>
+<p class="prim-desc">Prompts are <strong>reusable message templates the server provides</strong> for interacting with a language model. Think of them as pre-written conversation starters with variable slots. A server might offer a "code review" prompt that already has the right instructions baked in &mdash; you just fill in your code.</p>
+<div class="prim-analogy">Prompts are like mad libs written by an expert. The server fills in the tricky structural parts; you supply the details that change each time.</div>
+<div class="prim-use-cases">
+<div class="uc-label">Common examples</div>
+<span class="uc-pill">summarize_document</span> <span class="uc-pill">code_review</span> <span class="uc-pill">explain_error</span> <span class="uc-pill">draft_reply</span></div>
+</div>
+<div class="prim-code">
+<div class="code-label">Request &mdash; getting a prompt</div>
+<pre><span class="tok-comment">// POST to MCP server</span>
+{
+  <span class="tok-field">"method"</span>: <span class="tok-str">"prompts/get"</span>,
+  <span class="tok-field">"params"</span>: {
+    <span class="tok-field">"name"</span>: <span class="tok-str">"code_review"</span>,
+    <span class="tok-field">"arguments"</span>: {
+      <span class="tok-field">"code"</span>: <span class="tok-str">"def hello():\n  print('world')"</span>,
+      <span class="tok-field">"language"</span>: <span class="tok-str">"python"</span>
+    }
+  }
+}</pre>
+<div class="response-label">✓ Server response (a messages array)</div>
+<div class="response-box">{ <span class="tok-field">"messages"</span>: [{ <span class="tok-field">"role"</span>: <span class="tok-str">"user"</span>, <span class="tok-field">"content"</span>: { <span class="tok-field">"type"</span>: <span class="tok-str">"text"</span>, <span class="tok-field">"text"</span>: <span class="tok-str">"Review this Python code for style, correctness, and edge cases: ..."</span> } }] }</div>
+</div>
+</div>
+</div>
+</div>
+<p class="lesson-body" style="margin-top: 8px;">One more thing worth knowing: the three primitives aren't mutually exclusive in a single server. A well-designed MCP server might expose resources (your calendar data), tools (create an event), and prompts (a scheduling assistant template) all at once. Postman's MCP request lets you browse all three from one place &mdash; more on that in a minute.</p>
+<div class="divider">&nbsp;</div>
+<h2 class="subhead">Two Transport Modes: <span class="hl">STDIO vs HTTP</span></h2>
+<p class="lesson-body">Every MCP server picks a transport layer &mdash; the plumbing that carries messages back and forth. There are two options, and which one you use depends on where the server lives and how it's running. The good news: Postman handles both, and swapping between them is just a dropdown.</p>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 720px; margin: 28px 0 32px;">
+<div style="background: white; border: 1.5px solid var(--rule); border-radius: 10px; padding: 22px; box-shadow: var(--card-shadow); position: relative; overflow: hidden;">
+<div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--ink);">&nbsp;</div>
+<div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: bold; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 10px; margin-top: 8px;">Transport 1</div>
+<div style="font-size: 26px; margin-bottom: 8px;">🖥️</div>
+<h4 style="font-family: 'Syne', sans-serif; font-size: 16px; font-weight: bold; color: var(--ink); margin-bottom: 8px;">STDIO</h4>
+<p style="font-size: 13.5px; line-height: 1.6; color: var(--ink-mid); font-weight: 300; margin-bottom: 12px;">Standard Input/Output &mdash; the server runs as a local process on your machine. Postman spawns it for you with a command like <code style="font-size: 12px; background: #F5F0EC; padding: 1px 5px; border-radius: 3px;">npx @company/mcp-server</code>.</p>
+<p style="font-size: 12.5px; line-height: 1.55; color: var(--ink-light); font-weight: 300;"><strong style="color: var(--ink); font-weight: 500;">Best for:</strong> Local CLI tools, development, anything you install via npm/pip.</p>
+</div>
+<div style="background: white; border: 1.5px solid var(--rule); border-radius: 10px; padding: 22px; box-shadow: var(--card-shadow); position: relative; overflow: hidden;">
+<div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--orange);">&nbsp;</div>
+<div style="font-family: 'Syne', sans-serif; font-size: 10px; font-weight: bold; letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; margin-top: 8px;">Transport 2</div>
+<div style="font-size: 26px; margin-bottom: 8px;">🌐</div>
+<h4 style="font-family: 'Syne', sans-serif; font-size: 16px; font-weight: bold; color: var(--ink); margin-bottom: 8px;">Streamable HTTP</h4>
+<p style="font-size: 13.5px; line-height: 1.6; color: var(--ink-mid); font-weight: 300; margin-bottom: 12px;">The server lives at a URL &mdash; deployed in the cloud or running locally on a port. You point Postman at an endpoint like <code style="font-size: 12px; background: #F5F0EC; padding: 1px 5px; border-radius: 3px;">https://mcp.example.com/mcp</code>.</p>
+<p style="font-size: 12.5px; line-height: 1.55; color: var(--ink-light); font-weight: 300;"><strong style="color: var(--ink); font-weight: 500;">Best for:</strong> Remote servers, production deployments, team-shared integrations.</p>
+</div>
+</div>
+<p class="lesson-body">Here's what the setup looks like in Postman for each. The configuration fields change slightly, but the workflow &mdash; connect, browse capabilities, run a request &mdash; stays exactly the same.</p>
+<div class="code-tabs-wrap">
+<div class="code-tab-strip"><button class="code-tab-btn active" data-tab="stdio-tab">STDIO</button> <button class="code-tab-btn" data-tab="http-tab">Streamable HTTP</button></div>
+<div class="code-panel">
+<div class="code-panel-topbar"><span class="code-panel-filename">Postman MCP Request Setup</span> <button class="copy-btn" aria-label="Copy code">Copy</button></div>
+<div id="stdio-tab" class="code-panel-inner active"><span class="tok-c">// ── STDIO Transport ──────────────────────────────</span><br /><span class="tok-c">// The server runs on YOUR machine as a subprocess.</span><br /><span class="tok-c">// Postman spawns it using the command you provide.</span><br /><br />Transport: <span class="tok-s">STDIO</span><br /><br />Command:&nbsp;&nbsp;&nbsp;<span class="tok-s">npx -y @postman/mcp-server</span><br /><br /><span class="tok-c">// Authentication: use the Environment tab</span><br /><span class="tok-c">// Add key-value pairs for any API keys your</span><br /><span class="tok-c">// server needs. Postman passes these as env vars.</span><br /><br />Environment:<br />&nbsp;&nbsp;<span class="tok-f">POSTMAN_API_KEY</span>&nbsp;&nbsp;=&nbsp;&nbsp;<span class="tok-s">{{postman_api_key}}</span><br /><br /><span class="tok-c">// Then click "Load Capabilities" &mdash; Postman</span><br /><span class="tok-c">// starts the process and shows available</span><br /><span class="tok-c">// tools, resources, and prompts.</span></div>
+<div id="http-tab" class="code-panel-inner"><span class="tok-c">// ── Streamable HTTP Transport ────────────────────</span><br /><span class="tok-c">// The server lives at a URL &mdash; cloud or local port.</span><br /><span class="tok-c">// Postman connects over HTTP.</span><br /><br />Transport:&nbsp;&nbsp;<span class="tok-s">HTTP</span><br /><br />URL:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tok-s">https://mcp.postman.com/mcp</span><br /><span class="tok-c">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(or http://localhost:3001/mcp for local)</span><br /><br /><span class="tok-c">// Authentication: use the Authorization tab</span><br /><span class="tok-c">// Select your Auth Type (Bearer, API Key, OAuth)</span><br /><span class="tok-c">// and fill in your credentials.</span><br /><br />Authorization:<br />&nbsp;&nbsp;Auth Type:&nbsp;&nbsp;<span class="tok-s">API Key</span><br />&nbsp;&nbsp;Key:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tok-s">x-api-key</span><br />&nbsp;&nbsp;Value:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tok-s">{{api_key}}</span><br />&nbsp;&nbsp;Add To:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tok-s">Header</span><br /><br /><span class="tok-c">// Then click "Load Capabilities" &mdash; Postman sends</span><br /><span class="tok-c">// an initialize request and displays the server's</span><br /><span class="tok-c">// tools, resources, and prompts.</span></div>
+</div>
+</div>
+<div class="callout callout-tip">
+<div class="callout-icon">💡</div>
+<div class="callout-text"><strong>Not sure which to use?</strong> If there's a URL, use HTTP. If the setup instructions say "install via npm" or "run npx", use STDIO. When in doubt, check the server's README &mdash; any well-documented MCP server will tell you.</div>
+</div>
+<div class="divider">&nbsp;</div>
+<h2 class="subhead">Watch: <span class="hl">Creating Your First MCP Request</span></h2>
+<p class="lesson-body">Here's a full walkthrough of creating an MCP request in Postman from scratch &mdash; connecting to a real server, browsing its capabilities, and running your first tool call.</p>
+<div class="video-placeholder">
+<div class="video-play-btn">&nbsp;</div>
+<div class="video-title">Demo: Creating Your First MCP Request in Postman</div>
+<div class="video-label">Video placeholder &mdash; replace with embed</div>
+</div>
+<div class="divider">&nbsp;</div>
+<h2 class="subhead">Decode <span class="hl">This Response</span></h2>
+<p class="lesson-body">Theory is good. Practice is better. Below is a real MCP server response &mdash; the kind Postman shows you in the Response tab after you run a tools/call request. Click each line to see exactly what it means and why it's there.</p>
+<div class="decode-wrap">
+<div class="decode-title">Read the Room</div>
+<div class="decode-subtitle">Click any highlighted line in the JSON to see its annotation.</div>
+<div class="decode-layout">
+<div id="decodeJson" class="decode-json">
+<div class="annotate-line" data-ann="1"><span class="annotate-marker">1</span><span class="tok-s">"jsonrpc"</span>: <span class="tok-s">"2.0"</span>,</div>
+<div class="annotate-line" data-ann="2"><span class="annotate-marker">2</span><span class="tok-s">"id"</span>: <span class="tok-num">42</span>,</div>
+<div class="annotate-line" data-ann="3"><span class="annotate-marker">3</span><span class="tok-s">"result"</span>: {</div>
+<div class="annotate-line" data-ann="4"><span class="annotate-marker">4</span> <span class="tok-s">"content"</span>: [{</div>
+<div class="annotate-line" data-ann="5"><span class="annotate-marker">5</span> <span class="tok-s">"type"</span>: <span class="tok-s">"text"</span>,</div>
+<div class="annotate-line" data-ann="6"><span class="annotate-marker">6</span> <span class="tok-s">"text"</span>: <span class="tok-s">"Calendar event created."</span></div>
+<span style="color: #e8ddd6;"> }],</span>
+<div class="annotate-line" data-ann="7"><span class="annotate-marker">7</span> <span class="tok-s">"isError"</span>: <span class="tok-b">false</span></div>
+<span style="color: #e8ddd6;">}}</span></div>
+<div class="decode-annotations">
+<div id="ann-1" class="annotation-card">
+<div class="ann-num">Line 1</div>
+<div class="ann-title">JSON-RPC version</div>
+<div class="ann-body">MCP is built on the <strong>JSON-RPC 2.0</strong> spec. This field is always <code style="font-size: 11px; background: #F5F0EC; padding: 1px 4px; border-radius: 2px;">"2.0"</code> &mdash; it's a protocol handshake, not a version you'd ever change.</div>
+</div>
+<div id="ann-2" class="annotation-card">
+<div class="ann-num">Line 2</div>
+<div class="ann-title">Request ID</div>
+<div class="ann-body">This echoes back the <strong>id</strong> from your original request. Useful when you're sending multiple requests &mdash; it's how you match responses to requests in async flows.</div>
+</div>
+<div id="ann-3" class="annotation-card">
+<div class="ann-num">Line 3</div>
+<div class="ann-title">Result vs. Error</div>
+<div class="ann-body">A successful call gets a <strong>"result"</strong> field. A failed one gets <strong>"error"</strong> instead &mdash; with a code and message. If you see "result", the server did what you asked.</div>
+</div>
+<div id="ann-4" class="annotation-card">
+<div class="ann-num">Line 4</div>
+<div class="ann-title">Content array</div>
+<div class="ann-body">Tool responses always return a <strong>content array</strong> &mdash; because a single tool call can return multiple items (text, images, embedded resources). Most common case: one text item.</div>
+</div>
+<div id="ann-5" class="annotation-card">
+<div class="ann-num">Line 5</div>
+<div class="ann-title">Content type</div>
+<div class="ann-body">Each content item declares its <strong>type</strong>. The spec supports <code style="font-size: 11px; background: #F5F0EC; padding: 1px 4px; border-radius: 2px;">text</code>, <code style="font-size: 11px; background: #F5F0EC; padding: 1px 4px; border-radius: 2px;">image</code>, and <code style="font-size: 11px; background: #F5F0EC; padding: 1px 4px; border-radius: 2px;">resource</code>. For most tool calls you'll see text &mdash; the human-readable result.</div>
+</div>
+<div id="ann-6" class="annotation-card">
+<div class="ann-num">Line 6</div>
+<div class="ann-title">The actual payload</div>
+<div class="ann-body">This is what the tool returned &mdash; the <strong>real output</strong> you care about. If an AI model called this tool, this text would be injected into its context for the next response.</div>
+</div>
+<div id="ann-7" class="annotation-card">
+<div class="ann-num">Line 7</div>
+<div class="ann-title">Application-level error flag</div>
+<div class="ann-body"><strong>isError: false</strong> means the tool ran successfully. <strong>isError: true</strong> means the tool ran but encountered a problem &mdash; like a calendar API that rejected the event. Note: this is different from an HTTP error or a JSON-RPC error.</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-info">
+<div class="callout-icon">🔍</div>
+<div class="callout-text"><strong>In Postman:</strong> when you run an MCP request, this full JSON structure appears in the <strong>Response</strong> tab. You can also watch real-time server notifications appear in the <strong>Notifications</strong> tab &mdash; useful for servers that stream progress updates as they work.</div>
+</div>
+<div class="divider">&nbsp;</div>
+
+<div class="try-this">
+<div class="try-this-icon">🤝</div>
+<div class="try-this-content">
+<div class="try-label">Try This</div>
+<h3>Make Your First MCP Handshake</h3>
+<p>Open Postman and connect to a real MCP server &mdash; right now. The Postman API Network has a growing catalog of servers ready to test, no setup required.</p>
+<div class="try-steps">
+  <div class="try-item"><span class="step-num">1</span><span>In the Postman left sidebar, click <strong>+ &rarr; MCP</strong> to open a new MCP request tab.</span></div>
+  <div class="try-item"><span class="step-num">2</span><span>Choose <strong>HTTP</strong> transport, then search for a server from the <a href="https://www.postman.com/explore/mcp-servers" target="_blank" rel="noopener">Postman MCP Catalog</a>. Try the Postman MCP Server as a starting point.</span></div>
+  <div class="try-item"><span class="step-num">3</span><span>Click <strong>Load Capabilities</strong>. Browse the <strong>Tools</strong>, <strong>Resources</strong>, and <strong>Prompts</strong> tabs &mdash; notice how each primitive looks different.</span></div>
+  <div class="try-item"><span class="step-num">4</span><span>Pick a tool, fill in its arguments, and click <strong>Run</strong>. Check the response JSON &mdash; can you identify the <code style="font-size: 12px; background: rgba(255,255,255,0.5); padding: 1px 5px; border-radius: 3px;">result.content</code> and <code style="font-size: 12px; background: rgba(255,255,255,0.5); padding: 1px 5px; border-radius: 3px;">isError</code> fields?</span></div>
+</div>
+</div>
+</div>
+
+<a href="module4-v1.html" style="text-decoration: none; display: block;">
+<div class="whats-next">
+<div class="next-icon">🔧</div>
+<div class="next-text">
+<div class="next-label">Up Next</div>
+<h4>Teaching Your Agent New Tricks</h4>
+</div>
+</div>
+</a>
+</div>
+
+<script>
+  (function () {
+    const explorer = document.getElementById('primitivesExplorer');
+    if (!explorer) return;
+    const tabs   = explorer.querySelectorAll('.prim-tab');
+    const panels = explorer.querySelectorAll('.prim-panel');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.prim;
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        const panel = explorer.querySelector('#prim-' + target);
+        if (panel) panel.classList.add('active');
+      });
+    });
+  })();
+
+  document.querySelectorAll('.code-tabs-wrap').forEach(wrap => {
+    const tabBtns = wrap.querySelectorAll('.code-tab-btn');
+    const panels  = wrap.querySelectorAll('.code-panel-inner');
+    const copyBtn = wrap.querySelector('.copy-btn');
+    let copyTimer;
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.tab;
+        tabBtns.forEach(b => b.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        const activePanel = wrap.querySelector('#' + target);
+        if (activePanel) activePanel.classList.add('active');
+      });
+    });
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        const activePanel = wrap.querySelector('.code-panel-inner.active');
+        if (!activePanel) return;
+        function extractText(node) {
+          if (node.nodeType === Node.TEXT_NODE) return node.textContent;
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            if (node.tagName === 'BR') return '\n';
+            return Array.from(node.childNodes).map(extractText).join('');
+          }
+          return '';
+        }
+        const text = extractText(activePanel).trim();
+        navigator.clipboard.writeText(text).then(() => {
+          copyBtn.classList.add('copied');
+          copyBtn.textContent = 'Copied!';
+          clearTimeout(copyTimer);
+          copyTimer = setTimeout(() => { copyBtn.classList.remove('copied'); copyBtn.textContent = 'Copy'; }, 2000);
+        }).catch(() => {
+          const ta = document.createElement('textarea');
+          ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+          copyBtn.classList.add('copied'); copyBtn.textContent = 'Copied!';
+          clearTimeout(copyTimer);
+          copyTimer = setTimeout(() => { copyBtn.classList.remove('copied'); copyBtn.textContent = 'Copy'; }, 2000);
+        });
+      });
+    }
+  });
+
+  (function () {
+    const jsonEl = document.getElementById('decodeJson');
+    if (!jsonEl) return;
+    const lines = jsonEl.querySelectorAll('.annotate-line');
+    lines.forEach(line => {
+      line.addEventListener('click', () => {
+        const annId = line.dataset.ann;
+        lines.forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('.annotation-card').forEach(c => c.classList.remove('active'));
+        line.classList.add('active');
+        const card = document.getElementById('ann-' + annId);
+        if (card) card.classList.add('active');
+      });
+    });
+    if (lines.length) {
+      lines[0].classList.add('active');
+      const firstCard = document.getElementById('ann-1');
+      if (firstCard) firstCard.classList.add('active');
+    }
+  })();
+</script>

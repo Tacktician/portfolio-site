@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Config Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --white: #FFFFFF;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .config-wrap { max-width: 620px; margin: 0 auto; }
+
+    .pill-tabs { display: flex; gap: 0.4rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+    .pill-tab {
+      background: white; border: 2px solid var(--rule); border-radius: 20px; padding: 6px 16px;
+      font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+      color: var(--ink-mid); transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+    .pill-tab:hover { border-color: var(--orange); color: var(--orange); }
+    .pill-tab.active { background: var(--orange); border-color: var(--orange); color: white; }
+
+    .config-card { background: white; border-radius: 14px; box-shadow: var(--card-shadow); overflow: hidden; }
+
+    .config-header { background: #110e0c; display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.25rem; }
+    .config-filename { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: #8C7B72; display: flex; align-items: center; gap: 0.5rem; }
+    .config-filename-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); opacity: 0.6; }
+    .copy-btn {
+      background: #2a2220; color: #8C7B72; border: 1px solid #3a3230; border-radius: 6px;
+      padding: 4px 12px; font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .copy-btn:hover { background: #3a3230; color: #e8ddd6; }
+    .copy-btn.copied { color: #7DD3B0; border-color: #7DD3B0; }
+
+    .config-code { padding: 1.25rem; font-family: 'DM Mono', monospace; font-size: 0.82rem; line-height: 1.75; overflow-x: auto; background: #1a1210; }
+    .config-code pre { margin: 0; }
+
+    .tok-key { color: #FF8C5A; }
+    .tok-str { color: #7DD3B0; }
+    .tok-num { color: #A8D8EA; }
+    .tok-bool { color: #C3A8EA; }
+    .tok-field { color: #FFD4C2; }
+    .tok-punc { color: #5C5047; }
+    .tok-comment { color: #8C7B72; font-style: italic; }
+
+    .config-annotations { padding: 1.25rem; border-top: 1px solid var(--rule); display: flex; flex-direction: column; gap: 0.6rem; }
+    .anno { display: flex; gap: 0.75rem; align-items: flex-start; }
+    .anno-key { background: #1a1210; color: #FFD4C2; font-family: 'DM Mono', monospace; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; }
+    .anno-text { font-size: 0.85rem; color: var(--ink-mid); line-height: 1.5; }
+
+    .config-filepath { margin-top: 0.75rem; padding: 0.6rem 1rem; background: #fdfbf9; border-radius: 8px; border: 1px solid var(--rule); font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--ink-light); display: flex; align-items: center; gap: 0.5rem; }
+    .filepath-label { font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--orange); flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+  <div class="config-wrap">
+    <div class="pill-tabs">
+      <button class="pill-tab active" onclick="switchConfig('claude', this)">Claude.app</button>
+      <button class="pill-tab" onclick="switchConfig('vscode', this)">VS Code</button>
+      <button class="pill-tab" onclick="switchConfig('cursor', this)">Cursor</button>
+    </div>
+
+    <div class="config-card">
+      <div class="config-header">
+        <div class="config-filename"><span class="config-filename-dot"></span><span id="filenameLabel">claude_desktop_config.json</span></div>
+        <button class="copy-btn" id="copyBtn" onclick="copyConfig()">Copy</button>
+      </div>
+      <div class="config-code"><pre id="configCode"></pre></div>
+      <div class="config-annotations" id="configAnnotations"></div>
+      <div class="config-filepath">
+        <span class="filepath-label">File</span>
+        <span id="filepathValue"></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const configs = {
+      claude: {
+        filename: 'claude_desktop_config.json',
+        filepath: '~/Library/Application Support/Claude/claude_desktop_config.json',
+        raw: `{
+  "mcpServers": {
+    "my-server": {
+      "command": "node",
+      "args": ["./server.js"]
+    }
+  }
+}`,
+        html: `<span class="tok-punc">{</span>
+  <span class="tok-field">"mcpServers"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span>
+    <span class="tok-field">"my-server"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span>
+      <span class="tok-field">"command"</span><span class="tok-punc">:</span> <span class="tok-str">"node"</span><span class="tok-punc">,</span>
+      <span class="tok-field">"args"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"./server.js"</span><span class="tok-punc">]</span>
+    <span class="tok-punc">}</span>
+  <span class="tok-punc">}</span>
+<span class="tok-punc">}</span>`,
+        annotations: [
+          { key: '"mcpServers"', text: 'Top-level registry key — all servers are nested here.' },
+          { key: '"my-server"', text: 'Your server\'s unique name — used to identify it in Claude.' },
+          { key: '"command"', text: 'Specifies the runtime to use when starting the server process.' }
+        ]
+      },
+      vscode: {
+        filename: 'settings.json',
+        filepath: '.vscode/settings.json',
+        raw: `{
+  "mcp.servers": {
+    "my-server": {
+      "command": "node",
+      "args": ["./server.js"],
+      "env": {}
+    }
+  }
+}`,
+        html: `<span class="tok-punc">{</span>
+  <span class="tok-field">"mcp.servers"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span>
+    <span class="tok-field">"my-server"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span>
+      <span class="tok-field">"command"</span><span class="tok-punc">:</span> <span class="tok-str">"node"</span><span class="tok-punc">,</span>
+      <span class="tok-field">"args"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"./server.js"</span><span class="tok-punc">],</span>
+      <span class="tok-field">"env"</span><span class="tok-punc">:</span> <span class="tok-punc">{}</span>
+    <span class="tok-punc">}</span>
+  <span class="tok-punc">}</span>
+<span class="tok-punc">}</span>`,
+        annotations: [
+          { key: '"mcp.servers"', text: 'VS Code-specific namespace for MCP server configuration.' },
+          { key: '"env"', text: 'Pass environment variables to the server process — useful for API keys.' },
+          { key: '"args"', text: 'Command-line arguments passed to the server script on startup.' }
+        ]
+      },
+      cursor: {
+        filename: 'mcp.json',
+        filepath: '~/.cursor/mcp.json',
+        raw: `{
+  "mcpServers": {
+    "my-server": {
+      "command": "node",
+      "args": ["./server.js"],
+      "cwd": "\${workspaceFolder}"
+    }
+  }
+}`,
+        html: `<span class="tok-punc">{</span>
+  <span class="tok-field">"mcpServers"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span>
+    <span class="tok-field">"my-server"</span><span class="tok-punc">:</span> <span class="tok-punc">{</span>
+      <span class="tok-field">"command"</span><span class="tok-punc">:</span> <span class="tok-str">"node"</span><span class="tok-punc">,</span>
+      <span class="tok-field">"args"</span><span class="tok-punc">:</span> <span class="tok-punc">[</span><span class="tok-str">"./server.js"</span><span class="tok-punc">],</span>
+      <span class="tok-field">"cwd"</span><span class="tok-punc">:</span> <span class="tok-str">"\${workspaceFolder}"</span>
+    <span class="tok-punc">}</span>
+  <span class="tok-punc">}</span>
+<span class="tok-punc">}</span>`,
+        annotations: [
+          { key: '"mcpServers"', text: 'Same schema as Claude.app — Cursor follows the same convention.' },
+          { key: '"cwd"', text: 'Sets the working directory for the server process.' },
+          { key: '"${workspaceFolder}"', text: 'Cursor variable — resolves to the current open project\'s root path.' }
+        ]
+      }
+    };
+
+    let activeConfig = 'claude';
+
+    function switchConfig(name, btn) {
+      document.querySelectorAll('.pill-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeConfig = name;
+      renderConfig();
+      resetCopy();
+    }
+
+    function renderConfig() {
+      const c = configs[activeConfig];
+      document.getElementById('filenameLabel').textContent = c.filename;
+      document.getElementById('configCode').innerHTML = c.html;
+      document.getElementById('filepathValue').textContent = c.filepath;
+      document.getElementById('configAnnotations').innerHTML = c.annotations.map(a =>
+        `<div class="anno"><span class="anno-key">${a.key}</span><span class="anno-text">${a.text}</span></div>`
+      ).join('');
+    }
+
+    function copyConfig() {
+      const c = configs[activeConfig];
+      navigator.clipboard.writeText(c.raw).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = 'Copied ✓';
+        btn.classList.add('copied');
+        setTimeout(resetCopy, 2000);
+      });
+    }
+
+    function resetCopy() {
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }
+
+    renderConfig();
+  </script>
+</body>
+</html>

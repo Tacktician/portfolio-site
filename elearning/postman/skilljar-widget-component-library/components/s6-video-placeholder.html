@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Placeholder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .video-placeholder {
+      background: #1a1210;
+      border-radius: 16px;
+      overflow: hidden;
+      max-width: 640px;
+      box-shadow: 0 8px 32px rgba(26,22,18,0.25);
+      position: relative;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Diagonal stripe pattern */
+    .video-bg {
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 20px,
+        rgba(255,255,255,0.02) 20px,
+        rgba(255,255,255,0.02) 40px
+      );
+    }
+
+    /* Subtle radial highlight */
+    .video-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(255,108,55,0.08) 0%, transparent 70%);
+    }
+
+    .video-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 1.25rem; }
+
+    .play-btn {
+      width: 64px; height: 64px; border-radius: 50%; background: var(--orange);
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      box-shadow: 0 4px 24px rgba(255,108,55,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .play-btn:hover { transform: scale(1.1); box-shadow: 0 8px 32px rgba(255,108,55,0.6); }
+    .play-icon { color: white; font-size: 1.5rem; margin-left: 3px; line-height: 1; }
+
+    .video-labels { text-align: center; }
+    .video-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; color: white; margin-bottom: 0.3rem; }
+    .video-meta { display: flex; align-items: center; gap: 0.5rem; justify-content: center; }
+    .video-duration { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.08); padding: 2px 8px; border-radius: 4px; }
+    .video-tag { font-family: 'Syne', sans-serif; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--orange); }
+
+    /* Progress bar */
+    .video-progress { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: rgba(255,255,255,0.1); }
+    .video-progress-fill { height: 100%; width: 0%; background: var(--orange); }
+  </style>
+</head>
+<body>
+
+  <div class="video-placeholder">
+    <div class="video-bg"></div>
+    <div class="video-glow"></div>
+    <div class="video-content">
+      <div class="play-btn">
+        <span class="play-icon">▶</span>
+      </div>
+      <div class="video-labels">
+        <div class="video-title">Introduction to MCP</div>
+        <div class="video-meta">
+          <span class="video-tag">Module 1</span>
+          <span class="video-duration">3:42</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-progress">
+      <div class="video-progress-fill"></div>
+    </div>
+  </div>
+
+</body>
+</html>

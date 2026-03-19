@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analogy Banner</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .analogy-banner {
+      background: var(--ink);
+      border-radius: 16px;
+      padding: 2rem 2.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.75rem;
+      max-width: 680px;
+      box-shadow: 0 8px 32px rgba(26,22,18,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle background texture */
+    .analogy-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at top right, rgba(255,108,55,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .banner-icon { font-size: 3rem; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+
+    .banner-content { flex: 1; position: relative; }
+    .banner-eyebrow { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); margin-bottom: 0.5rem; }
+    .banner-body { font-family: 'DM Sans', sans-serif; font-size: 1.05rem; color: rgba(255,255,255,0.85); line-height: 1.7; margin: 0; }
+    .banner-body em { color: white; font-style: normal; font-weight: 600; }
+
+    .banner-quote { position: absolute; top: -0.5rem; right: 0; font-size: 4rem; color: rgba(255,108,55,0.1); font-family: Georgia, serif; line-height: 1; user-select: none; }
+  </style>
+</head>
+<body>
+
+  <div class="analogy-banner">
+    <div class="banner-icon">🏗️</div>
+    <div class="banner-content">
+      <div class="banner-eyebrow">Mental Model</div>
+      <p class="banner-body">Think of MCP like a <em>power outlet standard</em> — any device (AI) can plug into any socket (server) as long as they follow the same spec. You don't redesign your appliances every time you move to a new country. You use an adapter standard.</p>
+      <div class="banner-quote">"</div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teaching Your Agent New Tricks — MCP in Postman</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange:       #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale:  #FFF0EB;
+      --ink:          #1A1612;
+      --ink-mid:      #4A3F38;
+      --ink-light:    #8C7B72;
+      --rule:         #E8DDD6;
+      --white:        #FFFFFF;
+      --green:        #2D9E6B;
+      --green-pale:   #EAF7F1;
+      --red:          #E03E2D;
+      --red-pale:     #FEF0EE;
+      --card-shadow:      0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+      --card-shadow-lift: 0 12px 32px rgba(26,22,18,0.14), 0 4px 8px rgba(26,22,18,0.08);
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ── Layout ── */
+    .lesson-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 56px 32px 80px;
+    }
+    @media (max-width: 680px) {
+      .lesson-wrap { padding: 36px 20px 60px; }
+    }
+
+    /* ── Typography ── */
+    .section-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 12px;
+    }
+    h1.lesson-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    h1.lesson-title em { font-style: normal; color: var(--orange); }
+    h2.subhead {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(18px, 2.5vw, 24px);
+      font-weight: 700;
+      color: var(--ink);
+      margin-top: 48px;
+      margin-bottom: 14px;
+      letter-spacing: -0.01em;
+    }
+    .lesson-intro {
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--ink-mid);
+      font-weight: 300;
+      max-width: 680px;
+      margin-bottom: 32px;
+      border-left: 3px solid var(--orange);
+      padding-left: 20px;
+    }
+    .lesson-body {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--ink-mid);
+      font-weight: 300;
+      max-width: 720px;
+      margin-bottom: 24px;
+    }
+    .lesson-body strong, .lesson-intro strong { color: var(--ink); font-weight: 500; }
+    a { color: var(--orange); text-decoration: underline; text-underline-offset: 3px; transition: color 0.15s; }
+    a:hover { color: var(--orange-light); }
+    .divider { height: 1px; background: var(--rule); margin: 40px 0; max-width: 720px; }
+
+    /* ── Buttons ── */
+    .btn {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--orange); color: white; box-shadow: 0 3px 10px rgba(255,108,55,0.35); }
+    .btn-primary:hover { background: var(--orange-light); }
+    .btn-primary:disabled { background: #D4C4BC; box-shadow: none; cursor: not-allowed; }
+    .btn-ghost { background: transparent; color: var(--ink-mid); border: 1.5px solid var(--rule); }
+    .btn-ghost:hover { border-color: var(--ink-mid); color: var(--ink); }
+    .btn:disabled { opacity: 0.5; cursor: default; }
+
+    /* ── Animations ── */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%     { transform: translateX(-6px); }
+      40%     { transform: translateX(6px); }
+      60%     { transform: translateX(-4px); }
+      80%     { transform: translateX(4px); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.55; }
+    }
+
+    /* ── Objectives box ── */
+    .objectives-box {
+      background: var(--orange-pale);
+      border: 1.5px solid #FFD4C2;
+      border-radius: 10px;
+      padding: 22px 26px;
+      margin-bottom: 44px;
+      max-width: 720px;
+    }
+    .objectives-box .obj-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 14px;
+    }
+    .objectives-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .objectives-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--ink-mid);
+      font-weight: 300;
+    }
+    .objectives-list li strong { color: var(--ink); font-weight: 500; }
+    .obj-bullet {
+      flex-shrink: 0;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: white;
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    /* ── Callout ── */
+    .callout {
+      background: var(--orange-pale);
+      border: 1.5px solid #FFD4C2;
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      max-width: 720px;
+    }
+    .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .callout-text { font-size: 14.5px; line-height: 1.6; color: var(--ink-mid); font-weight: 400; }
+    .callout-text strong { color: var(--ink); font-weight: 500; }
+
+    /* ── Mermaid diagram wrapper ── */
+    .diagram-wrap {
+      max-width: 720px;
+      margin: 28px 0 36px;
+      background: var(--white);
+      border: 1.5px solid var(--rule);
+      border-radius: 12px;
+      padding: 32px 28px;
+      box-shadow: var(--card-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .diagram-wrap::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--orange);
+    }
+    .diagram-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 20px;
+    }
+    .diagram-wrap .mermaid {
+      display: flex;
+      justify-content: center;
+    }
+    /* Override mermaid default font to match design system */
+    .diagram-wrap svg {
+      max-width: 100%;
+      font-family: 'DM Sans', sans-serif !important;
+    }
+
+    /* ── Flow step cards (fallback / annotation below diagram) ── */
+    .flow-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      max-width: 720px;
+      margin: 0 0 36px;
+    }
+    .flow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
+    }
+    .flow-step:last-child { border-bottom: none; }
+    .flow-step-num {
+      flex-shrink: 0;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: white;
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+    .flow-step-body {}
+    .flow-step-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .flow-step-title .step-tag {
+      display: inline-block;
+      background: var(--orange-pale);
+      color: var(--orange);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 3px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .flow-step-desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--ink-mid);
+      font-weight: 300;
+    }
+    .flow-connector {
+      width: 2px;
+      height: 16px;
+      background: var(--rule);
+      margin-left: 13px;
+    }
+
+    /* ── Video placeholder ── */
+    .video-placeholder {
+      max-width: 720px;
+      background: var(--ink);
+      border-radius: 12px;
+      padding: 48px 32px;
+      margin: 32px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .video-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,108,55,0.04) 20px, rgba(255,108,55,0.04) 21px);
+    }
+    .video-play {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: var(--orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 8px rgba(255,108,55,0.15);
+      position: relative;
+      z-index: 1;
+    }
+    .video-play svg { width: 20px; height: 20px; fill: white; margin-left: 3px; }
+    .video-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 0.04em;
+      position: relative;
+      z-index: 1;
+    }
+    .video-sublabel {
+      font-size: 12px;
+      color: var(--ink-light);
+      font-weight: 300;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── CTA aside ── */
+    .cta-aside {
+      background: white;
+      border: 1.5px solid var(--rule);
+      border-left: 4px solid var(--orange);
+      border-radius: 0 10px 10px 0;
+      padding: 24px 28px;
+      max-width: 680px;
+      margin-bottom: 40px;
+      box-shadow: var(--card-shadow);
+    }
+    .cta-aside .cta-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 10px;
+    }
+    .cta-aside p { font-size: 15px; line-height: 1.7; color: var(--ink-mid); font-weight: 300; }
+    .cta-aside p strong { color: var(--ink); font-weight: 500; }
+    .cta-aside p + p { margin-top: 12px; }
+
+    /* ── What's Next ── */
+    .whats-next {
+      background: var(--ink);
+      border-radius: 12px;
+      padding: 28px 32px;
+      max-width: 680px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .whats-next::after {
+      content: '→';
+      position: absolute;
+      right: 28px;
+      font-size: 28px;
+      color: var(--orange);
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      transition: transform 0.2s;
+    }
+    .whats-next:hover::after { transform: translateX(5px); }
+    .next-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: var(--orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .next-text .next-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 4px;
+    }
+    .next-text h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: -0.01em;
+    }
+    h1, h2 { font-family: 'Syne', sans-serif; }
+  </style>
+<div class="lesson-wrap"><!-- TITLE + INTRO -->
+<div class="section-label">Module 4 &mdash; Working with MCP in Postman</div>
+<h1 class="lesson-title">Teaching Your Agent <em>New Tricks</em></h1>
+<p class="lesson-intro">In a previous course, you gave your agent a brain and a goal. Now we're giving it some hands &mdash; specifically, very specialised hands that can reach into Slack, Notion, Stripe, Google Maps, or whatever your workflow needs, without writing a single line of integration code.</p>
+<!-- OBJECTIVES -->
+<div class="objectives-box">
+<div class="obj-label">What You'll Learn</div>
+<ul class="objectives-list">
+<li><span class="obj-bullet">1</span> How to <strong>add an MCP server</strong> to an AI request in Postman</li>
+<li><span class="obj-bullet">2</span> How the AI model <strong>selects and uses tools</strong> &mdash; and when it decides not to</li>
+<li><span class="obj-bullet">3</span> How to <strong>evaluate whether tool invocation</strong> actually improved the model's response</li>
+</ul>
+</div>
+<div class="divider">&nbsp;</div>
+<!-- SECTION 1: HOW THE FLOW WORKS -->
+<h2 class="subhead">How the Request&ndash;Tool&ndash;Response Loop Works</h2>
+<p class="lesson-body">When you attach an MCP server to an AI request, the model doesn't just get a longer system prompt. It gets a menu. Every tool your MCP server exposes shows up as something the model can choose to invoke &mdash; or not. The key word there is <strong>choose</strong>.</p>
+<p class="lesson-body">Here's what that loop actually looks like, from the moment you hit Send to the moment the response lands:</p>
+<!-- Mermaid diagram -->
+<div class="diagram-wrap">
+<div class="diagram-label">Request flow &mdash; AI request + MCP server</div>
+<div id="mcpFlowDiagram"></div>
+</div>
+<!-- Annotated step breakdown -->
+<div class="flow-steps">
+<div class="flow-step">
+<div class="flow-step-num">1</div>
+<div class="flow-step-body">
+<div class="flow-step-title">You send a prompt via an AI request</div>
+<div class="flow-step-desc">Same as any AI request &mdash; enter your prompt, hit Send. The difference is what the model can see on the other side.</div>
+</div>
+</div>
+<div class="flow-step">
+<div class="flow-step-num">2</div>
+<div class="flow-step-body">
+<div class="flow-step-title">Model sees available tools from the attached MCP server</div>
+<div class="flow-step-desc">Postman passes the MCP server's tool list to the model as part of the request context. The model now knows what actions are available to it.</div>
+</div>
+</div>
+<div class="flow-step">
+<div class="flow-step-num">3</div>
+<div class="flow-step-body">
+<div class="flow-step-title">Model decides whether to invoke a tool <span class="step-tag">The interesting bit</span></div>
+<div class="flow-step-desc">This is the part that surprises people. The model makes its own judgement call. If the prompt is answerable from training data alone, it might skip the tool entirely. If it needs live data or an action, it'll reach for one.</div>
+</div>
+</div>
+<div class="flow-step">
+<div class="flow-step-num">4</div>
+<div class="flow-step-body">
+<div class="flow-step-title">Tool returns context</div>
+<div class="flow-step-desc">The MCP server executes the tool call and returns a result &mdash; a list of items, a created resource, a fetched document, whatever the tool does.</div>
+</div>
+</div>
+<div class="flow-step">
+<div class="flow-step-num">5</div>
+<div class="flow-step-body">
+<div class="flow-step-title">Model incorporates the result into its response</div>
+<div class="flow-step-desc">The tool output gets folded into the model's answer. In Postman, you can see the full chain &mdash; which tool was called, with what arguments, and what came back.</div>
+</div>
+</div>
+</div>
+<!-- CALLOUT -->
+<div class="callout">
+<div class="callout-icon">🤔</div>
+<div class="callout-text"><strong>The model decides whether to use the tool &mdash; not you.</strong> You're not scripting "call this tool when X happens." You're giving the model agency and trusting its judgement. That's both the power of this approach and the reason you should test it thoroughly in Postman before pointing it at anything production-shaped.</div>
+</div>
+<div class="divider">&nbsp;</div>
+<!-- VIDEO PLACEHOLDER -->
+<h2 class="subhead">See It in Action</h2>
+<p class="lesson-body">The walkthrough below shows the full flow end-to-end: connecting a real MCP server to an AI request, sending a prompt, and watching the model decide to invoke a tool &mdash; then inspecting exactly what happened in the Postman response pane.</p>
+<div class="video-placeholder">
+<div class="video-play">&nbsp;</div>
+<div class="video-label">Arcade Demo &mdash; MCP Server Walkthrough in Postman</div>
+<div class="video-sublabel">Replace this block with the embedded Arcade video when ready</div>
+</div>
+<div class="divider">&nbsp;</div>
+<!-- CTA -->
+<div class="cta-aside">
+<div class="cta-label">🚀 Try This</div>
+<p><strong>Add the Postman MCP Server to one of your existing AI requests.</strong> Prompt the model to create a Collection based on a simple API you use regularly &mdash; then inspect what it built.</p>
+<p>Does it match what you'd have made manually? What's missing? What surprised you? There are no wrong answers here &mdash; the goal is to develop an intuition for when the model reaches for a tool and when it doesn't.</p>
+</div>
+<!-- WHAT'S NEXT -->
+<a href="module5-v1.html" style="text-decoration: none; display: block;">
+<div class="whats-next">
+<div class="next-icon">🔧</div>
+<div class="next-text">
+<div class="next-label">Up Next</div>
+<h4>Building Your Own MCP Server</h4>
+</div>
+</div>
+</a>
+</div>
+<!-- /lesson-wrap -->
+<script>
+function initMermaid() {
+  if (typeof mermaid === 'undefined') {
+    setTimeout(initMermaid, 50);
+    return;
+  }
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      primaryColor:       '#F5F0EC',
+      primaryTextColor:   '#1A1612',
+      primaryBorderColor: '#E8DDD6',
+      lineColor:          '#8C7B72',
+      fontFamily:         'DM Sans, sans-serif',
+      fontSize:           '14px',
+    },
+    flowchart: { curve: 'basis', padding: 20, nodeSpacing: 40, rankSpacing: 48 }
+  });
+
+  const diagram = [
+    'flowchart TD',
+    '    A(["👤  You send a prompt\nvia an AI Request"])',
+    '    B["🧠  Model receives prompt\n+ sees available MCP tools"]',
+    '    C{"Does this prompt\nneed a tool?"}',
+    '    D["⚙️  Model invokes tool\nvia MCP server"]',
+    '    E["📦  Tool returns\ncontext or data"]',
+    '    F["✍️  Model incorporates\ntool output into response"]',
+    '    G["💬  Response returned\nto you in Postman"]',
+    '    H["💬  Response returned\n(no tool used)"]',
+    '    A --> B',
+    '    B --> C',
+    '    C -- Yes --> D',
+    '    D --> E',
+    '    E --> F',
+    '    F --> G',
+    '    C -- No --> H',
+    '    style A fill:#FF6C37,color:#fff,stroke:none',
+    '    style G fill:#2D9E6B,color:#fff,stroke:none',
+    '    style H fill:#2D9E6B,color:#fff,stroke:none',
+    '    style C fill:#FFF0EB,color:#1A1612,stroke:#FFD4C2',
+    '    style D fill:#1A1612,color:#fff,stroke:none',
+    '    style E fill:#1A1612,color:#fff,stroke:none',
+    '    style B fill:#F5F0EC,color:#1A1612,stroke:#E8DDD6',
+    '    style F fill:#F5F0EC,color:#1A1612,stroke:#E8DDD6'
+  ].join('\n');
+
+  const container = document.getElementById('mcpFlowDiagram');
+  container.className = 'mermaid';
+  container.textContent = diagram;
+
+  mermaid.run();
+}
+initMermaid();
+</script>
+
+</body>
+</html>

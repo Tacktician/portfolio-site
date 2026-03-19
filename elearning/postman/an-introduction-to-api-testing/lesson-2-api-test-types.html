@@ -1,0 +1,451 @@
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+<div>
+<style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --white: #FFFFFF;
+      --green: #2D9E6B;
+      --green-pale: #EAF7F1;
+      --red: #E03E2D;
+      --red-pale: #FEF0EE;
+      --blue: #2563EB;
+      --blue-pale: #EFF4FF;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    .lesson-container { font-family: 'DM Sans', sans-serif; color: var(--ink); line-height: 1.7; max-width: 780px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+
+    /* ── Section Header ── */
+    .section-header { margin-bottom: 2.5rem; }
+    .section-eyebrow { display: inline-block; font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--orange); margin-bottom: 0.75rem; }
+    .section-title { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--ink); line-height: 1.15; margin: 0 0 1.25rem; letter-spacing: -0.02em; }
+    .section-title em { font-style: italic; color: var(--orange); }
+    .section-intro { border-left: 4px solid var(--orange); padding-left: 1.1rem; font-size: 1rem; color: var(--ink-mid); line-height: 1.7; margin: 0; }
+
+    /* ── Objectives Box ── */
+    .objectives-box { background: var(--orange-pale); border: 1.5px solid #FFD4C2; border-radius: 10px; padding: 22px 26px; margin-bottom: 2.5rem; box-shadow: var(--card-shadow); }
+    .obj-label { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); margin-bottom: 14px; }
+    .objectives-list { display: flex; flex-direction: column; gap: 10px; }
+    .obj-item { display: flex; align-items: flex-start; gap: 10px; }
+    .obj-item p { display: block; margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink-mid); font-weight: 300; }
+    .obj-item p strong { color: var(--ink); font-weight: 500; }
+    .obj-bullet { flex-shrink: 0; width: 20px; height: 20px; min-width: 20px; border-radius: 50%; background: var(--orange); color: white; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; margin-top: 2px; }
+
+    /* ── Divider ── */
+    .divider-with-label { display: flex; align-items: center; gap: 1rem; margin: 2.5rem auto; }
+    .divider-with-label::before, .divider-with-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+    .divider-label { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-light); white-space: nowrap; }
+
+    /* ── Body Text ── */
+    .lesson-text { font-size: 0.95rem; color: var(--ink-mid); line-height: 1.7; margin-bottom: 2rem; }
+    .lesson-text strong { color: var(--ink); font-weight: 600; }
+
+    /* ── Callout ── */
+    .callout { border-radius: 12px; padding: 1.1rem 1.4rem; display: flex; align-items: flex-start; gap: 1rem; box-shadow: var(--card-shadow); margin-bottom: 2.5rem; }
+    .callout-info { background: var(--blue-pale); border: 1.5px solid rgba(37,99,235,0.15); }
+    .callout-tip { background: var(--orange-pale); border: 1.5px solid rgba(255,108,55,0.2); }
+    .callout-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 1px; }
+    .callout-content { flex: 1; }
+    .callout-title { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+    .callout-info .callout-title { color: var(--blue); }
+    .callout-tip .callout-title { color: var(--orange); }
+    .callout-body { font-size: 0.9rem; color: var(--ink-mid); line-height: 1.6; margin: 0; }
+
+    /* ── Arcade Embed ── */
+    .arcade-wrap { position: relative; padding-bottom: calc(56.65% + 41px); height: 0; width: 100%; margin-bottom: 2.5rem; }
+    .arcade-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 12px; }
+
+    /* ── Step Carousel ── */
+    .carousel-wrap { max-width: 100%; margin: 0 auto 2.5rem; }
+    .progress-bar-track { height: 4px; background: var(--rule); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: var(--orange); border-radius: 2px; transition: width 0.4s cubic-bezier(0.4,0,0.2,1); }
+    .slide-card { background: white; border-radius: 16px; box-shadow: var(--card-shadow); padding: 2rem; min-height: 220px; position: relative; overflow: hidden; }
+    .slide-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--orange); }
+    .slide-counter { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); margin-bottom: 0.5rem; }
+    .slide-title { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--ink); margin: 0 0 0.75rem; }
+    .slide-body { font-size: 0.95rem; color: var(--ink-mid); line-height: 1.7; margin: 0 0 1rem; }
+    .slide-why { background: var(--orange-pale); border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.85rem; color: var(--ink-mid); }
+    .slide-why strong { color: var(--orange); font-family: 'Syne', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.25rem; }
+    .carousel-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 1.25rem; }
+    .nav-btn { background: white; border: 2px solid var(--rule); border-radius: 10px; padding: 10px 22px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; color: var(--ink-mid); transition: border-color 0.2s, color 0.2s, background 0.2s; display: flex; align-items: center; gap: 0.4rem; }
+    .nav-btn:hover:not(:disabled) { border-color: var(--orange); color: var(--orange); }
+    .nav-btn:disabled { opacity: 0.3; cursor: default; }
+    .nav-btn.primary { background: var(--orange); border-color: var(--orange); color: white; }
+    .nav-btn.primary:hover { background: var(--orange-light); border-color: var(--orange-light); color: white; }
+    .nav-btn.done { background: var(--green); border-color: var(--green); color: white; cursor: default; }
+    .dots { display: flex; gap: 0.4rem; align-items: center; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--rule); transition: background 0.2s, transform 0.2s; cursor: pointer; }
+    .dot.active { background: var(--orange); transform: scale(1.3); }
+    .dot.done { background: var(--ink-light); }
+    .slide-inner { animation: fadeSlide 0.25s ease; }
+    @keyframes fadeSlide { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+
+    /* ── Drag and Drop Matching ── */
+    .dnd-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; margin-bottom: 1.5rem; }
+    .dnd-col-label { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 0.75rem; }
+    .cards-pool { display: flex; flex-direction: column; gap: 0.6rem; min-height: 280px; }
+    .drag-card { background: white; border: 2px solid var(--rule); border-radius: 10px; padding: 12px 16px; cursor: grab; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 0.6rem; box-shadow: var(--card-shadow); transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s; user-select: none; }
+    .drag-card:hover { border-color: var(--orange); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(26,22,18,0.12); }
+    .drag-card:active { cursor: grabbing; }
+    .drag-card.dragging { opacity: 0.4; }
+    .drop-targets { display: flex; flex-direction: column; gap: 0.6rem; }
+    .drop-target { background: white; border: 2px dashed var(--rule); border-radius: 10px; padding: 12px 16px; min-height: 52px; display: flex; align-items: center; gap: 0.75rem; transition: border-color 0.2s, background 0.2s; position: relative; }
+    .drop-target .target-label { font-size: 0.88rem; color: var(--ink-mid); flex: 1; }
+    .drop-target.drag-over { border-color: var(--orange); background: var(--orange-pale); }
+    .drop-target.correct { border-color: var(--green); background: var(--green-pale); border-style: solid; }
+    .drop-target.incorrect { border-color: var(--red); background: var(--red-pale); border-style: solid; animation: shake 0.4s ease; }
+    .placed-card { background: var(--ink); color: white; border-radius: 8px; padding: 6px 10px; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+    .placed-card .remove-btn { cursor: pointer; opacity: 0.6; font-size: 0.75rem; line-height: 1; transition: opacity 0.2s; margin-left: 2px; }
+    .placed-card .remove-btn:hover { opacity: 1; }
+    .status-dot { position: absolute; top: 12px; right: 12px; width: 9px; height: 9px; border-radius: 50%; background: var(--green); opacity: 0; transition: opacity 0.2s; }
+    .drop-target.correct .status-dot { opacity: 1; }
+    @keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
+    .actions { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; }
+    .check-btn { background: var(--orange); color: white; border: none; border-radius: 8px; padding: 10px 24px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: background 0.2s; }
+    .check-btn:hover { background: var(--orange-light); }
+    .reset-btn { background: transparent; color: var(--ink-mid); border: 2px solid var(--rule); border-radius: 8px; padding: 10px 20px; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: border-color 0.2s; }
+    .reset-btn:hover { border-color: var(--ink-mid); }
+    .result-panel { margin-bottom: 2.5rem; background: white; border-radius: 12px; padding: 1.25rem 1.5rem; box-shadow: var(--card-shadow); display: none; }
+    .result-panel.show { display: block; }
+    .result-score { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--ink); margin-bottom: 0.25rem; }
+    .result-msg { color: var(--ink-mid); font-size: 0.9rem; }
+    .perfect-badge { display: inline-block; background: var(--green); color: white; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.8rem; padding: 3px 10px; border-radius: 20px; margin-left: 0.5rem; vertical-align: middle; }
+    .drag-ghost { position: fixed; pointer-events: none; z-index: 9999; opacity: 0.9; transform: rotate(3deg) scale(1.05); }
+
+    /* ── What's Next Footer ── */
+    a.whats-next, a.whats-next:hover, a.whats-next:visited, a.whats-next:active {
+      background: var(--ink); border-radius: 16px; padding: 1.75rem 2rem;
+      display: flex; align-items: center; gap: 1.5rem; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(26,22,18,0.2);
+      text-decoration: none; margin-top: 1rem; color: inherit;
+    }
+    a.whats-next:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(26,22,18,0.3); }
+    .whats-next:hover .arrow-icon { transform: translateX(5px); }
+    .next-icon-box { width: 52px; height: 52px; background: var(--orange); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .arrow-icon { font-size: 1.4rem; color: white; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); display: block; }
+    .next-content { flex: 1; }
+    .next-label { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); margin-bottom: 0.3rem; }
+    .next-title { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: white; margin: 0; }
+    .next-subtitle { font-size: 0.83rem; color: rgba(255,255,255,0.45); margin-top: 0.2rem; }
+    .next-chevron { color: rgba(255,255,255,0.25); font-size: 1.1rem; transition: color 0.2s; }
+    .whats-next:hover .next-chevron { color: rgba(255,255,255,0.6); }
+
+    @media (max-width: 640px) {
+      .dnd-layout { grid-template-columns: 1fr; }
+    }
+    h1, h2 { font-family: 'Syne', sans-serif; }
+</style>
+</div>
+<div class="lesson-container"><!-- SECTION HEADER -->
+<div class="section-header"><span class="section-eyebrow">Lesson 2 &middot; An Introduction to API Testing</span>
+<h1 class="section-title">API <em>Test Types</em></h1>
+<p class="section-intro">Not all API tests serve the same purpose. Different test types address different concerns &mdash; from correctness and contracts to performance under load. Knowing which tests to reach for (and when) is a foundational skill.</p>
+</div>
+<!-- LEARNING OBJECTIVES -->
+<div class="objectives-box">
+<div class="obj-label">What You&rsquo;ll Learn</div>
+<div class="objectives-list">
+<div class="obj-item"><span class="obj-bullet">1</span>
+<p>Identify the <strong>key concerns</strong> that API testing addresses, from error handling to edge cases.</p>
+</div>
+<div class="obj-item"><span class="obj-bullet">2</span>
+<p>Distinguish between <strong>contract, unit, end-to-end, and load testing</strong> and explain when each applies.</p>
+</div>
+<div class="obj-item"><span class="obj-bullet">3</span>
+<p>Match each test type to its <strong>correct definition</strong> and real-world use case.</p>
+</div>
+</div>
+</div>
+<!-- VIDEO / ARCADE EMBED (replace src with actual Arcade URL) -->
+<div class="arcade-wrap"><iframe title="API Test Types" src="https://demo.arcade.software/pmhu8Krf3mzpAjBqUegE?embed&amp;embed_mobile=tab&amp;embed_desktop=inline&amp;show_copy_link=true" allowfullscreen="" loading="lazy"></iframe></div>
+<!-- STEP CAROUSEL -->
+<div class="divider-with-label"><span class="divider-label">Key Concerns in API Testing</span></div>
+<p class="lesson-text">When you test an API, you&rsquo;re checking that it behaves correctly across a range of conditions. Each of the following concerns represents a dimension of quality. <strong>Step through the carousel</strong> to understand what each concern means and why it matters.</p>
+<div class="carousel-wrap">
+<div class="progress-bar-track">
+<div id="js-progress-fill" class="progress-bar-fill"></div>
+</div>
+<div class="slide-card">
+<div id="js-slide-inner" class="slide-inner"></div>
+</div>
+<div class="carousel-nav"><button id="js-prev-btn" class="nav-btn" disabled="disabled">&larr; Prev</button>
+<div id="js-dots" class="dots"></div>
+<button id="js-next-btn" class="nav-btn primary">Next &rarr;</button></div>
+</div>
+<!-- DRAG AND DROP -->
+<div class="divider-with-label"><span class="divider-label">Match the Test Type</span></div>
+<p class="lesson-text">Now that you understand what API tests look for, let&rsquo;s explore the <strong>four core test types</strong> you&rsquo;ll encounter. Drag each test type to its matching definition.</p>
+<div class="dnd-layout">
+<div>
+<div class="dnd-col-label">Drag these cards &rarr;</div>
+<div id="js-cards-pool" class="cards-pool">
+<div class="drag-card" draggable="true" data-id="contract">📜 Contract Testing</div>
+<div class="drag-card" draggable="true" data-id="unit">🔬 Unit Testing</div>
+<div class="drag-card" draggable="true" data-id="e2e">🔗 End-to-End Testing</div>
+<div class="drag-card" draggable="true" data-id="load">📈 Load Testing</div>
+</div>
+</div>
+<div>
+<div class="dnd-col-label">&larr; Drop onto the right definition</div>
+<div id="js-drop-targets" class="drop-targets">
+<div class="drop-target" data-accepts="contract">
+<div class="status-dot">&nbsp;</div>
+<span class="target-label">Establishes a single source of truth for what each request and response should look like</span></div>
+<div class="drop-target" data-accepts="unit">
+<div class="status-dot">&nbsp;</div>
+<span class="target-label">Confirms that a single endpoint returns the correct response to a given request</span></div>
+<div class="drop-target" data-accepts="e2e">
+<div class="status-dot">&nbsp;</div>
+<span class="target-label">Validates key user journeys that may involve multiple endpoints and APIs</span></div>
+<div class="drop-target" data-accepts="load">
+<div class="status-dot">&nbsp;</div>
+<span class="target-label">Checks whether an API is able to operate reliably during times of peak traffic</span></div>
+</div>
+</div>
+</div>
+<div class="actions"><button id="js-check-btn" class="check-btn">Check Answers</button> <button id="js-reset-btn" class="reset-btn">Reset</button></div>
+<div id="js-result-panel" class="result-panel">
+<div id="js-result-score" class="result-score"></div>
+<div id="js-result-msg" class="result-msg"></div>
+</div>
+<!-- KEY TAKEAWAY -->
+<div class="callout callout-tip"><span class="callout-icon">💡</span>
+<div class="callout-content">
+<div class="callout-title">Key Takeaway</div>
+<p class="callout-body">Most teams start with <strong>unit tests</strong> (fast, focused, high confidence) and layer on contract, end-to-end, and load tests as their API matures. You don&rsquo;t need every test type on day one &mdash; but you should know what each one offers so you can reach for the right tool at the right time.</p>
+</div>
+</div>
+<!-- WHAT'S NEXT --> <a class="whats-next" href="/path/api-testing-path/an-introduction-to-api-testing/test-automation-at-a-glance" target="_self">
+<div class="next-icon-box"><span class="arrow-icon">&rarr;</span></div>
+<div class="next-content">
+<div class="next-label">Up Next</div>
+<div class="next-title">Lesson 3: Test Automation at a Glance</div>
+<div class="next-subtitle">Why automation matters and how it fits into API-first development</div>
+</div>
+<span class="next-chevron">&rsaquo;</span> </a></div>
+<p>
+<script>
+(function(){
+
+    /* ═══════════════════════════════════════════
+       STEP CAROUSEL
+       ═══════════════════════════════════════════ */
+    var steps = [
+      { title: 'Error Handling', body: 'APIs must handle bad input gracefully. Error handling tests verify that your API returns appropriate status codes and messages when things go wrong \u2014 malformed requests, missing parameters, or unauthorized access.', why: 'Poorly handled errors leak implementation details, confuse consumers, and create security vulnerabilities.' },
+      { title: 'Rate Limiting', body: 'Rate limiting protects your API from abuse and overuse. Tests in this area confirm that your API enforces request quotas, returns proper 429 status codes, and includes helpful headers like Retry-After.', why: 'Without rate limiting, a single misbehaving client can degrade the experience for everyone.' },
+      { title: 'Response Accuracy', body: 'The most fundamental concern: does the API return the correct data? Response accuracy tests validate that the values, calculations, and data relationships in responses match expected outcomes.', why: 'Accurate data is the entire reason your API exists. Everything else is secondary.' },
+      { title: 'Data Validation', body: 'APIs should reject invalid input before processing it. Data validation tests ensure that required fields are enforced, types are checked, and constraints (min/max, format, enum values) are respected.', why: 'Bad data in means bad data out. Validation is your first line of defense against data corruption.' },
+      { title: 'Response Times', body: 'Performance matters. Response time tests measure how quickly your API replies under normal and heavy conditions, helping you identify slow queries, missing indexes, or inefficient logic.', why: 'Users expect sub-second responses. Every 100ms of latency reduces engagement and trust.' },
+      { title: 'Edge Cases', body: 'Edge case tests probe the boundaries \u2014 empty arrays, maximum-length strings, concurrent updates, Unicode characters, and null values. These are the scenarios that simple \u201Chappy path\u201D tests miss.', why: 'Bugs live in the edges. The most damaging production incidents almost always involve untested boundary conditions.' },
+      { title: 'Response Formats', body: 'API consumers depend on a consistent response structure. Response format tests check that JSON schemas, field names, data types, and pagination structures remain stable across versions.', why: 'A broken response format breaks every client that depends on it. Consistency is a contract.' }
+    ];
+
+    var current = 0;
+    var slideInner = document.getElementById('js-slide-inner');
+    var progressFill = document.getElementById('js-progress-fill');
+    var prevBtn = document.getElementById('js-prev-btn');
+    var nextBtn = document.getElementById('js-next-btn');
+    var dotsWrap = document.getElementById('js-dots');
+
+    function renderCarousel(){
+        var step = steps[current];
+        var total = steps.length;
+        slideInner.innerHTML =
+            '<div class="slide-counter">Concern ' + (current+1) + ' of ' + total + '</div>' +
+            '<h2 class="slide-title">' + step.title + '</h2>' +
+            '<p class="slide-body">' + step.body + '</p>' +
+            '<div class="slide-why"><strong>Why this matters</strong>' + step.why + '</div>';
+
+        progressFill.style.width = ((current+1)/total*100) + '%';
+        prevBtn.disabled = (current === 0);
+
+        if(current === total - 1){
+            nextBtn.textContent = 'Done \u2713';
+            nextBtn.className = 'nav-btn done';
+        } else {
+            nextBtn.innerHTML = 'Next &rarr;';
+            nextBtn.className = 'nav-btn primary';
+        }
+
+        var dotsHtml = '';
+        for(var i = 0; i < total; i++){
+            var cls = 'dot';
+            if(i === current) cls += ' active';
+            else if(i < current) cls += ' done';
+            dotsHtml += '<div class="' + cls + '" data-dot="' + i + '"></div>';
+        }
+        dotsWrap.innerHTML = dotsHtml;
+    }
+
+    prevBtn.addEventListener('click', function(){ if(current > 0){ current--; renderCarousel(); } });
+    nextBtn.addEventListener('click', function(){ if(current < steps.length - 1){ current++; renderCarousel(); } });
+    dotsWrap.addEventListener('click', function(e){
+        var dot = e.target.closest('.dot');
+        if(dot){ current = parseInt(dot.getAttribute('data-dot'), 10); renderCarousel(); }
+    });
+
+    renderCarousel();
+
+
+    /* ═══════════════════════════════════════════
+       DRAG AND DROP
+       ═══════════════════════════════════════════ */
+    var draggingId = null;
+    var draggingEl = null;
+    var ghost = null;
+    var offsetX = 0, offsetY = 0;
+
+    var cards = document.querySelectorAll('.drag-card');
+    var targets = document.querySelectorAll('.drop-target');
+
+    /* Desktop drag events */
+    for(var c = 0; c < cards.length; c++){
+        (function(card){
+            card.addEventListener('dragstart', function(){
+                draggingId = card.getAttribute('data-id');
+                draggingEl = card;
+                setTimeout(function(){ card.classList.add('dragging'); }, 0);
+            });
+            card.addEventListener('dragend', function(){
+                card.classList.remove('dragging');
+                draggingId = null; draggingEl = null;
+            });
+        })(cards[c]);
+    }
+
+    for(var t = 0; t < targets.length; t++){
+        (function(target){
+            target.addEventListener('dragover', function(e){ e.preventDefault(); target.classList.add('drag-over'); });
+            target.addEventListener('dragleave', function(){ target.classList.remove('drag-over'); });
+            target.addEventListener('drop', function(e){
+                e.preventDefault(); target.classList.remove('drag-over');
+                if(draggingId) dropCard(target, draggingId, draggingEl);
+            });
+        })(targets[t]);
+    }
+
+    /* Touch drag events */
+    for(var c2 = 0; c2 < cards.length; c2++){
+        (function(card){
+            card.addEventListener('touchstart', function(e){
+                var touch = e.touches[0];
+                draggingId = card.getAttribute('data-id');
+                draggingEl = card;
+                var rect = card.getBoundingClientRect();
+                offsetX = touch.clientX - rect.left; offsetY = touch.clientY - rect.top;
+                ghost = card.cloneNode(true);
+                ghost.className = 'drag-card drag-ghost';
+                ghost.style.width = rect.width + 'px';
+                ghost.style.left = (touch.clientX - offsetX) + 'px';
+                ghost.style.top = (touch.clientY - offsetY) + 'px';
+                document.body.appendChild(ghost);
+                card.classList.add('dragging');
+            }, { passive: true });
+
+            card.addEventListener('touchmove', function(e){
+                e.preventDefault();
+                var touch = e.touches[0];
+                if(ghost){ ghost.style.left = (touch.clientX - offsetX) + 'px'; ghost.style.top = (touch.clientY - offsetY) + 'px'; }
+                for(var i = 0; i < targets.length; i++){
+                    var r = targets[i].getBoundingClientRect();
+                    targets[i].classList.toggle('drag-over', touch.clientX >= r.left && touch.clientX <= r.right && touch.clientY >= r.top && touch.clientY <= r.bottom);
+                }
+            }, { passive: false });
+
+            card.addEventListener('touchend', function(e){
+                var touch = e.changedTouches[0];
+                if(ghost){ ghost.remove(); ghost = null; }
+                if(draggingEl) draggingEl.classList.remove('dragging');
+                for(var i = 0; i < targets.length; i++){
+                    targets[i].classList.remove('drag-over');
+                    var r = targets[i].getBoundingClientRect();
+                    if(touch.clientX >= r.left && touch.clientX <= r.right && touch.clientY >= r.top && touch.clientY <= r.bottom){
+                        if(draggingId) dropCard(targets[i], draggingId, draggingEl);
+                    }
+                }
+                draggingId = null; draggingEl = null;
+            });
+        })(cards[c2]);
+    }
+
+    function dropCard(target, id, sourceEl){
+        var existing = target.querySelector('.placed-card');
+        if(existing){ returnToPool(existing.getAttribute('data-return-id')); existing.remove(); }
+        for(var i = 0; i < targets.length; i++){
+            var p = targets[i].querySelector('.placed-card[data-return-id="' + id + '"]');
+            if(p) p.remove();
+        }
+        if(sourceEl) sourceEl.style.display = 'none';
+        var placed = document.createElement('div');
+        placed.className = 'placed-card';
+        placed.setAttribute('data-return-id', id);
+        var cardEl = document.querySelector('.drag-card[data-id="' + id + '"]');
+        placed.innerHTML = (cardEl ? cardEl.textContent.trim() : id) + ' <span class="remove-btn" data-remove-id="' + id + '">\u2715</span>';
+        var label = target.querySelector('.target-label');
+        target.insertBefore(placed, label);
+        target.classList.remove('correct', 'incorrect');
+    }
+
+    function returnToPool(id){
+        var card = document.querySelector('.drag-card[data-id="' + id + '"]');
+        if(card) card.style.display = '';
+    }
+
+    /* Remove button via delegation */
+    document.getElementById('js-drop-targets').addEventListener('click', function(e){
+        var removeBtn = e.target.closest('.remove-btn');
+        if(removeBtn){
+            var id = removeBtn.getAttribute('data-remove-id');
+            var placed = removeBtn.closest('.placed-card');
+            if(placed) placed.remove();
+            returnToPool(id);
+        }
+    });
+
+    /* Check / Reset buttons */
+    document.getElementById('js-check-btn').addEventListener('click', function(){
+        var correct = 0;
+        var total = targets.length;
+        for(var i = 0; i < total; i++){
+            var placed = targets[i].querySelector('.placed-card');
+            targets[i].classList.remove('correct', 'incorrect');
+            if(placed){
+                var isCorrect = placed.getAttribute('data-return-id') === targets[i].getAttribute('data-accepts');
+                if(isCorrect){
+                    correct++;
+                    targets[i].classList.add('correct');
+                } else {
+                    targets[i].classList.add('incorrect');
+                    /* Re-trigger shake animation */
+                    targets[i].style.animation = 'none';
+                    (function(t){ requestAnimationFrame(function(){ t.style.animation = ''; }); })(targets[i]);
+                }
+            }
+        }
+        var panel = document.getElementById('js-result-panel');
+        panel.classList.add('show');
+        document.getElementById('js-result-score').innerHTML = correct + ' / ' + total + ' correct' + (correct === total ? '<span class="perfect-badge">Perfect!</span>' : '');
+        document.getElementById('js-result-msg').textContent = correct === total ? '\uD83C\uDF89 Excellent! You matched all test types correctly.'
+            : correct >= total / 2 ? 'Good effort! Review the incorrect matches and try again.'
+            : 'Keep going \u2014 review the definitions and give it another shot.';
+    });
+
+    document.getElementById('js-reset-btn').addEventListener('click', function(){
+        for(var i = 0; i < targets.length; i++){
+            var placed = targets[i].querySelector('.placed-card');
+            if(placed){ returnToPool(placed.getAttribute('data-return-id')); placed.remove(); }
+            targets[i].classList.remove('correct', 'incorrect');
+        }
+        document.getElementById('js-result-panel').classList.remove('show');
+    });
+
+})();
+</script>
+</p>

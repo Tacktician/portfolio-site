@@ -1,0 +1,363 @@
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+<div>
+<style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --white: #FFFFFF;
+      --green: #2D9E6B;
+      --green-pale: #EAF7F1;
+      --blue: #2563EB;
+      --blue-pale: #EFF4FF;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    .lesson-container { font-family: 'DM Sans', sans-serif; color: var(--ink); line-height: 1.7; max-width: 780px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+
+    /* ── Section Header ── */
+    .section-header { margin-bottom: 2.5rem; }
+    .section-eyebrow { display: inline-block; font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--orange); margin-bottom: 0.75rem; }
+    .section-title { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--ink); line-height: 1.15; margin: 0 0 1.25rem; letter-spacing: -0.02em; }
+    .section-title em { font-style: italic; color: var(--orange); }
+    .section-intro { border-left: 4px solid var(--orange); padding-left: 1.1rem; font-size: 1rem; color: var(--ink-mid); line-height: 1.7; margin: 0; }
+
+    /* ── Objectives Box ── */
+    .objectives-box { background: var(--orange-pale); border: 1.5px solid #FFD4C2; border-radius: 10px; padding: 22px 26px; margin-bottom: 2.5rem; box-shadow: var(--card-shadow); }
+    .obj-label { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); margin-bottom: 14px; }
+    .objectives-list { display: flex; flex-direction: column; gap: 10px; }
+    .obj-item { display: flex; align-items: flex-start; gap: 10px; }
+    .obj-item p { display: block; margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink-mid); font-weight: 300; }
+    .obj-item p strong { color: var(--ink); font-weight: 500; }
+    .obj-bullet { flex-shrink: 0; width: 20px; height: 20px; min-width: 20px; border-radius: 50%; background: var(--orange); color: white; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; margin-top: 2px; }
+
+    /* ── Divider ── */
+    .divider-with-label { display: flex; align-items: center; gap: 1rem; margin: 2.5rem auto; }
+    .divider-with-label::before, .divider-with-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+    .divider-label { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-light); white-space: nowrap; }
+
+    /* ── Body Text ── */
+    .lesson-text { font-size: 0.95rem; color: var(--ink-mid); line-height: 1.7; margin-bottom: 2rem; }
+    .lesson-text strong { color: var(--ink); font-weight: 600; }
+
+    /* ── Callout ── */
+    .callout { border-radius: 12px; padding: 1.1rem 1.4rem; display: flex; align-items: flex-start; gap: 1rem; box-shadow: var(--card-shadow); margin-bottom: 2.5rem; }
+    .callout-info { background: var(--blue-pale); border: 1.5px solid rgba(37,99,235,0.15); }
+    .callout-tip { background: var(--orange-pale); border: 1.5px solid rgba(255,108,55,0.2); }
+    .callout-success { background: var(--green-pale); border: 1.5px solid rgba(45,158,107,0.2); }
+    .callout-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 1px; }
+    .callout-content { flex: 1; }
+    .callout-title { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+    .callout-info .callout-title { color: var(--blue); }
+    .callout-tip .callout-title { color: var(--orange); }
+    .callout-success .callout-title { color: var(--green); }
+    .callout-body { font-size: 0.9rem; color: var(--ink-mid); line-height: 1.6; margin: 0; }
+
+    /* ── Mental Model Callout (purple) ── */
+    .mental-model {
+      background: #F3EDF9; border: 1.5px solid #D4BFE8; border-radius: 12px;
+      padding: 1.1rem 1.4rem; display: flex; align-items: flex-start; gap: 1rem;
+      box-shadow: var(--card-shadow); margin-bottom: 2.5rem;
+    }
+    .mental-model .callout-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 1px; }
+    .mental-model .callout-title { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.3rem; color: #784FA9; }
+    .mental-model .callout-body { font-size: 0.9rem; color: var(--ink-mid); line-height: 1.6; margin: 0; }
+    .mental-model .callout-body strong { color: var(--ink); font-weight: 600; }
+
+    /* ── Accordion ── */
+    .accordion { max-width: 720px; margin: 0 0 2.5rem; }
+    .acc-item {
+      border: 1.5px solid var(--rule); border-radius: 10px; margin-bottom: 8px;
+      overflow: hidden; transition: border-color 0.2s;
+    }
+    .acc-item.open { border-color: var(--orange); }
+    .acc-trigger {
+      width: 100%; background: none; border: none; cursor: pointer;
+      padding: 0; text-align: left; transition: background 0.15s; display: block;
+    }
+    .acc-trigger-inner {
+      display: flex !important; flex-direction: row !important; align-items: center !important;
+      gap: 14px !important; padding: 16px 20px !important; width: 100% !important; box-sizing: border-box !important;
+    }
+    .acc-trigger:hover .acc-trigger-inner { background: #FDF8F5; }
+    .acc-item.open .acc-trigger .acc-trigger-inner { background: var(--orange-pale); }
+    .acc-icon {
+      width: 30px !important; height: 30px !important; border-radius: 8px; background: var(--orange-pale);
+      display: flex !important; align-items: center !important; justify-content: center !important;
+      font-size: 16px; flex-shrink: 0 !important;
+    }
+    .acc-item.open .acc-icon { background: var(--orange); }
+    .acc-text { flex: 1 !important; min-width: 0; }
+    .acc-label {
+      display: block; margin: 0; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--ink);
+    }
+    .acc-sublabel { font-size: 13px; color: var(--ink-mid); font-weight: 400; }
+    .acc-chevron {
+      width: 18px !important; height: 18px !important; flex-shrink: 0 !important;
+      color: var(--ink-light); transition: transform 0.25s ease;
+    }
+    .acc-item.open .acc-chevron { transform: rotate(180deg); color: var(--orange); }
+    .acc-body {
+      max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.25s ease;
+      padding: 0 20px;
+    }
+    .acc-item.open .acc-body { max-height: 600px; padding: 0 20px 20px; }
+    .acc-body-inner { padding-top: 16px; border-top: 1px solid var(--rule); }
+    .acc-body-inner p { font-size: 16px; line-height: 1.65; color: var(--ink-mid); font-weight: 300; margin-bottom: 12px; }
+    .acc-body-inner p:last-child { margin-bottom: 0; }
+    .acc-body-inner strong { color: var(--ink); font-weight: 500; }
+    .acc-anno { background: var(--orange-pale); border-left: 3px solid var(--orange); border-radius: 0 6px 6px 0; padding: 10px 14px; margin: 10px 0; font-size: 13px; line-height: 1.5; color: var(--ink-mid); font-weight: 300; }
+    .acc-anno strong { color: var(--ink); font-weight: 500; }
+    .acc-checklist { display: flex; flex-direction: column; gap: 0.4rem; }
+    .acc-check-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; color: var(--ink-mid); }
+    .acc-check-item::before { content: '\2713'; color: var(--green); font-weight: 700; font-size: 0.8rem; }
+
+    /* ── Flow Steps ── */
+    .flow-steps { display: flex; flex-direction: column; margin-bottom: 2.5rem; }
+    .flow-step { display: flex; gap: 1.25rem; padding: 0 0 1.5rem; position: relative; }
+    .flow-step:last-child { padding-bottom: 0; }
+    .flow-step:not(:last-child)::after { content: ''; position: absolute; left: 19px; top: 44px; bottom: 0; width: 2px; background: var(--rule); }
+    .step-num-col { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .step-circle { width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: white; font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: var(--card-shadow); }
+    .step-body { flex: 1; padding-top: 8px; }
+    .step-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; flex-wrap: wrap; }
+    .step-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; color: var(--ink); }
+    .step-pill { font-family: 'Syne', sans-serif; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 9px; border-radius: 10px; background: var(--orange-pale); color: var(--orange); }
+    .step-desc { font-size: 0.88rem; color: var(--ink-mid); line-height: 1.6; margin: 0; }
+
+    /* ── What's Next Footer ── */
+    a.whats-next, a.whats-next:hover, a.whats-next:visited, a.whats-next:active {
+      background: var(--ink); border-radius: 16px; padding: 1.75rem 2rem;
+      display: flex; align-items: center; gap: 1.5rem; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(26,22,18,0.2);
+      text-decoration: none; margin-top: 1rem; color: inherit;
+    }
+    a.whats-next:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(26,22,18,0.3); }
+    .whats-next:hover .arrow-icon { transform: translateX(5px); }
+    .next-icon-box { width: 52px; height: 52px; background: var(--orange); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .arrow-icon { font-size: 1.4rem; color: white; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); display: block; }
+    .next-content { flex: 1; }
+    .next-label { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); margin-bottom: 0.3rem; }
+    .next-title { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: white; margin: 0; }
+    .next-subtitle { font-size: 0.83rem; color: rgba(255,255,255,0.45); margin-top: 0.2rem; }
+    .next-chevron { color: rgba(255,255,255,0.25); font-size: 1.1rem; transition: color 0.2s; }
+    .whats-next:hover .next-chevron { color: rgba(255,255,255,0.6); }
+    h1, h2 { font-family: 'Syne', sans-serif; }
+</style>
+</div>
+<div class="lesson-container"><!-- SECTION HEADER -->
+<div class="section-header"><span class="section-eyebrow">Lesson 3 &middot; An Introduction to API Testing</span>
+<h1 class="section-title">Test Automation <em>at a Glance</em></h1>
+<p class="section-intro">API test automation is the practice of using specialized tools and scripts to automatically execute tests on APIs &mdash; ensuring their functionality, performance, and security without manual intervention.</p>
+</div>
+<!-- LEARNING OBJECTIVES -->
+<div class="objectives-box">
+<div class="obj-label">What You&rsquo;ll Learn</div>
+<div class="objectives-list">
+<div class="obj-item"><span class="obj-bullet">1</span>
+<p>Explain <strong>what API test automation is</strong> and why it matters in modern development workflows.</p>
+</div>
+<div class="obj-item"><span class="obj-bullet">2</span>
+<p>Describe how automated testing supports <strong>API-first development</strong> and CI/CD practices.</p>
+</div>
+<div class="obj-item"><span class="obj-bullet">3</span>
+<p>Identify the <strong>core benefits</strong> of test automation: early bug detection, reduced manual effort, and consistent execution.</p>
+</div>
+</div>
+</div>
+<!-- MENTAL MODEL -->
+<div class="mental-model"><span class="callout-icon">🏭</span>
+<div class="callout-content">
+<div class="callout-title">Mental Model</div>
+<p class="callout-body">Think of test automation like an <strong>assembly line quality check</strong>. A factory doesn&rsquo;t have a person manually inspect every single item &mdash; it uses automated sensors at every stage. Similarly, test automation places checks at every point in your development pipeline, catching defects the moment they&rsquo;re introduced.</p>
+</div>
+</div>
+<!-- ACCORDION -->
+<div class="divider-with-label"><span class="divider-label">Why Automate API Tests?</span></div>
+<p class="lesson-text">Manual testing has its place &mdash; especially during exploratory work and initial design. But as your API grows, <strong>manual testing alone can&rsquo;t keep up</strong>. Explore each of the core reasons teams invest in automation below.</p>
+<div id="js-accordion" class="accordion">
+<div class="acc-item open" data-idx="0">
+<div class="acc-trigger-inner" data-acc="0"><span class="acc-icon">🐛</span>
+<div class="acc-text">
+<p class="acc-label">Catch Issues Early <span style="color: var(--orange); font-size: 11px; margin-left: 6px;">Benefit 1</span></p>
+<p class="acc-sublabel">Find bugs minutes after they&rsquo;re introduced, not weeks later</p>
+</div>
+</div>
+<div class="acc-body">
+<div class="acc-body-inner">
+<p>Automated tests run on every code change &mdash; in local development, on pull requests, and in staging environments. This means bugs are caught <strong>minutes after they&rsquo;re introduced</strong>, not weeks later in production.</p>
+<div class="acc-anno">💡 The cost of fixing a bug increases 10&times; for every stage it advances through the pipeline. Catch it early, fix it cheaply.</div>
+</div>
+</div>
+</div>
+<div class="acc-item" data-idx="1">
+<div class="acc-trigger-inner" data-acc="1"><span class="acc-icon">⏱️</span>
+<div class="acc-text">
+<p class="acc-label">Reduce Manual Effort <span style="color: var(--orange); font-size: 11px; margin-left: 6px;">Benefit 2</span></p>
+<p class="acc-sublabel">Free your QA team to focus on higher-value work</p>
+</div>
+</div>
+<div class="acc-body">
+<div class="acc-body-inner">
+<p>A test suite that runs in seconds replaces hours of manual regression testing. This frees your QA team to focus on higher-value work &mdash; exploratory testing, usability reviews, and edge case analysis.</p>
+<div class="acc-checklist">
+<div class="acc-check-item">Regression suites run automatically on every commit</div>
+<div class="acc-check-item">No more &ldquo;did someone test that?&rdquo; uncertainty</div>
+<div class="acc-check-item">QA bandwidth shifts from execution to strategy</div>
+</div>
+</div>
+</div>
+</div>
+<div class="acc-item" data-idx="2">
+<div class="acc-trigger-inner" data-acc="2"><span class="acc-icon">🔄</span>
+<div class="acc-text">
+<p class="acc-label">Ensure Consistent Execution <span style="color: var(--orange); font-size: 11px; margin-left: 6px;">Benefit 3</span></p>
+<p class="acc-sublabel">Same checks, every time, no shortcuts</p>
+</div>
+</div>
+<div class="acc-body">
+<div class="acc-body-inner">
+<p>Humans get tired, skip steps, and make mistakes. Automated tests run the <strong>exact same checks every single time</strong> &mdash; no shortcuts, no assumptions, no &ldquo;I&rsquo;m sure it&rsquo;s fine&rdquo; moments.</p>
+<div class="acc-anno">🔄 Consistency is especially critical for API contract validation, where even a minor schema change can break downstream consumers.</div>
+</div>
+</div>
+</div>
+<div class="acc-item" data-idx="3">
+<div class="acc-trigger-inner" data-acc="3"><span class="acc-icon">🚀</span>
+<div class="acc-text">
+<p class="acc-label">Enable CI/CD Confidence <span style="color: var(--orange); font-size: 11px; margin-left: 6px;">Benefit 4</span></p>
+<p class="acc-sublabel">Ship safely at speed with automated quality gates</p>
+</div>
+</div>
+<div class="acc-body">
+<div class="acc-body-inner">
+<p>Continuous integration and continuous delivery (CI/CD) pipelines depend on automated tests as their quality gate. Without reliable test automation, teams can&rsquo;t ship safely at speed.</p>
+<div class="acc-checklist">
+<div class="acc-check-item">Deploy multiple times a day with confidence</div>
+<div class="acc-check-item">Automated gates block broken code from reaching production</div>
+<div class="acc-check-item">Rollback decisions are backed by test evidence</div>
+</div>
+</div>
+</div>
+</div>
+<div class="acc-item" data-idx="4">
+<div class="acc-trigger-inner" data-acc="4"><span class="acc-icon">📋</span>
+<div class="acc-text">
+<p class="acc-label">Support API-First Development <span style="color: var(--orange); font-size: 11px; margin-left: 6px;">Benefit 5</span></p>
+<p class="acc-sublabel">Validate the contract before the implementation</p>
+</div>
+</div>
+<div class="acc-body">
+<div class="acc-body-inner">
+<p>In the API-first model, the API is designed, documented, and tested <strong>before</strong> the implementation. Automated tests validate the contract from day one, ensuring that what you build matches what you promised.</p>
+<div class="acc-anno">📐 API-first teams use automated contract tests as a living specification &mdash; if the tests pass, the API is correct.</div>
+</div>
+</div>
+</div>
+</div>
+<!-- FLOW STEPS -->
+<div class="divider-with-label"><span class="divider-label">Where Automation Fits in Your Pipeline</span></div>
+<p class="lesson-text">Test automation isn&rsquo;t a standalone activity &mdash; it&rsquo;s woven into every stage of the development lifecycle. Here&rsquo;s how automated tests integrate into a typical CI/CD pipeline.</p>
+<div class="flow-steps">
+<div class="flow-step">
+<div class="step-num-col">
+<div class="step-circle">1</div>
+</div>
+<div class="step-body">
+<div class="step-header"><span class="step-title">Write Code</span> <span class="step-pill">Development</span></div>
+<p class="step-desc">Developers write or update API endpoints. Alongside the code, they write unit tests that validate individual endpoint behavior &mdash; request handling, response structure, and error cases.</p>
+</div>
+</div>
+<div class="flow-step">
+<div class="step-num-col">
+<div class="step-circle">2</div>
+</div>
+<div class="step-body">
+<div class="step-header"><span class="step-title">Commit &amp; Push</span> <span class="step-pill">CI Trigger</span></div>
+<p class="step-desc">The commit triggers a CI pipeline that runs the full unit test suite automatically. Failures block the pull request from being merged, keeping the main branch clean.</p>
+</div>
+</div>
+<div class="flow-step">
+<div class="step-num-col">
+<div class="step-circle">3</div>
+</div>
+<div class="step-body">
+<div class="step-header"><span class="step-title">Integration Tests</span></div>
+<p class="step-desc">After merging, contract and end-to-end tests run against a staging environment. These validate that APIs interact correctly with each other and that no breaking changes were introduced.</p>
+</div>
+</div>
+<div class="flow-step">
+<div class="step-num-col">
+<div class="step-circle">4</div>
+</div>
+<div class="step-body">
+<div class="step-header"><span class="step-title">Performance &amp; Load</span></div>
+<p class="step-desc">Scheduled load tests simulate peak traffic to ensure the API can handle production-level demand. Results are compared against baselines to detect performance regressions early.</p>
+</div>
+</div>
+<div class="flow-step">
+<div class="step-num-col">
+<div class="step-circle">5</div>
+</div>
+<div class="step-body">
+<div class="step-header"><span class="step-title">Deploy to Production</span> <span class="step-pill">Go Live</span></div>
+<p class="step-desc">With all automated gates passing, the code ships to production. Post-deploy smoke tests confirm the release is healthy, and monitoring watches for any anomalies.</p>
+</div>
+</div>
+</div>
+<!-- PREVIEW CALLOUT -->
+<div class="callout callout-success"><span class="callout-icon">✅</span>
+<div class="callout-content">
+<div class="callout-title">Coming Up</div>
+<p class="callout-body">This was a brief overview of test automation concepts. A later module in this learning path &mdash; <strong>Optimizing Workflows with Test Automation</strong> &mdash; will take a much deeper dive into building, configuring, and scaling automated test suites with Postman.</p>
+</div>
+</div>
+<!-- KEY TAKEAWAY -->
+<div class="callout callout-tip"><span class="callout-icon">💡</span>
+<div class="callout-content">
+<div class="callout-title">Key Takeaway</div>
+<p class="callout-body">Test automation is essential for maintaining high-quality APIs in fast-paced development environments. It catches issues early, reduces manual effort, ensures consistency, and enables teams to ship with confidence. You don&rsquo;t need to automate everything on day one &mdash; but building the habit early pays dividends as your API grows.</p>
+</div>
+</div>
+<!-- WHAT'S NEXT --> <a class="whats-next" href="/path/api-testing-path/an-introduction-to-api-testing/quiz" target="_self">
+<div class="next-icon-box"><span class="arrow-icon">✎</span></div>
+<div class="next-content">
+<div class="next-label">Up Next &mdash; Quiz</div>
+<div class="next-title">An Introduction to API Testing: Knowledge Check</div>
+<div class="next-subtitle">Test what you&rsquo;ve learned across all three lessons</div>
+</div>
+<span class="next-chevron">&rsaquo;</span> </a></div>
+<p>
+<script>
+(function(){
+    var items = document.querySelectorAll('.acc-item');
+
+    function handleAccClick(clickedItem) {
+        var isOpen = clickedItem.classList.contains('open');
+        for (var i = 0; i < items.length; i++) {
+            items[i].classList.remove('open');
+        }
+        if (!isOpen) {
+            clickedItem.classList.add('open');
+        }
+    }
+
+    for (var i = 0; i < items.length; i++) {
+        (function(item) {
+            var inner = item.querySelector('.acc-trigger-inner');
+            if (inner) {
+                inner.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    handleAccClick(item);
+                });
+            }
+        })(items[i]);
+    }
+})();
+</script>
+</p>

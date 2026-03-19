@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mermaid Flowchart</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --white: #FFFFFF;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .chart-card {
+      background: white;
+      border-radius: 14px;
+      border-top: 4px solid var(--orange);
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .chart-header { padding: 1.25rem 1.5rem 0; }
+    .chart-eyebrow { font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); margin-bottom: 0.25rem; }
+    .chart-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--ink); margin: 0; }
+    .chart-desc { font-size: 0.875rem; color: var(--ink-light); margin: 0.4rem 0 0; }
+
+    .chart-body { padding: 1rem 1.5rem 1.5rem; display: flex; justify-content: center; }
+    .chart-body svg { max-width: 100%; height: auto; }
+
+    .mermaid-loading { text-align: center; padding: 3rem; color: var(--ink-light); font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <div class="chart-eyebrow">Process Flow</div>
+      <h2 class="chart-title">MCP Request Lifecycle</h2>
+      <p class="chart-desc">How a client request flows through the protocol to a result.</p>
+    </div>
+    <div class="chart-body">
+      <div class="mermaid-loading" id="loading">Loading diagram…</div>
+      <div class="mermaid" id="diagram" style="display:none">
+flowchart TD
+    A([🚀 Start]) --> B[Client sends request]
+    B --> C[MCP transport layer]
+    C --> D{Valid JSON-RPC?}
+    D -- No --> E[Return error response]
+    D -- Yes --> F[Route to handler]
+    F --> G{Method type?}
+    G -- tools/call --> H[Execute tool]
+    G -- resources/read --> I[Fetch resource]
+    G -- prompts/get --> J[Render prompt]
+    H --> K[Format result]
+    I --> K
+    J --> K
+    K --> L([✅ Return response])
+    E --> L
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    function initMermaid() {
+      if (typeof mermaid === 'undefined') {
+        setTimeout(initMermaid, 100);
+        return;
+      }
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'base',
+        themeVariables: {
+          primaryColor: '#FFF0EB',
+          primaryTextColor: '#1A1612',
+          primaryBorderColor: '#FF6C37',
+          lineColor: '#8C7B72',
+          secondaryColor: '#f8f4f0',
+          tertiaryColor: '#ffffff',
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: '14px',
+          edgeLabelBackground: '#f8f4f0',
+          nodeBorder: '#FF6C37',
+          clusterBkg: '#FFF0EB',
+          titleColor: '#1A1612',
+          actorBorder: '#FF6C37',
+          actorBkg: '#FFF0EB',
+        }
+      });
+
+      const diagramEl = document.getElementById('diagram');
+      const loadingEl = document.getElementById('loading');
+
+      mermaid.render('mermaid-svg', diagramEl.textContent.trim()).then(({ svg }) => {
+        loadingEl.style.display = 'none';
+        diagramEl.style.display = 'block';
+        diagramEl.innerHTML = svg;
+      }).catch(err => {
+        loadingEl.textContent = 'Failed to render diagram.';
+        console.error(err);
+      });
+    }
+    initMermaid();
+  </script>
+</body>
+</html>

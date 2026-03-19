@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CTA Aside</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --white: #FFFFFF;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .cta-aside {
+      background: white;
+      border-left: 4px solid var(--orange);
+      border-radius: 0 12px 12px 0;
+      padding: 1.25rem 1.5rem;
+      box-shadow: var(--card-shadow);
+      max-width: 560px;
+    }
+
+    .cta-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem; }
+    .cta-icon { font-size: 1rem; }
+    .cta-label { font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--orange); }
+
+    .cta-body { font-size: 0.92rem; color: var(--ink-mid); line-height: 1.65; margin: 0 0 1rem; }
+
+    .cta-code { background: #1a1210; border-radius: 8px; padding: 0.6rem 0.9rem; font-family: 'DM Mono', monospace; font-size: 0.8rem; color: #7DD3B0; display: inline-block; }
+  </style>
+</head>
+<body>
+
+  <div class="cta-aside">
+    <div class="cta-header">
+      <span class="cta-icon">⚡</span>
+      <span class="cta-label">Try This</span>
+    </div>
+    <p class="cta-body">Open your terminal and run the following command to test your setup. You should see a success response within a few seconds.</p>
+    <div class="cta-code">npx @modelcontextprotocol/inspector stdio node ./server.js</div>
+  </div>
+
+</body>
+</html>

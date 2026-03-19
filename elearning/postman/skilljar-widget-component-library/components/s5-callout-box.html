@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Callout Box</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --green: #2D9E6B;
+      --green-pale: #EAF7F1;
+      --red: #E03E2D;
+      --red-pale: #FEF0EE;
+      --blue: #2563EB;
+      --blue-pale: #EFF4FF;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; padding: 2rem; background: #f8f4f0; margin: 0; color: var(--ink); }
+
+    .callout {
+      border-radius: 12px;
+      padding: 1.1rem 1.4rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      max-width: 560px;
+      box-shadow: var(--card-shadow);
+    }
+    .callout-tip { background: var(--orange-pale); border: 1.5px solid rgba(255,108,55,0.2); }
+    .callout-success { background: var(--green-pale); border: 1.5px solid rgba(45,158,107,0.2); }
+    .callout-warning { background: #FFFBEB; border: 1.5px solid rgba(234,179,8,0.25); }
+    .callout-info { background: var(--blue-pale); border: 1.5px solid rgba(37,99,235,0.15); }
+
+    .callout-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 1px; }
+    .callout-content { flex: 1; }
+    .callout-title { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.3rem; }
+    .callout-tip .callout-title { color: var(--orange); }
+    .callout-success .callout-title { color: var(--green); }
+    .callout-warning .callout-title { color: #92400E; }
+    .callout-info .callout-title { color: var(--blue); }
+    .callout-body { font-size: 0.9rem; color: var(--ink-mid); line-height: 1.6; margin: 0; }
+
+    .callout-stack { display: flex; flex-direction: column; gap: 0.75rem; }
+  </style>
+</head>
+<body>
+
+  <div class="callout-stack">
+
+    <div class="callout callout-tip">
+      <span class="callout-icon">💡</span>
+      <div class="callout-content">
+        <div class="callout-title">Tip</div>
+        <p class="callout-body">This component is used to highlight goals, tips, or important information throughout the course. The orange palette draws the reader's eye without being disruptive.</p>
+      </div>
+    </div>
+
+    <div class="callout callout-success">
+      <span class="callout-icon">✅</span>
+      <div class="callout-content">
+        <div class="callout-title">Success</div>
+        <p class="callout-body">Your server is running and responding correctly. All four capabilities were registered successfully during the handshake.</p>
+      </div>
+    </div>
+
+    <div class="callout callout-warning">
+      <span class="callout-icon">⚠️</span>
+      <div class="callout-content">
+        <div class="callout-title">Warning</div>
+        <p class="callout-body">Never commit your API key to version control. Store it in a <code>.env</code> file and add that file to your <code>.gitignore</code> immediately.</p>
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <span class="callout-icon">ℹ️</span>
+      <div class="callout-content">
+        <div class="callout-title">Note</div>
+        <p class="callout-body">MCP uses JSON-RPC 2.0 as its message format. All requests include a <code>jsonrpc</code>, <code>id</code>, <code>method</code>, and optional <code>params</code> field.</p>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

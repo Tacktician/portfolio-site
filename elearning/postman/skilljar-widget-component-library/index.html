@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Component Library</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6C37;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --white: #FFFFFF;
+      --green: #2D9E6B;
+      --green-pale: #EAF7F1;
+      --red: #E03E2D;
+      --red-pale: #FEF0EE;
+      --blue: #2563EB;
+      --blue-pale: #EFF4FF;
+      --purple: #7C3AED;
+      --purple-pale: #F5F0FF;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+      --card-shadow-lift: 0 12px 32px rgba(26,22,18,0.14), 0 4px 8px rgba(26,22,18,0.08);
+      --sidebar-width: 268px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; overflow: hidden; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f0ece7;
+      color: var(--ink);
+      display: flex;
+      flex-direction: row;
+    }
+
+    /* ======================== SIDEBAR ======================== */
+    .sidebar {
+      width: var(--sidebar-width);
+      flex-shrink: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--white);
+      border-right: 1px solid var(--rule);
+      overflow: hidden;
+    }
+
+    .sidebar-header {
+      padding: 1.5rem 1.25rem 1rem;
+      border-bottom: 1px solid var(--rule);
+      flex-shrink: 0;
+    }
+    .sidebar-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.2rem;
+    }
+    .sidebar-title-dot { color: var(--orange); }
+    .sidebar-subtitle {
+      font-size: 0.78rem;
+      color: var(--ink-light);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .search-wrap { padding: 0.75rem 1.25rem; border-bottom: 1px solid var(--rule); flex-shrink: 0; }
+    .search-input {
+      width: 100%;
+      border: 1.5px solid var(--rule);
+      border-radius: 8px;
+      padding: 7px 10px 7px 32px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      color: var(--ink);
+      background: #fdfbf9 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='7' stroke='%238C7B72' stroke-width='2'/%3E%3Cpath d='M16.5 16.5L21 21' stroke='%238C7B72' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat 10px center;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .search-input:focus { border-color: var(--orange); }
+    .search-input::placeholder { color: var(--ink-light); }
+
+    .sidebar-list { flex: 1; overflow-y: auto; padding: 0.5rem 0 1rem; }
+    .sidebar-list::-webkit-scrollbar { width: 4px; }
+    .sidebar-list::-webkit-scrollbar-track { background: transparent; }
+    .sidebar-list::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+
+    .list-group-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-light);
+      padding: 0.75rem 1.25rem 0.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .list-group-count { background: var(--rule); color: var(--ink-light); font-size: 0.6rem; padding: 1px 6px; border-radius: 10px; font-weight: 700; }
+
+    .list-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 8px 1.25rem;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      position: relative;
+    }
+    .list-item:hover { background: #fdfbf9; }
+    .list-item.active { background: var(--orange-pale); border-left-color: var(--orange); }
+
+    .list-item-name {
+      font-size: 0.85rem;
+      color: var(--ink-mid);
+      flex: 1;
+      line-height: 1.3;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    .list-item.active .list-item-name { color: var(--ink); font-weight: 600; }
+
+    .list-item-badge {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: var(--rule);
+      color: var(--ink-light);
+      flex-shrink: 0;
+    }
+    .list-item.active .list-item-badge { background: rgba(255,108,55,0.15); color: var(--orange); }
+
+    .list-item-hidden { display: none; }
+
+    .empty-search { padding: 1.5rem 1.25rem; font-size: 0.82rem; color: var(--ink-light); text-align: center; display: none; }
+
+    /* ======================== MAIN ======================== */
+    .main {
+      flex: 1;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .main-topbar {
+      flex-shrink: 0;
+      padding: 1.25rem 2rem 0;
+      background: #f0ece7;
+    }
+
+    .comp-meta { display: flex; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+    .comp-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+    .comp-module-badge {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--ink);
+      color: white;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+    .comp-desc-text {
+      font-size: 0.875rem;
+      color: var(--ink-light);
+      margin-top: 0.3rem;
+      line-height: 1.5;
+    }
+
+    .tab-row {
+      display: flex;
+      align-items: center;
+      margin-top: 1rem;
+      border-bottom: 1px solid var(--rule);
+      padding: 0 2rem;
+      background: #f0ece7;
+      flex-shrink: 0;
+    }
+    .view-tab-btn {
+      background: none;
+      border: none;
+      padding: 10px 16px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: var(--ink-light);
+      border-bottom: 2px solid transparent;
+      position: relative;
+      top: 1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .view-tab-btn:hover { color: var(--ink); }
+    .view-tab-btn.active { color: var(--orange); border-bottom-color: var(--orange); }
+
+    .tab-actions { margin-left: auto; display: flex; gap: 0.5rem; align-items: center; }
+    .copy-src-btn {
+      background: white;
+      border: 1.5px solid var(--rule);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--ink-mid);
+      transition: border-color 0.2s, color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .copy-src-btn:hover { border-color: var(--orange); color: var(--orange); }
+    .copy-src-btn.copied { border-color: var(--green); color: var(--green); }
+    .open-new-btn {
+      background: white;
+      border: 1.5px solid var(--rule);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--ink-mid);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .open-new-btn:hover { border-color: var(--orange); color: var(--orange); }
+
+    /* ======================== CONTENT PANELS ======================== */
+    .panels-wrap {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      padding: 1.25rem 2rem 1.5rem;
+    }
+
+    .preview-panel { width: 100%; height: 100%; display: flex; flex-direction: column; }
+    .source-panel { width: 100%; height: 100%; display: none; flex-direction: column; }
+
+    .preview-panel.active { display: flex; }
+    .source-panel.active { display: flex; }
+
+    .preview-iframe-wrap {
+      flex: 1;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow-lift);
+      background: white;
+      position: relative;
+    }
+    .preview-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .source-code-wrap {
+      flex: 1;
+      background: #1a1210;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow-lift);
+      display: flex;
+      flex-direction: column;
+    }
+    .source-code-header {
+      background: #110e0c;
+      padding: 0.65rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid #2a2220;
+      flex-shrink: 0;
+    }
+    .source-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); opacity: 0.5; }
+    .source-filename { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: #5C5047; }
+    .source-code-body {
+      flex: 1;
+      overflow: auto;
+      padding: 1rem 1.25rem 1.5rem;
+    }
+    .source-code-body::-webkit-scrollbar { width: 6px; height: 6px; }
+    .source-code-body::-webkit-scrollbar-track { background: transparent; }
+    .source-code-body::-webkit-scrollbar-thumb { background: #3a3230; border-radius: 3px; }
+
+    .source-pre {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      line-height: 1.7;
+      color: #c8bdb6;
+      white-space: pre;
+      margin: 0;
+    }
+
+    /* Syntax highlighting for source view */
+    .sh-tag { color: #FF8C5A; }
+    .sh-attr { color: #A8D8EA; }
+    .sh-val { color: #7DD3B0; }
+    .sh-comment { color: #5C5047; font-style: italic; }
+    .sh-entity { color: #C3A8EA; }
+
+    /* ======================== WELCOME STATE ======================== */
+    .welcome-state {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+      padding: 2rem;
+    }
+    .welcome-icon { font-size: 3rem; opacity: 0.4; }
+    .welcome-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--ink-mid); }
+    .welcome-body { font-size: 0.88rem; color: var(--ink-light); max-width: 320px; line-height: 1.6; }
+
+    /* ======================== LOADING SPINNER ======================== */
+    .iframe-loading {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: white; z-index: 2; transition: opacity 0.3s;
+    }
+    .spinner {
+      width: 28px; height: 28px; border: 3px solid var(--rule); border-top-color: var(--orange);
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .iframe-loading.hidden { opacity: 0; pointer-events: none; }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">
+        <span class="sidebar-title-dot">◆</span> Component Library
+      </div>
+      <div class="sidebar-subtitle">22 components · 2 categories</div>
+    </div>
+
+    <div class="search-wrap">
+      <input type="text" class="search-input" placeholder="Search components…" id="searchInput" oninput="filterList(this.value)" autocomplete="off">
+    </div>
+
+    <div class="sidebar-list" id="sidebarList">
+      <!-- Rendered by JS -->
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main" id="main">
+
+    <!-- Welcome state shown until a component is selected -->
+    <div class="welcome-state" id="welcomeState">
+      <div class="welcome-icon">🧩</div>
+      <div class="welcome-title">Select a component</div>
+      <div class="welcome-body">Choose any component from the sidebar to preview it and view its source code.</div>
+    </div>
+
+    <!-- Component viewer (hidden until selection) -->
+    <div id="viewerWrap" style="display:none; flex-direction:column; height:100%;">
+
+      <div class="main-topbar">
+        <div class="comp-meta">
+          <div>
+            <div class="comp-name" id="compName">—</div>
+            <div class="comp-desc-text" id="compDesc">—</div>
+          </div>
+          <span class="comp-module-badge" id="compModule">—</span>
+        </div>
+      </div>
+
+      <div class="tab-row">
+        <button class="view-tab-btn active" id="tabPreview" onclick="switchView('preview')">Preview</button>
+        <button class="view-tab-btn" id="tabSource" onclick="switchView('source')">Source</button>
+        <div class="tab-actions">
+          <a class="open-new-btn" id="openNewBtn" href="#" target="_blank" title="Open in new tab">↗ Open</a>
+          <button class="copy-src-btn" id="copySrcBtn" onclick="copySource()">⎘ Copy</button>
+        </div>
+      </div>
+
+      <div class="panels-wrap">
+        <!-- Preview -->
+        <div class="preview-panel active" id="previewPanel">
+          <div class="preview-iframe-wrap">
+            <div class="iframe-loading" id="iframeLoading">
+              <div class="spinner"></div>
+            </div>
+            <iframe class="preview-iframe" id="previewIframe" src="about:blank" onload="iframeLoaded()"></iframe>
+          </div>
+        </div>
+
+        <!-- Source -->
+        <div class="source-panel" id="sourcePanel">
+          <div class="source-code-wrap">
+            <div class="source-code-header">
+              <span class="source-dot"></span>
+              <span class="source-filename" id="sourceFilename">—</span>
+            </div>
+            <div class="source-code-body">
+              <pre class="source-pre" id="sourceCode">Loading…</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    /* ============================================================
+       DATA
+    ============================================================ */
+    const components = [
+      // Interactive
+      { id: '01-blurred-reveal-table', name: 'Blurred Reveal Table', category: 'interactive', module: 'M1', desc: 'Table where outcome cells are blurred until clicked. Supports "Reveal All" button and reveals counter.' },
+      { id: '02-drag-drop-matching', name: 'Drag-and-Drop Matching', category: 'interactive', module: 'M2', desc: 'Cards dragged onto labeled drop targets. Checks correctness, shake on wrong, success diagram on perfect score.' },
+      { id: '03-tabbed-primitives-explorer', name: 'Tabbed Primitives Explorer', category: 'interactive', module: 'M3', desc: 'Three tabs each showing a concept with description, analogy, use-case pills, and a code sample.' },
+      { id: '04-code-tabs', name: 'Code Tabs with Copy', category: 'interactive', module: 'M3', desc: 'Tabbed code panels with copy-to-clipboard button and syntax highlighting.' },
+      { id: '05-annotated-code-explorer', name: 'Annotated Code Explorer', category: 'interactive', module: 'M3', desc: 'Clickable JSON lines that activate annotation cards on the right.' },
+      { id: '06-mermaid-flowchart', name: 'Mermaid Flowchart', category: 'interactive', module: 'M4', desc: 'Mermaid.js flowchart inside a styled card with custom theme matching the design system.' },
+      { id: '07-accordion', name: 'Accordion', category: 'interactive', module: 'M5', desc: 'Expandable/collapsible sections. One open at a time with smooth max-height transition.' },
+      { id: '08-generator-step-carousel', name: 'Step Carousel', category: 'interactive', module: 'M5', desc: 'Horizontal step slides with Prev/Next navigation, dot indicators, and progress bar.' },
+      { id: '09-decision-tree', name: 'Decision Tree', category: 'interactive', module: 'M5', desc: 'Branching 3-question quiz mapping answer paths to one of 3 outcome types.' },
+      { id: '10-config-generator', name: 'Config Generator', category: 'interactive', module: 'M6', desc: 'Pill-tab selector switches config variants with syntax-highlighted code and copy button.' },
+      { id: '11-step-flow-navigator', name: 'Step-Flow Navigator', category: 'interactive', module: 'M6', desc: 'Visual node track showing progress; body shows current step; Prev/Next navigation.' },
+      { id: '12-interactive-checklist', name: 'Interactive Checklist', category: 'interactive', module: 'M6', desc: 'Checklist with progress bar. Toggle checked state. Win state reveals when all required items checked.' },
+      // Static
+      { id: 's1-objectives-box', name: 'Objectives Box', category: 'static', module: 'M1', desc: 'Orange-pale card listing lesson objectives with numbered orange bullet circles.' },
+      { id: 's2-analogy-card-pair', name: 'Analogy Card Pair', category: 'static', module: 'M1', desc: '2-column comparison cards: one muted (gray), one highlighted (orange). Each has tag, icon, heading, text, verdict chip.' },
+      { id: 's3-cta-aside', name: 'CTA Aside', category: 'static', module: 'M1', desc: 'Left-border callout card (4px solid orange). White background with subtle shadow.' },
+      { id: 's4-whats-next-footer', name: "What's Next Footer", category: 'static', module: 'ALL', desc: 'Dark ink card with orange icon box and animated arrow on hover.' },
+      { id: 's5-callout-box', name: 'Callout Box', category: 'static', module: 'M2', desc: 'Orange-pale card with emoji icon and text. For goals, tips, or warnings.' },
+      { id: 's6-video-placeholder', name: 'Video Placeholder', category: 'static', module: 'M1', desc: 'Dark card with diagonal stripes, orange play button, and label.' },
+      { id: 's7-flow-steps-list', name: 'Flow Steps List', category: 'static', module: 'M4', desc: 'Numbered vertical steps. Each has a dark numbered circle, bold title, optional pill tag, description.' },
+      { id: 's8-analogy-banner', name: 'Analogy Banner', category: 'static', module: 'M5', desc: 'Dark wide card with large emoji, eyebrow label, and body text for mental models.' },
+      { id: 's9-section-label', name: 'Section Label + Title', category: 'static', module: 'ALL', desc: 'Orange uppercase label → large Syne heading → orange left-border intro paragraph.' },
+      { id: 's10-divider', name: 'Divider', category: 'static', module: 'ALL', desc: '1px horizontal rule using --rule color, max-width 720px.' },
+    ];
+
+    /* ============================================================
+       STATE
+    ============================================================ */
+    let activeId = null;
+    let activeView = 'preview';
+    let sourceCache = {};
+    let rawSourceCache = {};
+
+    /* ============================================================
+       SIDEBAR RENDER
+    ============================================================ */
+    function renderSidebar(filter = '') {
+      const list = document.getElementById('sidebarList');
+      const q = filter.toLowerCase().trim();
+
+      const interactive = components.filter(c => c.category === 'interactive');
+      const staticC = components.filter(c => c.category === 'static');
+
+      let interactiveVisible = 0;
+      let staticVisible = 0;
+
+      function makeItems(arr) {
+        return arr.map(comp => {
+          const visible = !q || comp.name.toLowerCase().includes(q) || comp.module.toLowerCase().includes(q);
+          if (visible && comp.category === 'interactive') interactiveVisible++;
+          if (visible && comp.category === 'static') staticVisible++;
+
+          return `<div
+            class="list-item ${comp.id === activeId ? 'active' : ''} ${visible ? '' : 'list-item-hidden'}"
+            data-id="${comp.id}"
+            onclick="selectComponent('${comp.id}')"
+          >
+            <span class="list-item-name">${highlightMatch(comp.name, q)}</span>
+            <span class="list-item-badge">${comp.module}</span>
+          </div>`;
+        }).join('');
+      }
+
+      const iItems = makeItems(interactive);
+      const sItems = makeItems(staticC);
+
+      list.innerHTML = `
+        <div class="list-group-label">Interactive <span class="list-group-count">${interactiveVisible}</span></div>
+        ${iItems}
+        <div class="list-group-label" style="margin-top:0.5rem">Static <span class="list-group-count">${staticVisible}</span></div>
+        ${sItems}
+        <div class="empty-search" id="emptySearch" style="${interactiveVisible + staticVisible === 0 ? 'display:block' : 'display:none'}">
+          No components match "<em>${q}</em>"
+        </div>
+      `;
+    }
+
+    function highlightMatch(name, q) {
+      if (!q) return name;
+      const idx = name.toLowerCase().indexOf(q);
+      if (idx === -1) return name;
+      return name.slice(0, idx) + `<mark style="background:var(--orange-pale);color:var(--orange);border-radius:2px">${name.slice(idx, idx + q.length)}</mark>` + name.slice(idx + q.length);
+    }
+
+    /* ============================================================
+       SELECT COMPONENT
+    ============================================================ */
+    function selectComponent(id) {
+      activeId = id;
+      const comp = components.find(c => c.id === id);
+      if (!comp) return;
+
+      // Update sidebar active state
+      renderSidebar(document.getElementById('searchInput').value);
+
+      // Show viewer
+      document.getElementById('welcomeState').style.display = 'none';
+      const vw = document.getElementById('viewerWrap');
+      vw.style.display = 'flex';
+
+      // Update meta
+      document.getElementById('compName').textContent = comp.name;
+      document.getElementById('compDesc').textContent = comp.desc;
+      document.getElementById('compModule').textContent = comp.module;
+
+      // Update filename in source header
+      document.getElementById('sourceFilename').textContent = `components/${comp.id}.html`;
+
+      // Update open link
+      const openBtn = document.getElementById('openNewBtn');
+      openBtn.href = `components/${comp.id}.html`;
+
+      // Load preview iframe
+      const iframe = document.getElementById('previewIframe');
+      document.getElementById('iframeLoading').classList.remove('hidden');
+      iframe.src = `components/${comp.id}.html`;
+
+      // Reset source
+      if (activeView === 'source') {
+        loadSource(id);
+      }
+
+      // Reset copy button
+      resetCopyBtn();
+    }
+
+    /* ============================================================
+       IFRAME LOAD
+    ============================================================ */
+    function iframeLoaded() {
+      document.getElementById('iframeLoading').classList.add('hidden');
+    }
+
+    /* ============================================================
+       VIEW SWITCHING
+    ============================================================ */
+    function switchView(view) {
+      activeView = view;
+      document.getElementById('tabPreview').classList.toggle('active', view === 'preview');
+      document.getElementById('tabSource').classList.toggle('active', view === 'source');
+      document.getElementById('previewPanel').classList.toggle('active', view === 'preview');
+      document.getElementById('sourcePanel').classList.toggle('active', view === 'source');
+
+      if (view === 'source' && activeId) {
+        loadSource(activeId);
+      }
+    }
+
+    /* ============================================================
+       SOURCE FETCHING & HIGHLIGHTING
+    ============================================================ */
+    async function loadSource(id) {
+      if (sourceCache[id]) {
+        document.getElementById('sourceCode').innerHTML = sourceCache[id];
+        return;
+      }
+      document.getElementById('sourceCode').textContent = 'Loading…';
+      try {
+        const resp = await fetch(`components/${id}.html`);
+        const text = await resp.text();
+        rawSourceCache[id] = text;
+        const highlighted = highlightHTML(text);
+        sourceCache[id] = highlighted;
+        document.getElementById('sourceCode').innerHTML = highlighted;
+      } catch (e) {
+        document.getElementById('sourceCode').textContent = 'Could not load source.';
+      }
+    }
+
+    function highlightHTML(code) {
+      // Escape HTML entities first
+      let escaped = code
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+      // Colorize HTML comments
+      escaped = escaped.replace(
+        /(&lt;!--[\s\S]*?--&gt;)/g,
+        '<span class="sh-comment">$1</span>'
+      );
+
+      // Colorize tags: &lt;tagname ... &gt;
+      escaped = escaped.replace(
+        /(&lt;\/?)([\w-]+)([\s\S]*?)(\/?&gt;)/g,
+        (match, open, tag, attrs, close) => {
+          // Colorize attributes and their values inside the tag
+          const coloredAttrs = attrs.replace(
+            /([\w-]+)(=)(&quot;[^&]*&quot;|&apos;[^&]*&apos;|\S+)/g,
+            '<span class="sh-attr">$1</span><span style="color:#5C5047">$2</span><span class="sh-val">$3</span>'
+          );
+          return `<span class="sh-tag">${open}${tag}</span>${coloredAttrs}<span class="sh-tag">${close}</span>`;
+        }
+      );
+
+      // Colorize CSS custom properties in :root
+      escaped = escaped.replace(/(--[\w-]+)/g, '<span style="color:#C3A8EA">$1</span>');
+
+      return escaped;
+    }
+
+    /* ============================================================
+       COPY SOURCE
+    ============================================================ */
+    async function copySource() {
+      if (!activeId) return;
+
+      // Ensure we have raw source
+      if (!rawSourceCache[activeId]) {
+        try {
+          const resp = await fetch(`components/${activeId}.html`);
+          rawSourceCache[activeId] = await resp.text();
+        } catch(e) { return; }
+      }
+
+      navigator.clipboard.writeText(rawSourceCache[activeId]).then(() => {
+        const btn = document.getElementById('copySrcBtn');
+        btn.textContent = 'Copied ✓';
+        btn.classList.add('copied');
+        setTimeout(resetCopyBtn, 2000);
+      });
+    }
+
+    function resetCopyBtn() {
+      const btn = document.getElementById('copySrcBtn');
+      btn.textContent = '⎘ Copy';
+      btn.classList.remove('copied');
+    }
+
+    /* ============================================================
+       SEARCH FILTER
+    ============================================================ */
+    function filterList(value) {
+      renderSidebar(value);
+    }
+
+    /* ============================================================
+       KEYBOARD SHORTCUT
+    ============================================================ */
+    document.addEventListener('keydown', e => {
+      // Press / to focus search
+      if (e.key === '/' && document.activeElement !== document.getElementById('searchInput')) {
+        e.preventDefault();
+        document.getElementById('searchInput').focus();
+      }
+    });
+
+    /* ============================================================
+       INIT
+    ============================================================ */
+    renderSidebar();
+    // Auto-select first component
+    selectComponent(components[0].id);
+  </script>
+</body>
+</html>

@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MCP in Postman — The Taxonomy Everyone Gets Wrong</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #FF6C37;
+      --white: #FFFFFF;
+      --orange-light: #FF8C5A;
+      --orange-pale: #FFF0EB;
+      --cream: #FFFFFF;
+      --ink: #1A1612;
+      --ink-mid: #4A3F38;
+      --ink-light: #8C7B72;
+      --rule: #E8DDD6;
+      --green: #2D9E6B;
+      --green-pale: #EAF7F1;
+      --red-pale: #FEF0EE;
+      --red: #E03E2D;
+      --card-shadow: 0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+      --card-shadow-lift: 0 12px 32px rgba(26,22,18,0.14), 0 4px 8px rgba(26,22,18,0.08);
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--ink);
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    /* ── Main Layout ── */
+    .lesson-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 56px 32px 80px;
+    }
+
+    /* ── Section Label ── */
+    .section-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 12px;
+    }
+
+    /* ── Headline ── */
+    h1.lesson-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    h1.lesson-title em {
+      font-style: normal;
+      color: var(--orange);
+    }
+
+    .lesson-intro {
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--ink-mid);
+      font-weight: 300;
+      max-width: 680px;
+      margin-bottom: 40px;
+      border-left: 3px solid var(--orange);
+      padding-left: 20px;
+    }
+
+    /* ── Callout box ── */
+    .callout {
+      background: var(--orange-pale);
+      border: 1.5px solid #FFD4C2;
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin-bottom: 44px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .callout-text { font-size: 14.5px; line-height: 1.6; color: var(--ink-mid); font-weight: 400; }
+    .callout-text strong { color: var(--ink); font-weight: 500; }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: var(--rule);
+      margin: 44px 0;
+    }
+
+    /* ── Drag & Drop Area ── */
+    .activity-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .activity-subtitle {
+      font-size: 14px;
+      color: var(--ink-light);
+      margin-bottom: 32px;
+      font-weight: 300;
+    }
+
+    .drag-arena {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 36px;
+    }
+
+    @media (max-width: 680px) {
+      .drag-arena { grid-template-columns: 1fr; }
+      .lesson-wrap { padding: 36px 20px 60px; }
+    }
+
+    /* ── Cards (draggable) ── */
+    .cards-panel h3,
+    .targets-panel h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .cards-pool {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 280px;
+    }
+
+    .drag-card {
+      background: white;
+      border: 1.5px solid var(--rule);
+      border-radius: 8px;
+      padding: 14px 18px;
+      cursor: grab;
+      user-select: none;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .drag-card:active { cursor: grabbing; }
+    .drag-card.dragging {
+      opacity: 0.4;
+      transform: scale(0.97);
+    }
+    .drag-card.ghost {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.95;
+      transform: rotate(1.5deg) scale(1.03);
+      box-shadow: var(--card-shadow-lift);
+      border-color: var(--orange);
+      transition: none;
+      width: var(--ghost-width);
+    }
+    .drag-card .card-emoji { font-size: 22px; flex-shrink: 0; }
+    .drag-card .card-label {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--ink);
+    }
+
+    /* ── Drop Targets ── */
+    .targets-pool {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .drop-target {
+      border: 2px dashed var(--rule);
+      border-radius: 10px;
+      padding: 14px 18px;
+      min-height: 72px;
+      transition: border-color 0.15s ease, background 0.15s ease;
+      position: relative;
+    }
+    .drop-target.over {
+      border-color: var(--orange);
+      background: var(--orange-pale);
+    }
+    .drop-target.correct {
+      border: 2px solid var(--green);
+      background: var(--green-pale);
+    }
+    .drop-target.incorrect {
+      border: 2px solid var(--red);
+      background: var(--red-pale);
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    .drop-target .target-meta {
+      font-size: 12px;
+      color: var(--ink-light);
+      font-weight: 300;
+      margin-bottom: 6px;
+      font-style: italic;
+    }
+    .drop-target .target-analogy {
+      font-size: 13.5px;
+      color: var(--ink-mid);
+      line-height: 1.45;
+    }
+    .drop-target .target-analogy strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+    .drop-target .target-placeholder {
+      font-size: 13px;
+      color: #C4B4AB;
+      font-weight: 300;
+      font-style: italic;
+    }
+
+    .drop-target .placed-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .drop-target .placed-card .card-emoji { font-size: 20px; }
+    .drop-target .placed-card .card-label {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--ink);
+    }
+    .drop-target .remove-btn {
+      margin-left: auto;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: var(--ink-light);
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: color 0.1s, background 0.1s;
+      flex-shrink: 0;
+    }
+    .drop-target .remove-btn:hover { color: var(--red); background: var(--red-pale); }
+
+    .status-dot {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--green);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .drop-target.correct .status-dot { opacity: 1; }
+
+    /* ── Controls ── */
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .btn {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      padding: 11px 22px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary {
+      background: var(--orange);
+      color: white;
+      box-shadow: 0 3px 10px rgba(255,108,55,0.35);
+    }
+    .btn-primary:hover { background: var(--orange-light); box-shadow: 0 5px 16px rgba(255,108,55,0.4); }
+    .btn-primary:disabled { background: #D4C4BC; box-shadow: none; cursor: not-allowed; }
+    .btn-ghost {
+      background: transparent;
+      color: var(--ink-mid);
+      border: 1.5px solid var(--rule);
+    }
+    .btn-ghost:hover { border-color: var(--ink-mid); color: var(--ink); }
+
+    .score-badge {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink-light);
+      margin-left: auto;
+    }
+    .score-badge span {
+      color: var(--orange);
+      font-size: 18px;
+    }
+
+    /* ── Result Panel ── */
+    .result-panel {
+      display: none;
+      border-radius: 12px;
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      animation: slideUp 0.4s ease;
+    }
+    .result-panel.show { display: block; }
+    .result-panel.success {
+      background: var(--green-pale);
+      border: 2px solid var(--green);
+    }
+    .result-panel.partial {
+      background: var(--orange-pale);
+      border: 2px solid var(--orange);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-panel h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+    .result-panel p {
+      font-size: 14.5px;
+      line-height: 1.65;
+      color: var(--ink-mid);
+      font-weight: 300;
+      max-width: 600px;
+    }
+    .result-panel p strong { color: var(--ink); font-weight: 500; }
+
+    /* ── Flow Diagram (post-completion reveal) ── */
+    .flow-reveal {
+      display: none;
+      margin-top: 44px;
+    }
+    .flow-reveal.show { display: block; animation: slideUp 0.5s ease 0.2s both; }
+
+    .flow-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+    .flow-title span { color: var(--orange); }
+
+    .flow-diagram {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      background: white;
+      border: 1.5px solid var(--rule);
+      border-radius: 12px;
+      padding: 28px 24px;
+      box-shadow: var(--card-shadow);
+      overflow-x: auto;
+    }
+
+    .flow-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .flow-node .node-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      background: var(--orange-pale);
+      border: 2px solid #FFD4C2;
+    }
+    .flow-node .node-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .flow-node .node-sub {
+      font-size: 11px;
+      color: var(--ink-light);
+      font-weight: 300;
+      text-align: center;
+      max-width: 80px;
+      line-height: 1.35;
+    }
+    .flow-arrow {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      color: var(--orange);
+      font-size: 20px;
+      margin-bottom: 24px;
+    }
+    h1, h2 { font-family: 'Syne', sans-serif; }
+    .whats-next {
+      background: var(--ink); border-radius: 12px; padding: 28px 56px 28px 32px;
+      max-width: 680px; margin: 44px 0 0;
+      display: flex; align-items: center; gap: 20px; position: relative; overflow: hidden;
+    }
+    .whats-next::after {
+      content: '→'; position: absolute; right: 28px; font-size: 28px; color: var(--orange);
+      font-family: 'Syne', sans-serif; font-weight: 800; transition: transform 0.2s;
+    }
+    .whats-next:hover::after { transform: translateX(5px); }
+    .next-icon { font-size: 32px; flex-shrink: 0; }
+    .next-label { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); margin-bottom: 0.3rem; }
+    .next-title { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: white; margin: 0; }
+  </style>
+</head>
+<body>
+
+  <div class="lesson-wrap">
+
+    <!-- Intro -->
+    <div class="section-label">Module 2 — Taxonomy</div>
+    <h1 class="lesson-title">The Taxonomy <em>Everyone</em> Gets Wrong</h1>
+    <p class="lesson-intro">
+      AI itself has an ecosystem of tools and terms. Even experienced AI developers mix these four terms up constantly. Before we go any further, let's sort them out — because if you misclassify a tool, your expectations misfire in every direction.
+    </p>
+
+    <div class="callout">
+      <div class="callout-icon">🎯</div>
+      <div class="callout-text">
+        <strong>Your goal:</strong> Drag each concept card to its correct role and analogy below.
+        Every concept has a job title (what it <em>does</em>) and a real-world analogy (what it <em>feels like</em>).
+        Get them all matched and the bigger picture clicks into place.
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Activity -->
+    <div class="activity-title">Match the Concept to Its Role</div>
+    <div class="activity-subtitle">Drag each card from the left column into the correct slot on the right.</div>
+
+    <div class="drag-arena">
+
+      <!-- Left: Cards Pool -->
+      <div class="cards-panel">
+        <h3>Concepts</h3>
+        <div class="cards-pool" id="cardsPool">
+          <div class="drag-card" draggable="true" data-id="agent">
+            <span class="card-emoji">🧠</span>
+            <span class="card-label">Agent</span>
+          </div>
+          <div class="drag-card" draggable="true" data-id="mcp">
+            <span class="card-emoji">📡</span>
+            <span class="card-label">MCP</span>
+          </div>
+          <div class="drag-card" draggable="true" data-id="cli">
+            <span class="card-emoji">💻</span>
+            <span class="card-label">CLI</span>
+          </div>
+          <div class="drag-card" draggable="true" data-id="skills">
+            <span class="card-emoji">📋</span>
+            <span class="card-label">Skills</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Drop Targets -->
+      <div class="targets-panel">
+        <h3>Roles &amp; Analogies</h3>
+        <div class="targets-pool">
+
+          <div class="drop-target" data-accepts="agent" id="target-agent">
+            <div class="status-dot"></div>
+            <div class="target-meta">Role: Sets goals, plans, decides, executes</div>
+            <div class="target-analogy">Analogy: <strong>The brain of the operation.</strong> Understands the goal and decides what to do next.</div>
+            <div class="target-placeholder">Drop a concept here…</div>
+          </div>
+
+          <div class="drop-target" data-accepts="mcp" id="target-mcp">
+            <div class="status-dot"></div>
+            <div class="target-meta">Role: Standard protocol connecting AI to external services</div>
+            <div class="target-analogy">Analogy: <strong>A telephone operator.</strong> Routes calls between your agent and the outside world through a standardized exchange.</div>
+            <div class="target-placeholder">Drop a concept here…</div>
+          </div>
+
+          <div class="drop-target" data-accepts="cli" id="target-cli">
+            <div class="status-dot"></div>
+            <div class="target-meta">Role: Runs commands directly on the system</div>
+            <div class="target-analogy">Analogy: <strong>The hands.</strong> Direct, local, no middleman — like walking over in person instead of calling.</div>
+            <div class="target-placeholder">Drop a concept here…</div>
+          </div>
+
+          <div class="drop-target" data-accepts="skills" id="target-skills">
+            <div class="status-dot"></div>
+            <div class="target-meta">Role: Packaged instructions for how an agent should behave</div>
+            <div class="target-analogy">Analogy: <strong>A how-to manual.</strong> The agent reads it once and knows how to handle a whole category of tasks.</div>
+            <div class="target-placeholder">Drop a concept here…</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button class="btn btn-primary" id="checkBtn" disabled>Check My Answers</button>
+      <button class="btn btn-ghost" id="resetBtn">Reset</button>
+      <div class="score-badge" id="scoreBadge" style="display:none">
+        Score: <span id="scoreNum">0</span>/4
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div class="result-panel" id="resultPanel">
+      <h3 id="resultTitle"></h3>
+      <p id="resultBody"></p>
+    </div>
+
+    <!-- Flow Diagram (revealed on perfect score) -->
+    <div class="flow-reveal" id="flowReveal">
+      <div class="flow-title">Here's how they work <span>together</span></div>
+      <div class="flow-diagram">
+        <div class="flow-node">
+          <div class="node-icon">🧠</div>
+          <div class="node-label">Agent</div>
+          <div class="node-sub">understands the goal</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="node-icon">📡</div>
+          <div class="node-label">MCP</div>
+          <div class="node-sub">routes the call</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="node-icon">💻</div>
+          <div class="node-label">CLI</div>
+          <div class="node-sub">runs it locally</div>
+        </div>
+        <div class="flow-arrow" style="color:#C4B4AB">or</div>
+        <div class="flow-node">
+          <div class="node-icon" style="background:#F0EDFB;border-color:#D5CCF5">🌐</div>
+          <div class="node-label">Service</div>
+          <div class="node-sub">via MCP server</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">
+          <div class="node-icon" style="background:#EAF7F1;border-color:#B8E8D4">✅</div>
+          <div class="node-label">Result</div>
+          <div class="node-sub">back to the agent</div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--ink-light);margin-top:14px;font-weight:300">
+        MCP and CLI aren't rivals — they're two different routes the agent can take depending on the destination. MCP wins when there's no CLI alternative: Slack, Notion, Figma, Google Workspace. CLI wins when you need direct, local, debuggable access. The agent decides which road to take.
+      </p>
+    </div>
+
+  <a href="module3-v1.html" style="text-decoration: none; display: block;">
+    <div class="whats-next">
+      <div class="next-icon">🤝</div>
+      <div>
+        <div class="next-label">Up Next</div>
+        <div class="next-title">Your First MCP Handshake</div>
+      </div>
+    </div>
+  </a>
+
+  </div><!-- /lesson-wrap -->
+
+  <script>
+    const state = {
+      placements: {},
+      draggingId: null,
+      dragOrigin: null,
+      checked: false,
+    };
+
+    const pool        = document.getElementById('cardsPool');
+    const checkBtn    = document.getElementById('checkBtn');
+    const resetBtn    = document.getElementById('resetBtn');
+    const resultPanel = document.getElementById('resultPanel');
+    const resultTitle = document.getElementById('resultTitle');
+    const resultBody  = document.getElementById('resultBody');
+    const scoreBadge  = document.getElementById('scoreBadge');
+    const scoreNum    = document.getElementById('scoreNum');
+    const flowReveal  = document.getElementById('flowReveal');
+    const targets     = document.querySelectorAll('.drop-target');
+
+    let ghost = null;
+    let ghostOffsetX = 0;
+    let ghostOffsetY = 0;
+
+    const cardMeta = {
+      agent:  { emoji: '🧠', label: 'Agent' },
+      mcp:    { emoji: '📡', label: 'MCP' },
+      cli:    { emoji: '💻', label: 'CLI' },
+      skills: { emoji: '📋', label: 'Skills' },
+    };
+
+    function initDrag() {
+      document.querySelectorAll('.drag-card').forEach(card => {
+        card.addEventListener('mousedown', onMouseDown);
+        card.addEventListener('touchstart', onTouchStart, { passive: false });
+      });
+    }
+
+    function onMouseDown(e) {
+      if (state.checked) return;
+      e.preventDefault();
+      startDrag(e.currentTarget, e.clientX, e.clientY);
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    }
+
+    function onTouchStart(e) {
+      if (state.checked) return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      startDrag(e.currentTarget, touch.clientX, touch.clientY);
+      document.addEventListener('touchmove', onTouchMove, { passive: false });
+      document.addEventListener('touchend', onTouchEnd);
+    }
+
+    function startDrag(card, clientX, clientY) {
+      state.draggingId = card.dataset.id;
+
+      if (card.closest('#cardsPool')) {
+        state.dragOrigin = 'pool';
+      } else {
+        targets.forEach(t => {
+          if (state.placements[t.id] === state.draggingId) {
+            state.dragOrigin = t.id;
+          }
+        });
+      }
+
+      const rect = card.getBoundingClientRect();
+      ghostOffsetX = clientX - rect.left;
+      ghostOffsetY = clientY - rect.top;
+
+      ghost = card.cloneNode(true);
+      ghost.classList.add('ghost');
+      ghost.style.setProperty('--ghost-width', rect.width + 'px');
+      ghost.style.left = (clientX - ghostOffsetX) + 'px';
+      ghost.style.top  = (clientY - ghostOffsetY) + 'px';
+      document.body.appendChild(ghost);
+
+      card.classList.add('dragging');
+    }
+
+    function onMouseMove(e)  { moveGhost(e.clientX, e.clientY); }
+    function onTouchMove(e)  { e.preventDefault(); const t = e.touches[0]; moveGhost(t.clientX, t.clientY); }
+
+    function moveGhost(x, y) {
+      if (!ghost) return;
+      ghost.style.left = (x - ghostOffsetX) + 'px';
+      ghost.style.top  = (y - ghostOffsetY) + 'px';
+      targets.forEach(t => t.classList.remove('over'));
+      const el = document.elementFromPoint(x, y);
+      if (el) {
+        const target = el.closest('.drop-target');
+        if (target) target.classList.add('over');
+      }
+    }
+
+    function onMouseUp(e) {
+      endDrag(e.clientX, e.clientY);
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    }
+
+    function onTouchEnd(e) {
+      const touch = e.changedTouches[0];
+      endDrag(touch.clientX, touch.clientY);
+      document.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('touchend', onTouchEnd);
+    }
+
+    function endDrag(x, y) {
+      targets.forEach(t => t.classList.remove('over'));
+      const el = document.elementFromPoint(x, y);
+      const target = el ? el.closest('.drop-target') : null;
+      if (target) {
+        dropOnTarget(target);
+      } else {
+        returnToPool(state.draggingId);
+      }
+      cleanup();
+    }
+
+    function dropOnTarget(target) {
+      const targetId = target.id;
+      const cardId = state.draggingId;
+      const origin = state.dragOrigin;
+      const existing = state.placements[targetId];
+
+      if (existing && existing !== cardId) {
+        returnToPool(existing);
+      }
+
+      if (origin === 'pool') {
+        const poolCard = pool.querySelector(`[data-id="${cardId}"]`);
+        if (poolCard) poolCard.remove();
+      } else if (origin !== targetId) {
+        delete state.placements[origin];
+        renderTarget(origin);
+      }
+
+      state.placements[targetId] = cardId;
+      renderTarget(targetId);
+      updateUI();
+    }
+
+    function returnToPool(cardId) {
+      Object.keys(state.placements).forEach(tid => {
+        if (state.placements[tid] === cardId) {
+          delete state.placements[tid];
+          renderTarget(tid);
+        }
+      });
+
+      if (!pool.querySelector(`[data-id="${cardId}"]`)) {
+        const meta = cardMeta[cardId];
+        const card = document.createElement('div');
+        card.className = 'drag-card';
+        card.draggable = true;
+        card.dataset.id = cardId;
+        card.innerHTML = `<span class="card-emoji">${meta.emoji}</span><span class="card-label">${meta.label}</span>`;
+        pool.appendChild(card);
+        card.addEventListener('mousedown', onMouseDown);
+        card.addEventListener('touchstart', onTouchStart, { passive: false });
+      }
+
+      updateUI();
+    }
+
+    function renderTarget(targetId) {
+      const target = document.getElementById(targetId);
+      const cardId = state.placements[targetId];
+      const placeholder = target.querySelector('.target-placeholder');
+      let placed = target.querySelector('.placed-card');
+
+      if (placed) placed.remove();
+
+      if (cardId) {
+        const meta = cardMeta[cardId];
+        placeholder.style.display = 'none';
+        const div = document.createElement('div');
+        div.className = 'placed-card';
+        div.innerHTML = `
+          <span class="card-emoji">${meta.emoji}</span>
+          <span class="card-label">${meta.label}</span>
+          <button class="remove-btn" title="Remove" data-card="${cardId}" data-target="${targetId}">✕</button>
+        `;
+        target.appendChild(div);
+        div.querySelector('.remove-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (state.checked) return;
+          const cid = e.currentTarget.dataset.card;
+          const tid = e.currentTarget.dataset.target;
+          delete state.placements[tid];
+          renderTarget(tid);
+          returnToPool(cid);
+        });
+      } else {
+        placeholder.style.display = '';
+      }
+
+      target.classList.remove('correct', 'incorrect');
+    }
+
+    function cleanup() {
+      if (ghost) { ghost.remove(); ghost = null; }
+      document.querySelectorAll('.drag-card.dragging').forEach(c => c.classList.remove('dragging'));
+      state.draggingId = null;
+      state.dragOrigin = null;
+    }
+
+    function updateUI() {
+      const filled = Object.keys(state.placements).length;
+      checkBtn.disabled = filled < 4;
+      state.checked = false;
+      targets.forEach(t => t.classList.remove('correct', 'incorrect'));
+      resultPanel.classList.remove('show', 'success', 'partial');
+      scoreBadge.style.display = 'none';
+      flowReveal.classList.remove('show');
+    }
+
+    checkBtn.addEventListener('click', () => {
+      state.checked = true;
+      let correct = 0;
+
+      targets.forEach(target => {
+        const placed = state.placements[target.id];
+        const expected = target.dataset.accepts;
+
+        if (placed === expected) {
+          target.classList.add('correct');
+          correct++;
+        } else {
+          target.classList.add('incorrect');
+          setTimeout(() => {
+            target.classList.remove('incorrect');
+            state.checked = false;
+          }, 600);
+        }
+      });
+
+      scoreBadge.style.display = 'flex';
+      scoreNum.textContent = correct;
+
+      if (correct === 4) {
+        resultPanel.className = 'result-panel show success';
+        resultTitle.textContent = '🎉 Perfect match!';
+        resultBody.innerHTML = `You've got the full picture. <strong>Agent = brain. MCP = telephone operator. CLI = hands. Skills = manual.</strong> The critical insight: MCP and CLI aren't competitors — they're two different roads the agent can take. MCP handles the services that have no CLI equivalent. CLI handles what's already on your machine. The agent decides which road to take. Keep that mental model close — it'll save you from a lot of architectural confusion ahead.`;
+        flowReveal.classList.add('show');
+      } else if (correct >= 2) {
+        resultPanel.className = 'result-panel show partial';
+        resultTitle.textContent = `Almost — ${correct}/4 correct`;
+        resultBody.innerHTML = `Good instincts, but a couple are still mismatched. The incorrect ones have been reset — have another look at the role descriptions and try again. Hint: pay attention to <strong>where the action happens</strong> — local machine vs. external service — it's the key to unlocking the harder ones.`;
+        state.checked = false;
+      } else {
+        resultPanel.className = 'result-panel show partial';
+        resultTitle.textContent = `Keep going — ${correct}/4 correct`;
+        resultBody.innerHTML = `No stress — this taxonomy trips up even experienced developers. The incorrect ones have been reset. Try re-reading the role descriptions carefully: one word in each often gives it away. What does each thing <em>actually do</em> vs. what does it <em>feel like</em>?`;
+        state.checked = false;
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      Object.keys(state.placements).forEach(tid => {
+        state.placements[tid] = null;
+        delete state.placements[tid];
+      });
+
+      pool.innerHTML = '';
+
+      targets.forEach(t => {
+        t.classList.remove('correct', 'incorrect');
+        const placed = t.querySelector('.placed-card');
+        if (placed) placed.remove();
+        t.querySelector('.target-placeholder').style.display = '';
+      });
+
+      Object.keys(cardMeta).forEach(id => {
+        const meta = cardMeta[id];
+        const card = document.createElement('div');
+        card.className = 'drag-card';
+        card.draggable = true;
+        card.dataset.id = id;
+        card.innerHTML = `<span class="card-emoji">${meta.emoji}</span><span class="card-label">${meta.label}</span>`;
+        pool.appendChild(card);
+        card.addEventListener('mousedown', onMouseDown);
+        card.addEventListener('touchstart', onTouchStart, { passive: false });
+      });
+
+      checkBtn.disabled = true;
+      state.checked = false;
+      resultPanel.classList.remove('show', 'success', 'partial');
+      scoreBadge.style.display = 'none';
+      flowReveal.classList.remove('show');
+    });
+
+    initDrag();
+  </script>
+</body>
+</html>
