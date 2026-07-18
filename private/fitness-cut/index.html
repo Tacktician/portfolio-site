@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Cut — 90-Day Fat-Loss Plan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ── Design tokens (Postman component library) ─────────────────────────── */
+    :root {
+      --orange:           #FF6C37;
+      --orange-light:     #FF8C5A;
+      --orange-pale:      #FFF0EB;
+      --ink:              #1A1612;
+      --ink-mid:          #4A3F38;
+      --ink-light:        #8C7B72;
+      --rule:             #E8DDD6;
+      --white:            #FFFFFF;
+      --green:            #2D9E6B;
+      --green-pale:       #EAF7F1;
+      --blue:             #2563EB;
+      --blue-pale:        #EFF4FF;
+      --red:              #E03E2D;
+      --red-pale:         #FEF0EE;
+      --purple:           #534AB7;
+      --purple-pale:      #EEEDFE;
+      --teal:             #0F6E56;
+      --teal-pale:        #E1F5EE;
+      --card-shadow:      0 2px 12px rgba(26,22,18,0.08), 0 1px 3px rgba(26,22,18,0.06);
+      --card-shadow-lift: 0 12px 32px rgba(26,22,18,0.14), 0 4px 8px rgba(26,22,18,0.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--ink);
+      background: #faf8f6;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    .lesson-wrap { max-width: 960px; margin: 0 auto; padding: 48px 32px 80px; }
+
+    /* ── Lesson header (section label + h1 + intro) ─────────────────────────── */
+    .section-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 12px;
+    }
+    h1.lesson-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.25rem;
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--ink);
+      margin: 0 0 24px;
+      letter-spacing: -0.01em;
+    }
+    h1.lesson-title em { color: var(--orange); font-style: normal; }
+    .lesson-intro {
+      border-left: 4px solid var(--orange);
+      padding-left: 16px;
+      margin: 0 0 36px;
+      font-size: 1.0625rem;
+      line-height: 1.7;
+      color: var(--ink-mid);
+      max-width: 720px;
+    }
+    .lesson-intro strong { color: var(--ink); }
+    .subhead {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 36px 0 14px;
+    }
+    .subhead .hl { color: var(--orange); }
+    .lesson-body { font-size: 0.95rem; line-height: 1.7; color: var(--ink-mid); margin: 0 0 16px; max-width: 720px; }
+    .lesson-body strong { color: var(--ink); }
+    code, .mono {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85em;
+      color: var(--orange);
+      background: #F5F0EC;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid var(--rule);
+      max-width: 960px;
+      margin: 32px 0;
+    }
+
+    /* ── Tabs nav (code-tabs underline pattern) ─────────────────────────────── */
+    .tabs-nav {
+      display: flex;
+      gap: 0;
+      border-bottom: 2px solid var(--rule);
+      margin: 0 0 32px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      padding: 12px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--ink-light);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.15s, border-color 0.15s;
+      text-transform: uppercase;
+    }
+    .tab-btn.active { color: var(--orange); border-bottom-color: var(--orange); }
+    .tab-btn:hover:not(.active) { color: var(--ink); }
+    .tab-content { display: none; animation: fade-in 0.25s ease; }
+    .tab-content.active { display: block; }
+    @keyframes fade-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── Callouts (s5-callout-box patterns) ─────────────────────────────────── */
+    .callout {
+      display: flex;
+      gap: 14px;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 0 0 24px;
+      max-width: 960px;
+      background: var(--orange-pale);
+      border-left: 4px solid var(--orange);
+    }
+    .callout-info  { background: var(--blue-pale);  border-left-color: var(--blue); }
+    .callout-warn  { background: #FAEEDA; border-left-color: #BA7517; }
+    .callout-warn .callout-text { color: #633806; }
+    .callout-warn .callout-text strong { color: #3B2003; }
+    .callout-tip   { background: var(--orange-pale); border-left-color: var(--orange); }
+    .callout-green { background: var(--green-pale); border-left-color: var(--green); }
+    .callout-icon  { font-size: 1.2rem; flex-shrink: 0; }
+    .callout-text  { font-size: 0.95rem; line-height: 1.6; color: var(--ink-mid); }
+    .callout-text strong { color: var(--ink); font-weight: 600; }
+
+    /* ── Phase / metric card grid (capability-grid pattern) ─────────────────── */
+    .phase-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; max-width: 960px; margin: 0 0 28px; }
+    @media (max-width: 640px) { .phase-grid { grid-template-columns: 1fr; } }
+    .phase-card {
+      background: var(--white);
+      border: 1.5px solid var(--rule);
+      border-radius: 10px;
+      padding: 18px 20px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .phase-card:hover { border-color: var(--orange); box-shadow: var(--card-shadow); }
+    .phase-card .phase-range {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .phase-card.p1 .phase-range { color: var(--blue); }
+    .phase-card.p2 .phase-range { color: var(--teal); }
+    .phase-card.p3 .phase-range { color: var(--purple); }
+    .phase-card.target .phase-range { color: var(--orange); }
+    .phase-card .phase-desc { font-size: 0.875rem; line-height: 1.55; color: var(--ink-mid); margin: 0; }
+    .phase-card .phase-desc strong { color: var(--ink); font-weight: 500; }
+
+    /* ── Day-of-week schedule grid ──────────────────────────────────────────── */
+    .day-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      max-width: 960px;
+      margin: 0 0 28px;
+    }
+    @media (max-width: 600px) { .day-grid { grid-template-columns: repeat(4, 1fr); } }
+    .day-cell {
+      border: 1.5px solid var(--rule);
+      border-radius: 8px;
+      padding: 12px 8px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      transition: transform 0.15s;
+    }
+    .day-cell:hover { transform: translateY(-1px); }
+    .day-label {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .day-strength { background: var(--blue-pale); color: #0C447C; border-color: #C5D8FF; }
+    .day-cardio   { background: var(--teal-pale); color: #085041; border-color: #B8E8D4; }
+    .day-rest     { background: #F5F0EC; color: var(--ink-light); }
+    .day-active   { background: var(--purple-pale); color: var(--purple); border-color: #D8D5F7; }
+
+    /* ── Principles list (objectives-box pattern) ───────────────────────────── */
+    .principles-box {
+      background: var(--orange-pale);
+      border: 1.5px solid #FFD4C2;
+      border-radius: 10px;
+      padding: 22px 26px;
+      max-width: 720px;
+      box-shadow: var(--card-shadow);
+      margin: 0 0 28px;
+    }
+    .principles-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 14px;
+    }
+    .principles-list { display: flex; flex-direction: column; gap: 10px; }
+    .principle-item { display: flex; align-items: flex-start; gap: 10px; }
+    .principle-item p { font-size: 15px; line-height: 1.55; color: var(--ink-mid); font-weight: 400; margin: 0; }
+    .principle-item p strong { color: var(--ink); font-weight: 600; }
+    .principle-bullet {
+      flex-shrink: 0;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: white;
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+
+    /* ── Accordion (07-accordion pattern) for phase content ─────────────────── */
+    .accordion-card {
+      border: 1.5px solid var(--rule);
+      border-radius: 12px;
+      background: var(--white);
+      margin: 0 0 16px;
+      overflow: hidden;
+      max-width: 960px;
+      box-shadow: var(--card-shadow);
+    }
+    .accordion-header {
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .accordion-header:hover { background: #fdfbf9; }
+    .accordion-badge {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    .badge-blue { background: var(--blue-pale); color: #0C447C; }
+    .badge-teal { background: var(--teal-pale); color: #085041; }
+    .badge-purple { background: var(--purple-pale); color: var(--purple); }
+    .accordion-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--ink);
+    }
+    .accordion-chevron {
+      margin-left: auto;
+      font-family: 'Syne', sans-serif;
+      color: var(--ink-light);
+      font-size: 1.2rem;
+      transition: transform 0.2s;
+    }
+    .accordion-card.open .accordion-chevron { transform: rotate(180deg); }
+    .accordion-body {
+      padding: 0 22px 22px;
+      border-top: 1px solid var(--rule);
+      padding-top: 22px;
+    }
+
+    /* ── Exercise tables ────────────────────────────────────────────────────── */
+    .exercise-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin: 0 0 24px;
+      background: var(--white);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .exercise-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: white;
+      background: var(--ink);
+    }
+    .exercise-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--rule);
+      color: var(--ink-mid);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .exercise-table td:first-child { font-weight: 500; color: var(--ink); }
+    .exercise-table tr:last-child td { border-bottom: none; }
+    .exercise-table tr:hover td { background: #fdfbf9; }
+
+    /* ── Cardio list ────────────────────────────────────────────────────────── */
+    .cardio-list {
+      max-width: 720px;
+      list-style: none;
+      padding: 0;
+      margin: 0 0 16px;
+    }
+    .cardio-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: var(--ink-mid);
+    }
+    .cardio-list li:last-child { border-bottom: none; }
+    .cardio-list li strong { color: var(--ink); font-weight: 600; }
+
+    /* ── Macro / nutrition card grid ────────────────────────────────────────── */
+    .macro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 720px; margin: 0 0 28px; }
+    @media (max-width: 600px) { .macro-grid { grid-template-columns: 1fr; } }
+    .macro-card {
+      background: var(--white);
+      border: 1.5px solid var(--rule);
+      border-radius: 10px;
+      padding: 18px 16px;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+    }
+    .macro-num { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; margin-bottom: 4px; }
+    .macro-num.cal { color: var(--blue); }
+    .macro-num.protein { color: var(--teal); }
+    .macro-num.fiber { color: var(--purple); }
+    .macro-lbl { font-size: 12px; color: var(--ink-light); margin-top: 2px; line-height: 1.45; }
+
+    /* ── Meal cards ─────────────────────────────────────────────────────────── */
+    .meal-card {
+      border: 1.5px solid var(--rule);
+      border-left: 4px solid var(--orange);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 0 0 10px;
+      background: var(--white);
+      max-width: 720px;
+    }
+    .meal-time {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 4px;
+    }
+    .meal-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .meal-desc { font-size: 0.92rem; color: var(--ink-mid); line-height: 1.6; }
+    .meal-desc strong { color: var(--ink); font-weight: 600; }
+
+    /* ── Pills (food tags) ──────────────────────────────────────────────────── */
+    .pills-row { max-width: 720px; margin: 0 0 16px; }
+    .pill {
+      display: inline-block;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 4px 11px;
+      border-radius: 99px;
+      margin: 3px 4px 3px 0;
+    }
+    .pill-ok    { background: var(--green-pale); color: #1B6D45; border: 1px solid #B8E8D4; }
+    .pill-avoid { background: var(--red-pale); color: #791F1F; border: 1px solid #F8D2CC; }
+
+    /* ── Comparison card pair (analogy pattern) ─────────────────────────────── */
+    .compare-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      max-width: 960px;
+      margin: 0 0 28px;
+    }
+    @media (max-width: 640px) { .compare-pair { grid-template-columns: 1fr; } }
+    .compare-card {
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+    }
+    .compare-card .top-bar { height: 4px; }
+    .compare-card.emphasize .top-bar { background: var(--green); }
+    .compare-card.avoid .top-bar { background: var(--red); }
+    .compare-card .body { padding: 18px 22px; }
+    .compare-card .tag {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+    .compare-card.emphasize .tag { color: var(--green); }
+    .compare-card.avoid .tag { color: var(--red); }
+    .compare-card h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin: 0 0 12px;
+    }
+
+    /* ── Plain prose lists (within accordion content) ───────────────────────── */
+    .body-list { list-style: none; padding: 0; margin: 0 0 16px; }
+    .body-list li {
+      position: relative;
+      padding: 6px 0 6px 22px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--ink-mid);
+    }
+    .body-list li::before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 14px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--orange);
+    }
+    .body-list li strong { color: var(--ink); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <div class="lesson-wrap">
+
+    <!-- Lesson header -->
+    <div class="section-label">Custom Plan &middot; 41 &middot; 5'10" &middot; 238 lbs</div>
+    <h1 class="lesson-title">The Cut &mdash; <em>Lose Fat, Keep the Muscle</em></h1>
+    <p class="lesson-intro">A 90-day fat-loss plan built for one job: <strong>strip 25&ndash;40 lbs while protecting every ounce of muscle definition you already have.</strong> Strength is not the goal here &mdash; muscle <em>retention</em> is. That means you still lift with intent (heavy-ish, low volume) so your body has a reason to hold onto lean mass, while the deficit and cardio do the fat-burning. Every workout comes in two versions: <strong>Gym</strong> and <strong>Home</strong>. Pick whichever fits the day.</p>
+
+    <!-- Tabs -->
+    <div class="tabs-nav" id="tabs">
+      <button class="tab-btn active" data-tab="overview" type="button">Overview</button>
+      <button class="tab-btn" data-tab="gym" type="button">Gym Version</button>
+      <button class="tab-btn" data-tab="home" type="button">Home Version</button>
+      <button class="tab-btn" data-tab="cardio" type="button">Cardio &amp; Steps</button>
+      <button class="tab-btn" data-tab="nutrition" type="button">Nutrition</button>
+    </div>
+
+    <!-- ────────── Overview tab ────────── -->
+    <section id="overview" class="tab-content active">
+
+      <div class="callout callout-warn">
+        <div class="callout-icon">&#x1F9EE;</div>
+        <div class="callout-text"><strong>Let's be honest about the timeline.</strong> 30&ndash;40 lbs in 12 weeks is <strong>2.5&ndash;3.3 lbs/week</strong> &mdash; aggressive, and above the rate that reliably preserves muscle. The safe, muscle-sparing sweet spot is <strong>1.5&ndash;2.5 lbs/week</strong>. Realistically that lands you at <strong>~208&ndash;218 lbs by day 90</strong>, with the full 30&ndash;40 lbs arriving around <strong>weeks 14&ndash;18</strong>. The good news: at 238 lbs your first 2&ndash;3 weeks will drop fast (water + glycogen), so early progress will feel dramatic. Aim for the process, not the scale number.</div>
+      </div>
+
+      <h2 class="subhead">Why this <span class="hl">keeps muscle</span></h2>
+      <div class="callout callout-info">
+        <div class="callout-icon">&#x1F4AA;</div>
+        <div class="callout-text">In a calorie deficit your body will happily burn muscle unless you give it two reasons not to: <strong>(1) a mechanical signal</strong> &mdash; lifting with real load, even briefly &mdash; and <strong>(2) enough protein</strong>. Nail those two and the fat comes off while your definition stays. That's the entire strategy. Cardio and steps just widen the deficit.</div>
+      </div>
+
+      <h2 class="subhead">The <span class="hl">Three Phases</span></h2>
+      <div class="phase-grid">
+        <div class="phase-card p1">
+          <div class="phase-range">Weeks 1&ndash;4</div>
+          <p class="phase-desc"><strong>Ignite.</strong> Set the deficit, build the habit, hit your step target daily. Full-body lifting 3&times;/wk to lock in the muscle-retention signal. Fast early scale drops.</p>
+        </div>
+        <div class="phase-card p2">
+          <div class="phase-range">Weeks 5&ndash;8</div>
+          <p class="phase-desc"><strong>Grind.</strong> Add a 4th lifting day and one interval session. This is where discipline beats motivation &mdash; the scale slows, the mirror keeps improving.</p>
+        </div>
+        <div class="phase-card p3">
+          <div class="phase-range">Weeks 9&ndash;12</div>
+          <p class="phase-desc"><strong>Sharpen.</strong> Cardio volume peaks, lifting stays heavy-ish to defend muscle. Definition becomes visible. Optional short "diet break" if energy tanks.</p>
+        </div>
+        <div class="phase-card target">
+          <div class="phase-range">1.5&ndash;2.5 lbs/wk</div>
+          <p class="phase-desc"><strong>Fat-loss target.</strong> Fast enough to see real change, slow enough to hold muscle and avoid rebound. Adjust food, not effort, if you stall.</p>
+        </div>
+      </div>
+
+      <h2 class="subhead">Weekly <span class="hl">Schedule</span> Framework</h2>
+      <p class="lesson-body">Four resistance days (each has a gym <em>and</em> a home version), two dedicated cardio days, one full rest day. Every day &mdash; training or not &mdash; you hit your step target.</p>
+      <div class="day-grid">
+        <div class="day-cell day-strength"><span class="day-label">Mon</span>Full A</div>
+        <div class="day-cell day-cardio"><span class="day-label">Tue</span>Cardio</div>
+        <div class="day-cell day-strength"><span class="day-label">Wed</span>Full B</div>
+        <div class="day-cell day-cardio"><span class="day-label">Thu</span>Cardio</div>
+        <div class="day-cell day-strength"><span class="day-label">Fri</span>Full A</div>
+        <div class="day-cell day-active"><span class="day-label">Sat</span>Full B</div>
+        <div class="day-cell day-rest"><span class="day-label">Sun</span>Rest</div>
+      </div>
+      <div class="callout callout-tip">
+        <div class="callout-icon">&#x1F501;</div>
+        <div class="callout-text"><strong>Weeks 1&ndash;4:</strong> run only Mon / Wed / Fri as lifting days (drop Saturday to cardio or rest) while you build the habit. <strong>Weeks 5+:</strong> add Saturday's <em>Full B</em> back in. Alternate the two full-body sessions (<strong>A</strong> and <strong>B</strong>) so everything gets trained twice a week.</div>
+      </div>
+
+      <h2 class="subhead">Guiding <span class="hl">Principles</span></h2>
+      <div class="principles-box">
+        <div class="principles-label">Non-negotiables</div>
+        <div class="principles-list">
+          <div class="principle-item"><span class="principle-bullet">1</span><p><strong>Protein first, every day</strong> &mdash; ~<strong>190&ndash;215g</strong> (roughly 0.8&ndash;0.9g per lb). This is the single biggest lever for keeping definition in a cut.</p></div>
+          <div class="principle-item"><span class="principle-bullet">2</span><p><strong>Lift heavy-ish, keep it short</strong> &mdash; 6&ndash;12 reps, 1&ndash;2 reps in reserve. You are defending muscle, not chasing PRs. Don't drop the weights just because you're dieting.</p></div>
+          <div class="principle-item"><span class="principle-bullet">3</span><p><strong>Hit your steps</strong> &mdash; work up to <strong>10,000&ndash;12,000 steps/day</strong>. Walking burns real calories, protects your knees at 238 lbs, and never eats into recovery.</p></div>
+          <div class="principle-item"><span class="principle-bullet">4</span><p><strong>Deficit, not starvation</strong> &mdash; cut ~500&ndash;750 cal/day below maintenance. Crash diets torch muscle and rebound. Slower loss = definition kept.</p></div>
+          <div class="principle-item"><span class="principle-bullet">5</span><p><strong>Sleep 7&ndash;8 hours</strong> &mdash; short sleep raises cortisol and cravings and accelerates muscle loss in a deficit. Recovery is where the fat-burning consolidates.</p></div>
+          <div class="principle-item"><span class="principle-bullet">6</span><p><strong>Weigh weekly, not daily</strong> &mdash; track the 7-day average. Day-to-day water swings will lie to you. Adjust food only if the average stalls for 10+ days.</p></div>
+        </div>
+      </div>
+
+      <div class="callout callout-green">
+        <div class="callout-icon">&#x1F4CF;</div>
+        <div class="callout-text"><strong>Track the mirror and the tape, not just the scale.</strong> As you keep muscle and lose fat, the scale can stall for a week while your waist keeps shrinking. Measure your waist at the navel every 2 weeks &mdash; it's the truest read on a cut.</div>
+      </div>
+    </section>
+
+    <!-- ────────── Gym Version tab ────────── -->
+    <section id="gym" class="tab-content">
+      <p class="lesson-body">Two full-body sessions, alternated. Each hits legs, push, pull, and core so you train everything twice a week &mdash; the most efficient way to hold muscle while cutting. Rest <strong>60&ndash;90 sec</strong> between sets. To save time and bump the calorie burn, pair the two exercises marked <strong>(superset)</strong> back-to-back.</p>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">&#x23F1;&#xFE0F;</div>
+        <div class="callout-text"><strong>Keep the weight up.</strong> In a deficit it's tempting to go light and chase a "burn." Don't. The heavy-ish load is exactly what tells your body to keep the muscle. If anything, cut a set before you cut the weight.</div>
+      </div>
+
+      <div class="accordion-card open">
+        <div class="accordion-header" data-accordion>
+          <span class="accordion-badge badge-blue">Mon / Fri</span>
+          <span class="accordion-title">Full Body A &mdash; Squat &amp; Push focus</span>
+          <span class="accordion-chevron">&#x25BE;</span>
+        </div>
+        <div class="accordion-body">
+          <table class="exercise-table">
+            <thead><tr><th>Exercise</th><th>Sets &times; Reps</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Goblet or Smith machine squat</td><td>3 &times; 8&ndash;10</td><td>Depth that's safe for your knees, controlled</td></tr>
+              <tr><td>Dumbbell / machine chest press</td><td>3 &times; 8&ndash;10</td><td>Flat or incline, full range</td></tr>
+              <tr><td>Seated cable row</td><td>3 &times; 10&ndash;12</td><td>Pull to the belly button, squeeze</td></tr>
+              <tr><td>Dumbbell walking lunge <em>(superset)</em></td><td>3 &times; 10 / leg</td><td>Or reverse lunges if knees complain</td></tr>
+              <tr><td>Lateral raise <em>(superset)</em></td><td>3 &times; 15</td><td>Light, strict &mdash; keeps shoulders capped</td></tr>
+              <tr><td>Cable crunch or hanging knee raise</td><td>3 &times; 15</td><td>Core, controlled</td></tr>
+              <tr><td>Finisher: incline treadmill walk</td><td>10 min</td><td>3&ndash;4% incline, 3.5 mph &mdash; optional</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="accordion-card open">
+        <div class="accordion-header" data-accordion>
+          <span class="accordion-badge badge-teal">Wed / Sat</span>
+          <span class="accordion-title">Full Body B &mdash; Hinge &amp; Pull focus</span>
+          <span class="accordion-chevron">&#x25BE;</span>
+        </div>
+        <div class="accordion-body">
+          <table class="exercise-table">
+            <thead><tr><th>Exercise</th><th>Sets &times; Reps</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Dumbbell / kettlebell Romanian deadlift</td><td>3 &times; 10&ndash;12</td><td>Hinge at the hips, neutral spine, no rounding</td></tr>
+              <tr><td>Lat pulldown</td><td>3 &times; 10&ndash;12</td><td>Squeeze the lats at the bottom</td></tr>
+              <tr><td>Dumbbell shoulder press (seated)</td><td>3 &times; 8&ndash;10</td><td>Controlled overhead</td></tr>
+              <tr><td>Leg press or Bulgarian split squat</td><td>3 &times; 10&ndash;12</td><td>Split squat is harder &mdash; scale as needed</td></tr>
+              <tr><td>Dumbbell curl <em>(superset)</em></td><td>3 &times; 12</td><td>Keeps arms full while cutting</td></tr>
+              <tr><td>Triceps rope pushdown <em>(superset)</em></td><td>3 &times; 12</td><td>Full extension</td></tr>
+              <tr><td>Plank</td><td>3 &times; 30&ndash;45 sec</td><td>Neutral spine, breathe</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">&#x1F4C8;</div>
+        <div class="callout-text"><strong>Progression while cutting:</strong> don't expect the weights to keep climbing &mdash; in a deficit, <em>maintaining</em> your loads week to week is a win and proof you're keeping muscle. If a weight starts feeling easy, add a rep or a little load. If everything feels heavy, that's normal on low calories &mdash; keep the weight, drop a set.</div>
+      </div>
+    </section>
+
+    <!-- ────────── Home Version tab ────────── -->
+    <section id="home" class="tab-content">
+      <p class="lesson-body">Same two-session structure, no machines required. <strong>Minimum kit:</strong> one pair of adjustable dumbbells or a couple of kettlebells. Zero equipment? The bodyweight swaps in the notes column cover you. Run each as a circuit &mdash; move through the list, rest 60&ndash;90 sec, repeat for <strong>3 rounds</strong>.</p>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">&#x1F3E0;</div>
+        <div class="callout-text"><strong>No dumbbells at all?</strong> Load a backpack with books or water jugs &mdash; it works for squats, RDLs, presses, and rows. The goal is still to make the last 2 reps genuinely hard, so your body keeps the muscle.</div>
+      </div>
+
+      <div class="accordion-card open">
+        <div class="accordion-header" data-accordion>
+          <span class="accordion-badge badge-blue">Mon / Fri</span>
+          <span class="accordion-title">Full Body A &mdash; Squat &amp; Push focus</span>
+          <span class="accordion-chevron">&#x25BE;</span>
+        </div>
+        <div class="accordion-body">
+          <table class="exercise-table">
+            <thead><tr><th>Exercise</th><th>Sets &times; Reps</th><th>Bodyweight swap / notes</th></tr></thead>
+            <tbody>
+              <tr><td>Goblet squat</td><td>3 &times; 12&ndash;15</td><td>No weight? Tempo squats: 3 sec down, pause</td></tr>
+              <tr><td>Push-ups</td><td>3 &times; AMRAP</td><td>Incline (hands on couch) to scale down</td></tr>
+              <tr><td>Bent-over dumbbell / backpack row</td><td>3 &times; 12</td><td>No weight? Doorway or towel rows</td></tr>
+              <tr><td>Reverse lunge</td><td>3 &times; 10 / leg</td><td>Hold weight at chest for more challenge</td></tr>
+              <tr><td>Pike push-up or DB shoulder press</td><td>3 &times; 10&ndash;12</td><td>Shoulders</td></tr>
+              <tr><td>Bicycle crunch</td><td>3 &times; 20</td><td>Slow and controlled</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="accordion-card open">
+        <div class="accordion-header" data-accordion>
+          <span class="accordion-badge badge-teal">Wed / Sat</span>
+          <span class="accordion-title">Full Body B &mdash; Hinge &amp; Pull focus</span>
+          <span class="accordion-chevron">&#x25BE;</span>
+        </div>
+        <div class="accordion-body">
+          <table class="exercise-table">
+            <thead><tr><th>Exercise</th><th>Sets &times; Reps</th><th>Bodyweight swap / notes</th></tr></thead>
+            <tbody>
+              <tr><td>Dumbbell / backpack Romanian deadlift</td><td>3 &times; 12&ndash;15</td><td>No weight? Single-leg RDL for balance + load</td></tr>
+              <tr><td>Glute bridge or hip thrust</td><td>3 &times; 15</td><td>Feet on floor; weight on hips to progress</td></tr>
+              <tr><td>Bent-over row (any load)</td><td>3 &times; 12</td><td>Squeeze shoulder blades</td></tr>
+              <tr><td>Bulgarian split squat (rear foot on couch)</td><td>3 &times; 10 / leg</td><td>Brutal with just bodyweight &mdash; that's fine</td></tr>
+              <tr><td>Dumbbell curl + overhead press <em>(superset)</em></td><td>3 &times; 12</td><td>Or slow push-ups if no weight</td></tr>
+              <tr><td>Plank / side plank</td><td>3 &times; 30&ndash;45 sec</td><td>Add a side plank each side</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="callout callout-green">
+        <div class="callout-icon">&#x1F525;</div>
+        <div class="callout-text"><strong>Home cardio finisher (optional):</strong> after the circuit, 8&ndash;10 min of jump rope (30 sec on / 30 sec off) or fast marching in place. Skip if your knees are barking &mdash; walking outside is always the safer calorie burn at your bodyweight.</div>
+      </div>
+    </section>
+
+    <!-- ────────── Cardio & Steps tab ────────── -->
+    <section id="cardio" class="tab-content">
+      <p class="lesson-body">Cardio here is a <strong>tool to widen the deficit</strong>, not the main event. Two guardrails at 238 lbs: keep most of it <strong>low-impact</strong> to protect your knees, and don't let it be so brutal it wrecks recovery from lifting (which is what actually holds your muscle). <strong>Steps do the quiet heavy lifting</strong> &mdash; they burn more total weekly calories than your workouts and cost you nothing in recovery.</p>
+
+      <h2 class="subhead">Your daily <span class="hl">step target</span></h2>
+      <div class="macro-grid">
+        <div class="macro-card">
+          <div class="macro-num cal">8k</div>
+          <div class="macro-lbl">Weeks 1&ndash;4 &mdash; build the habit</div>
+        </div>
+        <div class="macro-card">
+          <div class="macro-num protein">10k</div>
+          <div class="macro-lbl">Weeks 5&ndash;8 &mdash; the workhorse number</div>
+        </div>
+        <div class="macro-card">
+          <div class="macro-num fiber">12k</div>
+          <div class="macro-lbl">Weeks 9&ndash;12 &mdash; push the deficit</div>
+        </div>
+      </div>
+
+      <h2 class="subhead">Dedicated <span class="hl">cardio days</span> (Tue / Thu)</h2>
+      <ul class="cardio-list">
+        <li><strong>Weeks 1&ndash;4 &mdash; steady state:</strong> 30&ndash;40 min exercise bike, incline treadmill walk, or brisk outdoor walk. Conversational pace, RPE 5&ndash;6 / 10.</li>
+        <li><strong>Weeks 5&ndash;8 &mdash; add intervals (1 session/wk):</strong> bike or rower &mdash; 1 min hard / 2 min easy &times; 8 rounds. Keep the second cardio day as steady state.</li>
+        <li><strong>Weeks 9&ndash;12 &mdash; peak:</strong> one HIIT session (30 sec hard / 90 sec easy &times; 8&ndash;10) + one 40&ndash;50 min steady-state session.</li>
+        <li><strong>Low-impact first:</strong> bike, rower, incline walk, elliptical &mdash; save running until you're lighter and only if the knees are happy.</li>
+      </ul>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">&#x2764;&#xFE0F;</div>
+        <div class="callout-text"><strong>Fat-burning zone myth, briefly:</strong> low intensity burns a higher <em>percentage</em> of fat but fewer total calories; hard intervals burn more total. Both work &mdash; total weekly calories burned is what matters. Use steady state to protect recovery and intervals when you're short on time.</div>
+      </div>
+
+      <div class="callout callout-warn">
+        <div class="callout-icon">&#x26A0;&#xFE0F;</div>
+        <div class="callout-text"><strong>Don't out-cardio your recovery.</strong> If your lifts start dropping fast, you feel wiped, or sleep suffers, pull back the intervals before you touch the lifting. Losing the muscle-retention stimulus is the one mistake that ruins a cut &mdash; you'd lose the definition you're working to keep.</div>
+      </div>
+    </section>
+
+    <!-- ────────── Nutrition tab ────────── -->
+    <section id="nutrition" class="tab-content">
+      <p class="lesson-body">This is where <strong>80% of the fat loss happens.</strong> You cannot out-train the fork. The formula for a muscle-sparing cut is simple: a moderate calorie deficit, high protein, and enough fiber and volume to not feel starved. Nail protein and calories and the workouts do the rest.</p>
+
+      <div class="macro-grid">
+        <div class="macro-card">
+          <div class="macro-num cal">1,900&ndash;2,100</div>
+          <div class="macro-lbl">Daily calories (deficit from ~2,600&ndash;2,800 maintenance)</div>
+        </div>
+        <div class="macro-card">
+          <div class="macro-num protein">190&ndash;215g</div>
+          <div class="macro-lbl">Protein &mdash; the muscle-retention lever, hit it daily</div>
+        </div>
+        <div class="macro-card">
+          <div class="macro-num fiber">35&ndash;45g</div>
+          <div class="macro-lbl">Fiber &mdash; kills hunger, keeps digestion moving</div>
+        </div>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">&#x1F4A1;</div>
+        <div class="callout-text"><strong>Start at ~2,000 cal and watch the 7-day scale average.</strong> Losing 1.5&ndash;2.5 lbs/wk? Hold. Stalled 10+ days? Drop ~150 cal or add ~1,500 steps &mdash; adjust one lever at a time. Losing faster than 3 lbs/wk for multiple weeks? Eat a bit more &mdash; that pace burns muscle and definition.</div>
+      </div>
+
+      <h2 class="subhead">Daily Meal <span class="hl">Framework</span></h2>
+
+      <div class="meal-card">
+        <div class="meal-time">Breakfast</div>
+        <div class="meal-name">Protein anchor</div>
+        <div class="meal-desc">4 eggs (or 2 eggs + whites) + 1 cup Greek yogurt or cottage cheese, plus a piece of fruit. <strong>Option B:</strong> protein shake (40g) + 2 eggs + berries. Coffee black or with a splash of milk. <strong>~40g protein.</strong></div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-time">Lunch</div>
+        <div class="meal-name">Lean protein + volume</div>
+        <div class="meal-desc">6&ndash;8 oz chicken breast, turkey, or lean fish + a big pile of vegetables or a large salad + a fist of rice, quinoa, or potato. Light on the dressing. <strong>~50g protein.</strong></div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-time">Snack (esp. training days)</div>
+        <div class="meal-name">Keep it protein-forward</div>
+        <div class="meal-desc">Greek yogurt, a protein shake, cottage cheese, or a protein bar (20g+ protein, under 200 cal). Pair with fruit or a rice cake if training soon. <strong>~30g protein.</strong></div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-time">Dinner</div>
+        <div class="meal-name">Protein + vegetables, lighter carbs</div>
+        <div class="meal-desc">6&ndash;8 oz salmon, lean beef, chicken, or shrimp + a large portion of vegetables (broccoli, asparagus, zucchini, peppers, spinach) + a small starch. On rest days, drop the starch. <strong>~50g protein.</strong></div>
+      </div>
+      <div class="meal-card">
+        <div class="meal-time">Optional &mdash; only if hungry</div>
+        <div class="meal-name">Bedtime protein</div>
+        <div class="meal-desc">Cottage cheese or casein shake &mdash; slow-digesting protein that supports overnight muscle repair. Keep it under 200 cal.</div>
+      </div>
+
+      <h2 class="subhead">Foods to <span class="hl">Emphasize vs. Minimize</span></h2>
+      <div class="compare-pair">
+        <div class="compare-card emphasize">
+          <div class="top-bar"></div>
+          <div class="body">
+            <div class="tag">&#x2705; Build the plate around these</div>
+            <h4>Emphasize</h4>
+            <div class="pills-row">
+              <span class="pill pill-ok">chicken breast</span>
+              <span class="pill pill-ok">eggs / egg whites</span>
+              <span class="pill pill-ok">white fish</span>
+              <span class="pill pill-ok">salmon</span>
+              <span class="pill pill-ok">Greek yogurt</span>
+              <span class="pill pill-ok">cottage cheese</span>
+              <span class="pill pill-ok">lean beef / turkey</span>
+              <span class="pill pill-ok">tofu / legumes</span>
+              <span class="pill pill-ok">leafy greens</span>
+              <span class="pill pill-ok">broccoli</span>
+              <span class="pill pill-ok">berries</span>
+              <span class="pill pill-ok">potatoes / rice</span>
+              <span class="pill pill-ok">oats</span>
+            </div>
+          </div>
+        </div>
+        <div class="compare-card avoid">
+          <div class="top-bar"></div>
+          <div class="body">
+            <div class="tag">&#x26D4; Minimize or cut</div>
+            <h4>Minimize</h4>
+            <div class="pills-row">
+              <span class="pill pill-avoid">alcohol</span>
+              <span class="pill pill-avoid">sugary drinks</span>
+              <span class="pill pill-avoid">liquid calories</span>
+              <span class="pill pill-avoid">fast food</span>
+              <span class="pill pill-avoid">fried food</span>
+              <span class="pill pill-avoid">chips &amp; snacks</span>
+              <span class="pill pill-avoid">pastries / sweets</span>
+              <span class="pill pill-avoid">heavy dressings &amp; sauces</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-warn">
+        <div class="callout-icon">&#x1F37A;</div>
+        <div class="callout-text"><strong>Alcohol is the fastest way to stall this cut.</strong> Empty calories, worse sleep, a blunted fat-burn the next day, and it wrecks your food discipline. You don't have to ban it &mdash; but every drink is a direct tax on your results. Cutting it is the single easiest win here.</div>
+      </div>
+
+      <h2 class="subhead">Simple <span class="hl">habits</span> that move the needle</h2>
+      <ul class="body-list">
+        <li><strong>Protein at every meal</strong> &mdash; it's the most filling macro and the one that saves your muscle. Hit it before you worry about anything else.</li>
+        <li><strong>Drink water before meals</strong> &mdash; 80&ndash;100+ oz/day. Thirst masquerades as hunger constantly.</li>
+        <li><strong>Volume eating</strong> &mdash; vegetables and lean protein fill you up for very few calories. Bulk every plate with them.</li>
+        <li><strong>Stop drinking your calories</strong> &mdash; soda, juice, sugary coffee, and beer add up fast and never fill you up.</li>
+        <li><strong>Plan one flexible meal a week</strong> &mdash; a planned meal out keeps you sane and consistent. It's the daily unplanned grazing that derails cuts, not one dinner.</li>
+        <li><strong>Consider creatine (5g/day)</strong> &mdash; one of the most evidence-backed supplements; helps preserve strength and muscle while dieting. Clear it with your doctor first.</li>
+      </ul>
+
+      <div class="callout callout-info">
+        <div class="callout-icon">&#x2695;&#xFE0F;</div>
+        <div class="callout-text"><strong>Quick note:</strong> a rapid cut at 41 is very doable, but if you have any existing conditions or take medication, run the calorie target and the aggressive timeline past your doctor first &mdash; especially if you plan to push toward the fast end of the range.</div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    (function () {
+      // Tab switching
+      var tabBtns = document.querySelectorAll('.tab-btn');
+      var tabPanels = document.querySelectorAll('.tab-content');
+      for (var i = 0; i < tabBtns.length; i++) {
+        tabBtns[i].addEventListener('click', function () {
+          var target = this.getAttribute('data-tab');
+          for (var j = 0; j < tabBtns.length; j++) { tabBtns[j].classList.remove('active'); }
+          for (var k = 0; k < tabPanels.length; k++) { tabPanels[k].classList.remove('active'); }
+          this.classList.add('active');
+          var panel = document.getElementById(target);
+          if (panel) { panel.classList.add('active'); }
+        });
+      }
+
+      // Accordion toggle (purely cosmetic — content stays visible by default)
+      var headers = document.querySelectorAll('[data-accordion]');
+      for (var n = 0; n < headers.length; n++) {
+        headers[n].addEventListener('click', function () {
+          var card = this.closest('.accordion-card');
+          if (card) { card.classList.toggle('open'); }
+          var body = card ? card.querySelector('.accordion-body') : null;
+          if (body) { body.style.display = card.classList.contains('open') ? 'block' : 'none'; }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
