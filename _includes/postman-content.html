@@ -53,7 +53,13 @@
 
                 <h2>Hands-On Labs</h2>
                 <p>Several courses send learners to working code they can run themselves. These are the lab and demo projects that the curriculum references, all open source on GitHub.</p>
-                <ul>
+                <style>
+                    .lab-list > li { margin-bottom: 1.75rem; font-size: 17px; }
+                    .lab-list ul { margin: 0.5rem 0 0 1.25rem; list-style: disc; }
+                    .lab-list ul ul { margin-top: 0.25rem; list-style: circle; }
+                    .lab-list ul li { font-size: 15px; line-height: 26px; margin-bottom: 0.25rem; }
+                </style>
+                <ul class="lab-list">
                     <li><a href="https://github.com/Tacktician/claims-intake-agent" target="_blank"><strong>Claims Intake Agent</strong></a>
                         <ul>
                             <li>A sample PII redaction agent (Python)</li>
